@@ -47,7 +47,7 @@ model SalePajamas {
   price    Float
 
   // ID composto de entidade fraca:
-  @@unique([saleId, pajamaId])
+  @@id([saleId, pajamaId])
   @@map("sales_pajamas")
 }
 
