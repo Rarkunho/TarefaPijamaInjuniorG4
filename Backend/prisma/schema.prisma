@@ -104,3 +104,12 @@ model Pajamas {
 
   @@map("pajamas")
 }
+
+model Feedback {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  rating      Float
+
+  @@map("feedback")
+}
