@@ -16,6 +16,7 @@
     "@prisma/client": "^6.4.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.13.10",
+    "backend": "file:",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
