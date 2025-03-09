@@ -9,6 +9,95 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  @@map("users")
+}
+
+model Address {
+  id           String @id @default(uuid())
+  zip_code     String
+  state        String
+  city         String
+  neighborhood String
+  address      String
+  number       String
+
+  sales Sales[]
+
+  @@map("address")
+}
+
+model SalePajamas {
+  saleId   String
+  pajamaId String
+
+  sale Sales @relation(fields: [saleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  pajama Pajamas @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  quantity Int
+  price    Float
+
+  // ID composto de entidade fraca:
+  @@unique([saleId, pajamaId])
+  @@map("sales_pajamas")
+}
+
+model Sales {
+  id             String  @id @default(uuid())
+  buyer_name     String
+  cpf            String
+  price          Float
+  payment_method String
+  installments   Int     @default(1)
+  card_number    String?
+
+  sale_pajamas SalePajamas[]
+  
+  addressId String?
+  address   Address? @relation(fields: [addressId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@map("sales")
+}
+
+model PajamaSize {
+  id             String @id @default(uuid())
+  stock_quantity Int    @default(0)
+
+  // size definido como String como método
+  // preventivo de futuras mudanças
+  // na convenção de armazenamento dos tamanhos
+  size String
+
+  pajamaId String
+  pajama   Pajamas @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("pajama_sizes")
+}
+
+model Pajamas {
+  id          String  @id @default(uuid())
+  name        String
+  description String
+  image       String
+  price       Float
+  season      String
+  type        String
+  gender      String
+  favorite    Boolean
+  onSale      Boolean
+  salePercent Float?
+
+  sizes PajamaSize[]
+  sale_pajamas SalePajamas[]
+
+  @@map("pajamas")
 }
