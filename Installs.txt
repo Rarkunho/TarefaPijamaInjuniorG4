@@ -1,0 +1,22 @@
+---------------------------------------------
+BACK END:
+npm install <nome>
+"dependencies": {
+    "@fastify/cookie": "11.0.2",
+    "@fastify/cors": "10.1.0",
+    "@fastify/jwt": "9.0.4",
+    "@prisma/client": "6.4.1",
+    "@types/bcryptjs": "2.4.6",
+    "@types/node": "22.13.4",
+    "bcryptjs": "3.0.2",
+    "dotenv": "16.4.7",
+    "fastify": "5.2.1",
+    "injunior-tarefanode": "file:",
+    "tsup": "2.0.3",
+    "tsx": "4.19.3",
+    "typescript": "5.7.3",
+    "zod": "3.24.2"
+}
+npx tsc --init
+-------------------------------------------------
+front end
