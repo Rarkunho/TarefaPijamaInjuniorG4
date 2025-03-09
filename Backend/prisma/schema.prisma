@@ -40,7 +40,7 @@ model SalePajamas {
   saleId   String
   pajamaId String
 
-  sale Sales @relation(fields: [saleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sale   Sales   @relation(fields: [saleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   pajama Pajamas @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   quantity Int
@@ -61,7 +61,10 @@ model Sales {
   card_number    String?
 
   sale_pajamas SalePajamas[]
-  
+
+  // ID de endereço é modificado para null quando o respectivo
+  // endereço referenciado é removido do BD para persistir o
+  // registro de venda 
   addressId String?
   address   Address? @relation(fields: [addressId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
@@ -96,7 +99,7 @@ model Pajamas {
   onSale      Boolean
   salePercent Float?
 
-  sizes PajamaSize[]
+  sizes        PajamaSize[]
   sale_pajamas SalePajamas[]
 
   @@map("pajamas")
