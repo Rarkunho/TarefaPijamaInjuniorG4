@@ -1,4 +1,4 @@
-import { Pajamas, Prisma } from "@prisma/client";
+import { Pajama, Prisma } from "@prisma/client";
 
 interface PajamaUpdateInput {
     name?: string;
@@ -14,7 +14,7 @@ interface PajamaUpdateInput {
 }
 
 interface PajamasRepository {
-    create(pajamaData: Prisma.PajamasCreateInput): Promise<Pajamas>;
+    create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama>;
     // update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajamas>;
 
     // TODO: Solicitar monitoria para sanar dúvidas referentes ao update
