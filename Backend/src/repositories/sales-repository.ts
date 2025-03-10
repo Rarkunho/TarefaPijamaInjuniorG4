@@ -19,7 +19,7 @@ interface SaleUpdateInput {
 export interface SalesRepository {
     create(saleData: Prisma.SaleUncheckedCreateInput): Promise<Sale>;
     update(saleId: string, updateData: SaleUpdateInput): Promise<Sale | null>;
-    delete(saleId: string): Promise<Sale | null>;
+    delete(saleId: string): Promise<Sale>;
     findById(saleId: string): Promise<Sale | null>;
     getSaleInfo(saleId: string): Promise<SaleInfoResponse | null>;
 }
