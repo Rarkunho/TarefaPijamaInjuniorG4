@@ -110,8 +110,8 @@ export class PrismaSalesRepository implements SalesRepository {
             }
         });
 
-        // Exigência: Remover endereços que estavam sendo
-        // referenciados pela unicamente pela venda removida:
+        // Requisito: Remover endereço que estava sendo
+        // referenciado unicamente pela venda recém removida:
         if (addressCount <= 1) {
             await prismaClient.address.delete({
                 where: {
