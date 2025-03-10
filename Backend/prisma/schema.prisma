@@ -8,16 +8,16 @@ datasource db {
 }
 
 enum PaymentMethod {
-  CREDIT_CARD @map("credit_card")
-  PIX         @map("pix")
+  CREDIT_CARD
+  PIX
 }
 
 enum PajamaSizes {
-  PP @map("PP")
-  P  @map("P")
-  M  @map("M")
-  G  @map("G")
-  GG @map("GG")
+  PP
+  P
+  M
+  G
+  GG
 }
 
 // TODO: criar enum para tamanhos

@@ -1,9 +1,9 @@
 import { Pajama, Prisma } from "@prisma/client";
 
-interface PajamaUpdateInput
-    extends Partial<Omit<Prisma.PajamaUncheckedCreateInput, 'id'>> {}
+export interface PajamaUpdateInput
+    extends Partial<Prisma.PajamaUncheckedCreateInput> {}
 
-interface PajamaInfoResponse
+export interface PajamaInfoResponse
     extends Omit<Prisma.PajamaUncheckedCreateInput, 'id'>,
             Required<Pick<Prisma.PajamaUncheckedCreateInput, 'id'>> {
     // Omite informação redundante do pajamaId:
@@ -12,7 +12,9 @@ interface PajamaInfoResponse
 
 export interface PajamasRepository {
     create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama>;
-    update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama>;
-    getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
     delete(pajamaId: string): Promise<Pajama>;
+    getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
+    update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama | null>;
+
+    // TODO: Criar update stock quantity e update many stock quantity
 }
