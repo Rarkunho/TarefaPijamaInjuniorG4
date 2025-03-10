@@ -1,31 +1,25 @@
 import { PaymentMethod, Prisma, Sale } from "@prisma/client";
 
 export interface SaleInfoResponse
-    extends Prisma.SaleUncheckedCreateInput,
-            Prisma.AddressUncheckedCreateInput {
+    extends Omit<Prisma.SaleUncheckedCreateInput, 'id' | 'salePajamas'>,
+            Omit<Prisma.AddressUncheckedCreateInput, 'id' | 'sales'> {
+    saleId: string;
     quantity: number;
 }
 
 export interface PajamaBoughtInfo {
     pajamaId: string;
     quantity: number;
-    pajamaPrice: number;
 }
 
 export interface SaleCreateInput
-    extends Prisma.SaleUncheckedCreateInput,
-            Prisma.AddressUncheckedCreateInput {
+    extends Omit<Prisma.SaleUncheckedCreateInput, 'id'>,
+            Omit<Prisma.AddressUncheckedCreateInput, 'id'> {
     PajamasBought: PajamaBoughtInfo[];
 }
 
-export interface SaleUpdateInput {
-    buyerName?: string;
-    cpf?: string;
-    price?: number;
-    paymentMethod?: PaymentMethod;
-    installments?: number;
-    cardNumber?: string;
-}
+export interface SaleUpdateInput
+    extends Partial<Omit<Prisma.SaleUncheckedCreateInput, 'id'>> {}
 
 export interface SalesRepository {
     create(saleData: SaleCreateInput): Promise<Sale>;

@@ -1,20 +1,18 @@
 import { Pajama, Prisma } from "@prisma/client";
 
-interface PajamaUpdateInput {
-    name?: string;
-    description?: string;
-    image?: string;
-    price?: number;
-    season?: string;
-    type?: string;
-    gender?: string;
-    favorite?: boolean;
-    onSale?: boolean;
-    salePercent?: number;
+interface PajamaUpdateInput
+    extends Partial<Omit<Prisma.PajamaUncheckedCreateInput, 'id'>> {}
+
+interface PajamaInfoResponse
+    extends Omit<Prisma.PajamaUncheckedCreateInput, 'id'>,
+            Required<Pick<Prisma.PajamaUncheckedCreateInput, 'id'>> {
+    // Omite informação redundante do pajamaId:
+    pajamaSizesInfo: Omit<Prisma.PajamaSizeUncheckedCreateInput, 'pajamaId'>[];
 }
 
 export interface PajamasRepository {
     create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama>;
-    // update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajamas>;
-
+    update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama>;
+    getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
+    delete(pajamaId: string): Promise<Pajama>;
 }

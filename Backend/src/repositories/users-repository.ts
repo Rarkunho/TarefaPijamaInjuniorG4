@@ -1,10 +1,7 @@
 import { Prisma, User } from "@prisma/client";
 
-export interface UserUpdateInput {
-    name?: string;
-    email?: string;
-    password?: string;
-}
+export interface UserUpdateInput
+    extends Omit<Prisma.UserCreateInput, 'id'> {}
 
 export interface UsersRepository {
     create(userData: Prisma.UserCreateInput): Promise<User>;

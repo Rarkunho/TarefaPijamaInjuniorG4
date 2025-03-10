@@ -42,6 +42,19 @@ export class PrismaSalesRepository implements SalesRepository {
 
         // Criando o relacionamento N:N entre Sale e Pajama (SalePajama):
 
+        // Extraindo todos os ID's dos respectivos pijamas comprados:
+        const pajamasBoughtIds = saleData.PajamasBought.map(pajama => pajama.pajamaId);
+
+        // Buscando os pijamas com base nos ID's extraídos:
+        const pajamasBoughtInfo = await prismaClient.pajama.findMany({
+            where: {
+                id: { in: pajamasBoughtIds }
+            }
+        });
+        
+        // Array associativo para cada id de pijama e seu respectivo preço:
+        const pajamasPriceMap = new Map(pajamasBoughtInfo.map(pajama => [pajama.id, pajama.price]));
+
         // Fazendo as requisições assíncronas independentemente (sem await) para
         // maximizar a eficiência da criação de venda:
         const salePajamasRepository = new PrismaSalePajamasRepository();
@@ -51,7 +64,7 @@ export class PrismaSalesRepository implements SalesRepository {
                     saleId: sale.id,
                     pajamaId: pajama.pajamaId,
                     quantity: pajama.quantity,
-                    price: pajama.quantity * pajama.pajamaPrice
+                    price: pajama.quantity * (pajamasPriceMap.get(pajama.pajamaId) || 0)
                 });
             })
         );
@@ -128,6 +141,7 @@ export class PrismaSalesRepository implements SalesRepository {
 
         const saleInfoResponse: SaleInfoResponse = {
             // Propriedades do endereço:
+            addressId: address.id,
             address: address.address,
             number: address.number,
             zipCode: address.zipCode,
@@ -136,7 +150,7 @@ export class PrismaSalesRepository implements SalesRepository {
             state: address.state,
 
             // Propriedades da venda:
-            addressId: sale.addressId,
+            saleId: sale.id,
             buyerName: sale.buyerName,
             cpf: sale.cpf,
             paymentMethod: sale.paymentMethod,

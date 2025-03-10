@@ -1,11 +1,7 @@
 import { Prisma, PrismaPromise, SalePajama } from "@prisma/client";
 
-export interface SalePajamaSearchDataInput {
-    saleId?: string;
-    pajamaId?: string;
-    quantity?: number;
-    price?: number;
-}
+export interface SalePajamaSearchDataInput
+    extends Partial<Prisma.SalePajamaUncheckedCreateInput> {}
 
 export interface SalePajamasRepository {
     create(salePajamaData: Prisma.SalePajamaUncheckedCreateInput): Promise<SalePajama>;
