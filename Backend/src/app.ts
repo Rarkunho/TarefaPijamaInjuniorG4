@@ -1,6 +1,7 @@
 import fastifyCors from "@fastify/cors";
 import fastify from "fastify";
 import { ZodError } from "zod";
+import { userRoutes } from "./http/controllers/users/routes";
 
 export const app = fastify();
 
@@ -20,3 +21,4 @@ app.setErrorHandler(async (error, _, reply) => {
     return await reply.status(500).send({ message: 'Internal Server Error' });
 });
 
+app.register(userRoutes)
