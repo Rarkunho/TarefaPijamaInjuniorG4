@@ -8,7 +8,7 @@ interface DeleteUserUseCaseRequest {
 }
 
 interface DeleteUserUseCaseResponse {
-    User: User
+    user: User
 }
 
 export class DeleteUserUseCase {
@@ -23,6 +23,6 @@ export class DeleteUserUseCase {
             throw new ResourceNotFoundError
         }
 
-        return { User: user }
+        return { user }
     }
 }
