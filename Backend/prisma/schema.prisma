@@ -30,17 +30,17 @@ model Address {
   address      String
   number       String
 
-  sales Sales[]
+  sales Sale[]
 
   @@map("address")
 }
 
-model SalePajamas {
+model SalePajama {
   saleId   String
   pajamaId String
 
-  sale   Sales   @relation(fields: [saleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  pajama Pajamas @relation(fields: [pajamaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   quantity Int
   price    Float
@@ -50,7 +50,7 @@ model SalePajamas {
   @@map("sales_pajamas")
 }
 
-model Sales {
+model Sale {
   id            String  @id @default(uuid())
   buyerName     String
   cpf           String
@@ -59,7 +59,7 @@ model Sales {
   installments  Int     @default(1)
   cardNumber    String?
 
-  salePajamas SalePajamas[]
+  salePajamas SalePajama[]
 
   // ID de endereço é modificado para null quando o respectivo
   // endereço referenciado é removido do BD para persistir o
@@ -80,12 +80,12 @@ model PajamaSize {
   size String
 
   pajamaId String
-  pajama   Pajamas @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  pajama   Pajama @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("pajama_sizes")
 }
 
-model Pajamas {
+model Pajama {
   id          String  @id @default(uuid())
   name        String
   description String
@@ -99,7 +99,7 @@ model Pajamas {
   salePercent Float?
 
   sizes       PajamaSize[]
-  salePajamas SalePajamas[]
+  salePajamas SalePajama[]
 
   @@map("pajamas")
 }

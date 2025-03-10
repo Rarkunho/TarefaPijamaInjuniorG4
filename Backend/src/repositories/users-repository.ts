@@ -1,8 +1,8 @@
 import { Prisma, User } from "@prisma/client";
 
 interface UserUpdateInput {
-    name?: string,
-    email?: string,
+    name?: string;
+    email?: string;
     password?: string
 }
 
