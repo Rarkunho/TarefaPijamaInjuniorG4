@@ -1,1 +1,67 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 
+:root {
+    --vermelho0: #ED8E96;
+    --vermelho100: #E06A73;
+    --vermelho200: #B82935;
+    --vermelho300: #A31621;
+    --vermelho400: #74010B;
+    --vermelho500: #3E0005;
+
+    --azul0: #97C3D8;
+    --azul100: #72A8C1;
+    --azul200: #4E8098;
+    --azul300: #3E677A;
+    --azul400: #274553;
+
+    --cinza0: #F5F8FF;
+    --cinza100: #CED3DC;
+    --cinza200: #A4A8B0;
+    --cinza300: #87888B;
+    --cinza400: #5F6165;
+
+    --preto: #171717;
+    --branco: #FCF7F8;
+}
