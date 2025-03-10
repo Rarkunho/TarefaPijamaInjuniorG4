@@ -8,9 +8,11 @@ datasource db {
 }
 
 enum PaymentMethod {
-  CREDIT_CARD
-  PIX
+  CREDIT_CARD @map("credit_card")
+  PIX         @map("pix")
 }
+
+// TODO: criar enum para tamanhos
 
 model User {
   id       String @id @default(uuid())
@@ -19,6 +21,40 @@ model User {
   password String
 
   @@map("users")
+}
+
+
+model SalePajama {
+  saleId   String
+  pajamaId String
+
+
+  quantity Int
+  price    Float
+
+  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  // ID composto de entidade fraca:
+  @@id([saleId, pajamaId])
+  @@map("sales_pajamas")
+}
+
+model Sale {
+  id            String        @id @default(uuid())
+  buyerName     String
+  cpf           String
+  price         Float
+  paymentMethod PaymentMethod
+  installments  Int           @default(1)
+  cardNumber    String?
+
+  salePajamas SalePajama[]
+
+  addressId String
+  address   Address @relation(fields: [addressId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@map("sales")
 }
 
 model Address {
@@ -37,48 +73,13 @@ model Address {
   @@map("address")
 }
 
-model SalePajama {
-  saleId   String
-  pajamaId String
-
-  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-
-  quantity Int
-  price    Float
-
-  // ID composto de entidade fraca:
-  @@id([saleId, pajamaId])
-  @@map("sales_pajamas")
-}
-
-model Sale {
-  id            String        @id @default(uuid())
-  buyerName     String
-  cpf           String
-  price         Float
-  paymentMethod PaymentMethod
-  installments  Int           @default(1)
-  cardNumber    String?
-
-  salePajamas SalePajama[]
-
-  // ID de endereço é modificado para null quando o respectivo
-  // endereço referenciado é removido do BD para persistir o
-  // registro de venda 
-  addressId String
-  address   Address @relation(fields: [addressId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-
-  @@map("sales")
-}
-
 model PajamaSize {
   id            String @id @default(uuid())
   stockQuantity Int    @default(0)
 
   // size definido como String como método
-  // preventivo de futuras mudanças
-  // na convenção de armazenamento dos tamanhos
+  // preventivo de futuras mudanças na convenção
+  // de nomenclatura do armazenamento de tamanhos
   size String
 
   pajamaId String
@@ -92,12 +93,12 @@ model Pajama {
   name        String
   description String
   image       String
-  price       Float
   season      String
   type        String
   gender      String
   favorite    Boolean
   onSale      Boolean
+  price       Float
   salePercent Float?
 
   sizes       PajamaSize[]

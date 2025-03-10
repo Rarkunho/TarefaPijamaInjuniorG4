@@ -13,10 +13,12 @@ interface PajamaUpdateInput {
     salePercent?: number;
 }
 
-interface PajamasRepository {
+export interface PajamasRepository {
     create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama>;
     // update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajamas>;
 
     // TODO: Solicitar monitoria para sanar dúvidas referentes ao update
+    // TODO: Perguntar sobre o armazenamento de informações entre a transição de formulários no front
+    // TODO: Como vamos capturar o userID no back?
 
 }
