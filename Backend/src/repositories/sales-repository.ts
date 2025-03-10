@@ -1,8 +1,8 @@
 import { PaymentMethod, Prisma, Sale } from "@prisma/client";
 
 export interface SaleInfoResponse
-    extends Omit<Prisma.SaleUncheckedCreateInput, 'id' | 'salePajamas'>,
-            Omit<Prisma.AddressUncheckedCreateInput, 'id' | 'sales'> {
+    extends Omit<Prisma.SaleUncheckedCreateInput, 'id'>,
+            Omit<Prisma.AddressUncheckedCreateInput, 'id'> {
     saleId: string;
     quantity: number;
 }
@@ -13,13 +13,13 @@ export interface PajamaBoughtInfo {
 }
 
 export interface SaleCreateInput
-    extends Omit<Prisma.SaleUncheckedCreateInput, 'id'>,
-            Omit<Prisma.AddressUncheckedCreateInput, 'id'> {
+    extends Prisma.SaleUncheckedCreateInput,
+            Prisma.AddressUncheckedCreateInput {
     PajamasBought: PajamaBoughtInfo[];
 }
 
 export interface SaleUpdateInput
-    extends Partial<Omit<Prisma.SaleUncheckedCreateInput, 'id'>> {}
+    extends Partial<Prisma.SaleUncheckedCreateInput> {}
 
 export interface SalesRepository {
     create(saleData: SaleCreateInput): Promise<Sale>;
