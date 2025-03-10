@@ -63,9 +63,6 @@ model Sale {
 
   salePajamas SalePajama[]
 
-  // ID de endereço é modificado para null quando o respectivo
-  // endereço referenciado é removido do BD para persistir o
-  // registro de venda 
   addressId String
   address   Address @relation(fields: [addressId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
