@@ -1,25 +1,24 @@
 import { PaymentMethod, Prisma, Sale } from "@prisma/client";
 
-interface SaleInfoResponse
+export interface SaleInfoResponse
     extends Prisma.SaleUncheckedCreateInput,
             Prisma.AddressUncheckedCreateInput {
     quantity: number;
-    price: number;
 }
 
 export interface PajamaBoughtInfo {
-    pajamaId: string,
-    quantity: number,
-    pajamaPrice: number
+    pajamaId: string;
+    quantity: number;
+    pajamaPrice: number;
 }
 
 export interface SaleCreateInput
     extends Prisma.SaleUncheckedCreateInput,
             Prisma.AddressUncheckedCreateInput {
-    PajamasBought: PajamaBoughtInfo[]
+    PajamasBought: PajamaBoughtInfo[];
 }
 
-interface SaleUpdateInput {
+export interface SaleUpdateInput {
     buyerName?: string;
     cpf?: string;
     price?: number;
@@ -30,7 +29,7 @@ interface SaleUpdateInput {
 
 export interface SalesRepository {
     create(saleData: SaleCreateInput): Promise<Sale>;
-    delete(saleId: string): Promise<Sale>;
+    delete(saleId: string): Promise<Sale | null>;
     findById(saleId: string): Promise<Sale | null>;
     getSaleInfo(saleId: string): Promise<SaleInfoResponse | null>;
     update(saleId: string, updateData: SaleUpdateInput): Promise<Sale | null>;

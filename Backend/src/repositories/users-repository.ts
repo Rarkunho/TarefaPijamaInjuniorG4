@@ -3,7 +3,7 @@ import { Prisma, User } from "@prisma/client";
 export interface UserUpdateInput {
     name?: string;
     email?: string;
-    password?: string
+    password?: string;
 }
 
 export interface UsersRepository {
