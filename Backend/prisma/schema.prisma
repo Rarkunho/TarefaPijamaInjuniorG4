@@ -32,6 +32,8 @@ model Address {
 
   sales Sale[]
 
+  // Criando uma restrição de unicidade para reforçar a relação N:1 de Sale para Address:
+  @@unique([zipCode, state, city, neighborhood, address, number])
   @@map("address")
 }
 
@@ -51,12 +53,12 @@ model SalePajama {
 }
 
 model Sale {
-  id            String  @id @default(uuid())
+  id            String        @id @default(uuid())
   buyerName     String
   cpf           String
   price         Float
   paymentMethod PaymentMethod
-  installments  Int     @default(1)
+  installments  Int           @default(1)
   cardNumber    String?
 
   salePajamas SalePajama[]
@@ -64,8 +66,8 @@ model Sale {
   // ID de endereço é modificado para null quando o respectivo
   // endereço referenciado é removido do BD para persistir o
   // registro de venda 
-  addressId String?
-  address   Address? @relation(fields: [addressId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  addressId String
+  address   Address @relation(fields: [addressId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   @@map("sales")
 }
