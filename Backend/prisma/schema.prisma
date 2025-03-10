@@ -20,21 +20,20 @@ model User {
   email    String @unique
   password String
 
-  favoritedPajamas FavoritedPajamas[]
-  cartItems CartItem[]
-
   @@map("users")
 }
+
 
 model SalePajama {
   saleId   String
   pajamaId String
 
-  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   quantity Int
   price    Float
+
+  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   // ID composto de entidade fraca:
   @@id([saleId, pajamaId])
@@ -97,45 +96,16 @@ model Pajama {
   season      String
   type        String
   gender      String
-  price       Float
-  // favorite    Boolean
+  favorite    Boolean
   onSale      Boolean
+  price       Float
   salePercent Float?
 
-  sizes            PajamaSize[]
-  salePajamas      SalePajama[]
-  favoritedPajamas FavoritedPajamas[]
-  cartItems CartItem[]
+  sizes       PajamaSize[]
+  salePajamas SalePajama[]
 
   @@map("pajamas")
 }
-
-// ----------------- Proposição de novos modelos ---------------------:
-model FavoritedPajamas {
-  userId   String
-  pajamaId String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@id([userId, pajamaId])
-  @@map("favorited_pajamas")
-}
-
-model CartItem {
-  id       String @id @default(uuid())
-  userId   String
-  pajamaId String
-  quantity Int
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@unique([userId, pajamaId])
-  @@map("cart_items")
-}
-
-// -------------------------------------------------------------- //
 
 model Feedback {
   id          String @id @default(uuid())

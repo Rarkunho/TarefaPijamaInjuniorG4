@@ -9,7 +9,8 @@ interface SaleInfoResponse
 
 export interface PajamaBoughtInfo {
     pajamaId: string,
-    quantity: number
+    quantity: number,
+    pajamaPrice: number
 }
 
 export interface SaleCreateInput

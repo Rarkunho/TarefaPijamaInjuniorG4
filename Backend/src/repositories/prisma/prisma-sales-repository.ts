@@ -58,20 +58,22 @@ export class PrismaSalesRepository implements SalesRepository {
         }
 
         // Criando o relacionamento N:N entre Sale e Pajama (SalePajama):
-        // const pajamasBoughtIds = 
-        
+
         // Criando as requisições assíncronas independentemente (sem await) para
         // maximizar a eficiência da criação de venda:
-        // const salePajamaPromises = saleData.PajamasBought.map(pajama => {
-        //     return prismaClient.salePajama.create({
-        //         data: {
-        //             saleId: sale.id,
-        //             pajamaId: pajama.pajamaId,
-        //             quantity: pajama.quantity
-        //         }
-        //     });
-        // })
+        const salePajamaPromises = saleData.PajamasBought.map(pajama => {
+            return prismaClient.salePajama.create({
+                data: {
+                    saleId: sale.id,
+                    pajamaId: pajama.pajamaId,
+                    quantity: pajama.quantity,
+                    price: pajama.quantity * pajama.pajamaPrice
+                }
+            });
+        });
 
+        // Sincroniza e aguarda a criação de todas as query's:
+        await Promise.all(salePajamaPromises);
 
         return sale;
     }
@@ -123,9 +125,7 @@ export class PrismaSalesRepository implements SalesRepository {
         return deletedSale;
     }
 
-    getSaleInfo(saleId: string): Promise<SaleInfoResponse | null> {
-
-    }
+    getSaleInfo(saleId: string): Promise<SaleInfoResponse | null>;
 
     update(saleId: string, updateData: SaleUpdateInput): Promise<Sale | null>;
 }
