@@ -18,5 +18,8 @@ export interface PajamasRepository {
     // update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajamas>;
 
     // TODO: Solicitar monitoria para sanar dúvidas referentes ao update
+    // TODO: Perguntar sobre o armazenamento de informações entre a transição de formulários no front
+    // TODO: Perguntar sobre o armazenamento de favoritos e carrinho
+    // TODO: Como vamos capturar o userID no back?
 
 }

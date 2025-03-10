@@ -8,9 +8,11 @@ datasource db {
 }
 
 enum PaymentMethod {
-  CREDIT_CARD
-  PIX
+  CREDIT_CARD @map("credit_card")
+  PIX         @map("pix")
 }
+
+// TODO: criar enum para tamanhos
 
 model User {
   id       String @id @default(uuid())
@@ -18,23 +20,10 @@ model User {
   email    String @unique
   password String
 
+  favoritedPajamas FavoritedPajamas[]
+  cartItems CartItem[]
+
   @@map("users")
-}
-
-model Address {
-  id           String @id @default(uuid())
-  zipCode      String
-  state        String
-  city         String
-  neighborhood String
-  address      String
-  number       String
-
-  sales Sale[]
-
-  // Criando uma restrição de unicidade para reforçar a relação N:1 de Sale para Address:
-  @@unique([zipCode, state, city, neighborhood, address, number])
-  @@map("address")
 }
 
 model SalePajama {
@@ -69,13 +58,29 @@ model Sale {
   @@map("sales")
 }
 
+model Address {
+  id           String @id @default(uuid())
+  zipCode      String
+  state        String
+  city         String
+  neighborhood String
+  address      String
+  number       String
+
+  sales Sale[]
+
+  // Criando uma restrição de unicidade para reforçar a relação N:1 de Sale para Address:
+  @@unique([zipCode, state, city, neighborhood, address, number])
+  @@map("address")
+}
+
 model PajamaSize {
   id            String @id @default(uuid())
   stockQuantity Int    @default(0)
 
   // size definido como String como método
-  // preventivo de futuras mudanças
-  // na convenção de armazenamento dos tamanhos
+  // preventivo de futuras mudanças na convenção
+  // de nomenclatura do armazenamento de tamanhos
   size String
 
   pajamaId String
@@ -89,19 +94,48 @@ model Pajama {
   name        String
   description String
   image       String
-  price       Float
   season      String
   type        String
   gender      String
-  favorite    Boolean
+  price       Float
+  // favorite    Boolean
   onSale      Boolean
   salePercent Float?
 
-  sizes       PajamaSize[]
-  salePajamas SalePajama[]
+  sizes            PajamaSize[]
+  salePajamas      SalePajama[]
+  favoritedPajamas FavoritedPajamas[]
+  cartItems CartItem[]
 
   @@map("pajamas")
 }
+
+// ----------------- Proposição de novos modelos ---------------------:
+model FavoritedPajamas {
+  userId   String
+  pajamaId String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userId, pajamaId])
+  @@map("favorited_pajamas")
+}
+
+model CartItem {
+  id       String @id @default(uuid())
+  userId   String
+  pajamaId String
+  quantity Int
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, pajamaId])
+  @@map("cart_items")
+}
+
+// -------------------------------------------------------------- //
 
 model Feedback {
   id          String @id @default(uuid())
