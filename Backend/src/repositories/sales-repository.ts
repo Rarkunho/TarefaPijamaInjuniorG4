@@ -16,7 +16,7 @@ interface SaleUpdateInput {
     cardNumber?: string;
 }
 
-interface SalesRepository {
+export interface SalesRepository {
     create(saleData: Prisma.SaleUncheckedCreateInput): Promise<Sale>;
     update(saleId: string, updateData: SaleUpdateInput): Promise<Sale | null>;
     delete(saleId: string): Promise<Sale | null>;

@@ -1,12 +1,12 @@
 import { Prisma, User } from "@prisma/client";
 
-interface UserUpdateInput {
+export interface UserUpdateInput {
     name?: string;
     email?: string;
     password?: string
 }
 
-interface UsersRepository {
+export interface UsersRepository {
     create(userData: Prisma.UserCreateInput): Promise<User>;
     delete(userId: string): Promise<User | null>;
     findById(userId: string): Promise<User | null>;

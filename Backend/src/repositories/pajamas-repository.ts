@@ -13,7 +13,7 @@ interface PajamaUpdateInput {
     salePercent?: number;
 }
 
-interface PajamasRepository {
+export interface PajamasRepository {
     create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama>;
     // update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajamas>;
 
