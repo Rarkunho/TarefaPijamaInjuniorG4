@@ -42,7 +42,7 @@ model SalePajama {
   sale   Sale?   @relation(fields: [saleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   pajama Pajama? @relation(fields: [pajamaId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  // Unicidade composta de entidade fraca:
+  // Restrição de unicidade para assegurar consistência:
   @@unique([saleId, pajamaId])
   @@map("sales_pajamas")
 }
