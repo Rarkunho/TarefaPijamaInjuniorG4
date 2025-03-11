@@ -90,7 +90,7 @@ export class PrismaSalesRepository implements SalesRepository {
         });
 
         if (sale === null) {
-            throw new Error('Sale not Found in Delete Sale Method');
+            throw new Error('Sale not Found in \'delete\' Sale Method');
         }
 
         // Contagem de Vendas com o Endereço Referenciado:
@@ -120,14 +120,14 @@ export class PrismaSalesRepository implements SalesRepository {
         });
 
         if (sale === null) {
-            throw new Error('Sale not Found in GetSaleInfo Sale Method');
+            throw new Error('Sale not Found in \'getSaleInfo\' Sale Method');
         }
 
         const addressRepository = new PrismaAddressRepository();
         const address = await addressRepository.findById(sale.addressId);
 
         if (address === null) {
-            throw new Error('Address not Found in GetSaleInfo Sale Method');
+            throw new Error('Address not Found in \'getSaleInfo\' Sale Method');
         }
 
         const salePajamasRepository = new PrismaSalePajamasRepository();
@@ -139,24 +139,16 @@ export class PrismaSalesRepository implements SalesRepository {
             return qtyAccum + currentPajama.quantity
         }, 0);
 
+        const { id: addressID, ...addressInfoFiltered } = address;
+        const { id: saleID, ...saleInfoFiltered } = sale;
+
         const saleInfoResponse: SaleInfoResponse = {
             // Propriedades do endereço:
-            addressId: address.id,
-            address: address.address,
-            number: address.number,
-            zipCode: address.zipCode,
-            neighborhood: address.neighborhood,
-            city: address.city,
-            state: address.state,
+            ...addressInfoFiltered,
 
             // Propriedades da venda:
             saleId: sale.id,
-            buyerName: sale.buyerName,
-            cpf: sale.cpf,
-            paymentMethod: sale.paymentMethod,
-            price: sale.price,
-            installments: sale.installments,
-            cardNumber: sale.cardNumber,
+            ...saleInfoFiltered,
 
             // Quantidade comprada:
             quantity: amountPajamasPurchased,

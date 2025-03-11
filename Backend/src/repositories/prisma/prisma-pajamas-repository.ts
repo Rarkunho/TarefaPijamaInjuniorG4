@@ -43,7 +43,7 @@ export class PrismaPajamasRepository implements PajamasRepository {
         });
 
         if (pajamaType === null) {
-            throw new Error('Pajama not Found in getPajamaInfo Method');
+            throw new Error('Pajama not Found in \'getPajamaInfo\' Method');
         }
 
         const pajamasSizeRepository = new PrismaPajamasSizeRepository();
