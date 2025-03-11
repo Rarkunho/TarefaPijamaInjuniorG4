@@ -2,7 +2,6 @@ import fastifyCors from "@fastify/cors";
 import fastify from "fastify";
 import { ZodError } from "zod";
 import { userRoutes } from "./http/controllers/users/routes";
-import { addressRoutes } from "./http/controllers/address/routes";
 
 export const app = fastify();
 
@@ -23,4 +22,3 @@ app.setErrorHandler(async (error, _, reply) => {
 });
 
 app.register(userRoutes)
-app.register(addressRoutes)
