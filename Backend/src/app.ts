@@ -2,6 +2,8 @@ import fastifyCors from "@fastify/cors";
 import fastify from "fastify";
 import { ZodError } from "zod";
 import { userRoutes } from "./http/controllers/users/routes";
+import { feedbackRoutes } from "./http/controllers/feedbacks/routes";
+import { pajamaRoutes } from "./http/controllers/pajamas/routes";
 
 export const app = fastify();
 
@@ -22,3 +24,5 @@ app.setErrorHandler(async (error, _, reply) => {
 });
 
 app.register(userRoutes)
+app.register(feedbackRoutes)
+app.register(pajamaRoutes)
