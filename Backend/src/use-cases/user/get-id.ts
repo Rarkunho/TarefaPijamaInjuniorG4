@@ -4,7 +4,7 @@ import { UsersRepository } from "src/repositories/users-repository"
 
 
 interface GetUserUseCaseRequest {
-    id: string  
+    id: string
 }
 
 interface GetUserUseCaseResponse {
@@ -12,15 +12,13 @@ interface GetUserUseCaseResponse {
 }
 
 export class GetUserUseCase {
-    constructor(private usersRepository: UsersRepository) {
-
-    }
+    constructor(private readonly usersRepository: UsersRepository) {}
 
     async execute({ id }: GetUserUseCaseRequest): Promise<GetUserUseCaseResponse> {
         const user = await this.usersRepository.findById(id)
 
         if (!user) {
-            throw new ResourceNotFoundError
+            throw new ResourceNotFoundError()
         }
 
         return { user }

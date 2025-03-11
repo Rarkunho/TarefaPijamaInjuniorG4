@@ -3,7 +3,8 @@ import { z } from 'zod';
 
 const envSchema = z.object({
     NODE_ENV: z.enum(['dev', 'test', 'production']).default('dev'),
-    PORT: z.coerce.number().default(3333)
+    PORT: z.coerce.number().default(3333),
+    HASH_NUMBER_TIMES: z.coerce.number().min(6).max(12).default(10)
 });
 
 const _env = envSchema.safeParse(process.env);
