@@ -20,16 +20,7 @@ export class PrismaPajamasSizeRepository implements PajamasSizeRepository {
     }
 
 
-    async findAllPajamasSize(pajamaId: string): Promise<PajamaSize[]> {
-        const pajamasSize = await prismaClient.pajamaSize.findMany({
-            where: {
-                pajamaId: pajamaId
-            }
-        });
-
-        return pajamasSize;
-    }
-
+    
     async updateStockQuantity(pajamaId: string, size: PajamaSizes, newQuantity: number): Promise<PajamaSize> {
         const updatedPajamaSize = await prismaClient.pajamaSize.update({
             where: {
@@ -60,10 +51,33 @@ export class PrismaPajamasSizeRepository implements PajamasSizeRepository {
                 }
             });
         });
-
+        
         // Sincronizando todas as promises para retornar o array:
         const updatedPajamaSizes = await Promise.all(updatePromises);
-
+        
         return updatedPajamaSizes;
+    }
+    
+    async findPajamaSize(pajamaId: string, size: PajamaSizes): Promise<PajamaSize | null> {
+        const pajamaSize = await prismaClient.pajamaSize.findUnique({
+            where: {
+                pajamaId_size: {
+                    pajamaId: pajamaId,
+                    size: size
+                }
+            }
+        });
+        
+        return pajamaSize;
+    }
+    
+    async findAllPajamasSize(pajamaId: string): Promise<PajamaSize[]> {
+        const pajamasSize = await prismaClient.pajamaSize.findMany({
+            where: {
+                pajamaId: pajamaId
+            }
+        });
+
+        return pajamasSize;
     }
 }
