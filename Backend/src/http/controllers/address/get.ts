@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaAddressRepository } from "src/repositories/prisma/prisma-address-repository";
 import { GetAdressUseCase } from "src/use-cases/address/get-id";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
-import { GetUserUseCase } from "src/use-cases/user/get-id";
 import { z } from "zod";
 
 export async function get(request: FastifyRequest, reply: FastifyReply) {
