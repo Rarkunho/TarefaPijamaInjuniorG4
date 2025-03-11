@@ -4,7 +4,7 @@ import { UsersRepository } from "src/repositories/users-repository"
 
 
 interface GetUserEmailUseCaseRequest {
-    email: string  
+    email: string
 }
 
 interface GetUserEmailUseCaseResponse {
@@ -12,15 +12,13 @@ interface GetUserEmailUseCaseResponse {
 }
 
 export class GetUserEmailUseCase {
-    constructor(private usersRepository: UsersRepository) {
-
-    }
+    constructor(private readonly usersRepository: UsersRepository) {}
 
     async execute({ email }: GetUserEmailUseCaseRequest): Promise<GetUserEmailUseCaseResponse> {
         const user = await this.usersRepository.findByEmail(email)
 
         if (!user) {
-            throw new ResourceNotFoundError
+            throw new ResourceNotFoundError()
         }
 
         return { user }

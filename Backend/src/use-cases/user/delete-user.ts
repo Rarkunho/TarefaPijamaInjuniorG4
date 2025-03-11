@@ -12,15 +12,13 @@ interface DeleteUserUseCaseResponse {
 }
 
 export class DeleteUserUseCase {
-    constructor(private usersRepository: UsersRepository) {
-
-    }
+    constructor(private readonly usersRepository: UsersRepository) {}
 
     async execute({ id }: DeleteUserUseCaseRequest): Promise<DeleteUserUseCaseResponse> {
         const user = await this.usersRepository.delete(id)
 
         if (!user) {
-            throw new ResourceNotFoundError
+            throw new ResourceNotFoundError()
         }
 
         return { user }
