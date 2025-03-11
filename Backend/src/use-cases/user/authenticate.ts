@@ -20,13 +20,13 @@ export class AuthenticateUserUseCase {
         const user = await this.usersRepository.findByEmail(email)
 
         if (!user){
-            throw new InvalidCredentialsError
+            throw new InvalidCredentialsError()
         }
 
         const doesPasswordMatch = await compare(password, user.password)
 
         if(!doesPasswordMatch){
-            throw new InvalidCredentialsError
+            throw new InvalidCredentialsError()
         }
 
         return {boolean : true}
