@@ -12,5 +12,5 @@ Front:
 - Autor1
 - Autor2
 - Autor3
-- Autor4
+- [Italo Ferreira] (https://https://github.com/Rarkunho)
 - [Yasmin Macedo] (https://github.com/yasminmcedo11)
