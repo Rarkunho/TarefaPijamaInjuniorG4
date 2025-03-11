@@ -4,12 +4,12 @@ export interface SalePajamaCreateInput
     extends Omit<Prisma.SalePajamaUncheckedCreateInput, 'saleId' | 'pajamaId'>,
             Required<Pick<Prisma.SalePajamaUncheckedCreateInput, 'saleId' | 'pajamaId'>> {}
 
-export interface SalePajamaSearchDataInput
+export interface SalePajamaSearchInput
     extends Partial<Prisma.SalePajamaUncheckedCreateInput> {}
 
 
 export interface SalePajamasRepository {
     create(salePajamaData: SalePajamaCreateInput): Promise<SalePajama>;
     asyncCreate(salePajamaData: Prisma.SalePajamaUncheckedCreateInput): PrismaPromise<SalePajama>;
-    findMany(salePajamaSearchData: SalePajamaSearchDataInput): Promise<SalePajama[]>;
+    findMany(salePajamaSearchData: SalePajamaSearchInput): Promise<SalePajama[]>;
 }

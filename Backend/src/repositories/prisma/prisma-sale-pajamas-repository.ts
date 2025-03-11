@@ -1,5 +1,5 @@
 import { Prisma, PrismaPromise, SalePajama } from "@prisma/client";
-import { SalePajamaCreateInput, SalePajamaSearchDataInput, SalePajamasRepository } from "../sale-pajamas-repository";
+import { SalePajamaCreateInput, SalePajamaSearchInput, SalePajamasRepository } from "../sale-pajamas-repository";
 import { prismaClient } from "src/lib/prisma";
 
 export class PrismaSalePajamasRepository implements SalePajamasRepository {
@@ -20,7 +20,7 @@ export class PrismaSalePajamasRepository implements SalePajamasRepository {
     }
 
 
-    async findMany(salePajamaSearchData: SalePajamaSearchDataInput): Promise<SalePajama[]> {
+    async findMany(salePajamaSearchData: SalePajamaSearchInput): Promise<SalePajama[]> {
         const salePajamas = await prismaClient.salePajama.findMany({
             where: salePajamaSearchData
         });
