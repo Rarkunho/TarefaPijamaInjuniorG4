@@ -1,8 +1,8 @@
 import { Prisma, PrismaPromise, SalePajama } from "@prisma/client";
-import { SalePajamaCreateInput, SalePajamasAsyncRepository, SalePajamaSearchInput } from "../sale-pajamas-repository";
+import { SalePajamaCreateInput, SalePajamasAsyncRepository, SalePajamaSearchInput, SalePajamasRepository } from "../sale-pajamas-repository";
 import { prismaClient } from "src/lib/prisma";
 
-export class PrismaSalePajamasRepository implements SalePajamasAsyncRepository {
+export class PrismaSalePajamasRepository implements SalePajamasRepository, SalePajamasAsyncRepository {
     asyncCreate(salePajamaData: Prisma.SalePajamaUncheckedCreateInput): PrismaPromise<SalePajama> {
         const salePajama = prismaClient.salePajama.create({
             data: salePajamaData

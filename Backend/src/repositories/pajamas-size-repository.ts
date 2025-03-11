@@ -10,6 +10,6 @@ export interface PajamasSizeRepository {
     updateManyStockQuantity(pajamaId: string, sizeQuantityMap: Map<PajamaSizes, number>): Promise<PajamaSize[]>;
 }
 
-export interface PajamasSizeAsyncRepository extends PajamasSizeRepository {
+export interface PajamasSizeAsyncRepository {
     asyncCreate(pajamaSizeData: Prisma.PajamaSizeUncheckedCreateInput): PrismaPromise<PajamaSize>;    
 }

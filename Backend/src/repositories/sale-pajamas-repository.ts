@@ -13,6 +13,6 @@ export interface SalePajamasRepository {
     findMany(salePajamaSearchData: SalePajamaSearchInput): Promise<SalePajama[]>;
 }
 
-export interface SalePajamasAsyncRepository extends SalePajamasRepository {
+export interface SalePajamasAsyncRepository {
     asyncCreate(salePajamaData: Prisma.SalePajamaUncheckedCreateInput): PrismaPromise<SalePajama>;
 }
