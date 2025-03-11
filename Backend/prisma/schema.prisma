@@ -30,17 +30,20 @@ model User {
 }
 
 model SalePajama {
-  saleId   String
-  pajamaId String
+  id       String  @id @default(uuid())
+  saleId   String?
+  pajamaId String?
 
   quantity Int
   price    Float
 
-  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  pajama Pajama @relation(fields: [pajamaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  // Registros são persistidos mesmo se as instâncias refenciadas nas demais
+  // tabelas forem removidas para armazenar o histórico de vendas consistentemente:
+  sale   Sale?   @relation(fields: [saleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  pajama Pajama? @relation(fields: [pajamaId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   // ID composto de entidade fraca:
-  @@id([saleId, pajamaId])
+  @@unique([saleId, pajamaId])
   @@map("sales_pajamas")
 }
 
