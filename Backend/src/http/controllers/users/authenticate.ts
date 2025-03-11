@@ -15,12 +15,15 @@ export async function authenticate(request : FastifyRequest, reply: FastifyReply
     try {
         const prismaUsersRepository = new PrismaUsersRepository()
         const authenticateUserUseCase = new AuthenticateUserUseCase(prismaUsersRepository)
-        const {user} = await authenticateUserUseCase.execute({
+        const loginStatus = await authenticateUserUseCase.execute({
             email,
             password
         })
+        if(loginStatus){
+            return reply.status(200).send("Usuario Autenticado")
+        }
 
-        return reply.status(200).send("Usuario Autenticado")
+        
     } catch (error) {
         return reply.status(401).send("Erro de Autenticação")
     }

@@ -9,7 +9,7 @@ interface AuthenticateUserUseCaseRequest{
 }
 
 interface AuthenticateUserUseCaseResponse{
-    user: User
+    boolean : boolean
 }
 
 export class AuthenticateUserUseCase {
@@ -29,6 +29,6 @@ export class AuthenticateUserUseCase {
             throw new InvalidCredentialsError
         }
 
-        return {user}
+        return {boolean : true}
     }
 }
