@@ -1,4 +1,4 @@
-import { Pajama, Prisma } from "@prisma/client";
+import { Pajama, PajamaSizes, Prisma } from "@prisma/client";
 
 export interface PajamaUpdateInput
     extends Partial<Prisma.PajamaUncheckedCreateInput> {}
@@ -15,6 +15,4 @@ export interface PajamasRepository {
     delete(pajamaId: string): Promise<Pajama>;
     getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
     update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama | null>;
-
-    // TODO: Criar update stock quantity e update many stock quantity
 }
