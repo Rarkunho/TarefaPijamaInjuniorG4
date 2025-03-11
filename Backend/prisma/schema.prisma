@@ -20,8 +20,6 @@ enum PajamaSizes {
   GG
 }
 
-// TODO: criar enum para tamanhos
-
 model User {
   id       String @id @default(uuid())
   name     String
