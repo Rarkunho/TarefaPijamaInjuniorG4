@@ -1,6 +1,7 @@
 import { PajamaSize, PajamaSizes, Prisma } from "@prisma/client";
 import { PajamasSizeRepository } from "../pajamas-size-repository";
 import { prismaClient } from "src/lib/prisma";
+import { PajamaBoughtInfo } from "../sales-repository";
 
 export class PrismaPajamasSizeRepository implements PajamasSizeRepository {
     async create(pajamaSizeData: Prisma.PajamaSizeUncheckedCreateInput): Promise<PajamaSize> {
@@ -33,19 +34,9 @@ export class PrismaPajamasSizeRepository implements PajamasSizeRepository {
         return updatedPajamaSize;
     }
 
-    async updateManyStockQuantity(pajamaId: string, sizeQuantityMap: Map<PajamaSizes, number>): Promise<PajamaSize[]> {
-        const updatePromises = Array.from(sizeQuantityMap.entries()).map(([size, quantity]) => {
-            return prismaClient.pajamaSize.update({
-                where: {
-                    pajamaId_size: {
-                        pajamaId: pajamaId,
-                        size: size
-                    }
-                },
-                data: {
-                    stockQuantity: quantity
-                }
-            });
+    async updateManyStockQuantity(pajamaSizesUpdateData: PajamaBoughtInfo[]): Promise<PajamaSize[]> {
+        const updatePromises = pajamaSizesUpdateData.map(pajamSize => {
+            return this.updateStockQuantity(pajamSize.pajamaId, pajamSize.size, pajamSize.quantity);
         });
         
         const updatedPajamaSizes = await Promise.all(updatePromises);
@@ -95,9 +86,9 @@ export class PrismaPajamasSizeRepository implements PajamasSizeRepository {
         return decrementedPajamaSize;
     }
 
-    async decrementManyStockQuantity(pajamaId: string, decrementQuantityMap: Map<PajamaSizes, number>): Promise<PajamaSize[]> {
-        const decrementedPajamaSizesPromises = Array.from(decrementQuantityMap.keys()).map(size => (
-            this.decrementStockQuantity(pajamaId, size, decrementQuantityMap.get(size) ?? 0)
+    async decrementManyStockQuantity(pajamaSizesDecrementData: PajamaBoughtInfo[]): Promise<PajamaSize[]> {
+        const decrementedPajamaSizesPromises = pajamaSizesDecrementData.map(pajamSize => (
+            this.decrementStockQuantity(pajamSize.pajamaId, pajamSize.size, pajamSize.quantity)
         ));
 
         const decrementedPajamaSizes = await Promise.all(decrementedPajamaSizesPromises);

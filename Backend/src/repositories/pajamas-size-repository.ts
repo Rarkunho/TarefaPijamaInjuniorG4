@@ -1,4 +1,5 @@
 import { PajamaSize, PajamaSizes, Prisma, PrismaPromise } from "@prisma/client";
+import { PajamaBoughtInfo } from "./sales-repository";
 
 export interface PajamasSizeRepository {
     create(pajamaSizeData: Prisma.PajamaSizeUncheckedCreateInput): Promise<PajamaSize>;
@@ -8,9 +9,9 @@ export interface PajamasSizeRepository {
     
     // TODO: Assegurar que quantity seja inteiro positivo:
     updateStockQuantity(pajamaId: string, size: PajamaSizes, newQuantity: number): Promise<PajamaSize>;
-    updateManyStockQuantity(pajamaId: string, sizeQuantityMap: Map<PajamaSizes, number>): Promise<PajamaSize[]>;
+    updateManyStockQuantity(pajamaSizesUpdateData: PajamaBoughtInfo[]): Promise<PajamaSize[]>;
     
     decrementStockQuantity(pajamaId: string, size: PajamaSizes, decrementQuantity: number): Promise<PajamaSize>;
-    decrementManyStockQuantity(pajamaId: string, decrementQuantityMap: Map<PajamaSizes, number>): Promise<PajamaSize[]>;
+    decrementManyStockQuantity(pajamaSizesDecrementData: PajamaBoughtInfo[]): Promise<PajamaSize[]>;
 }
 
