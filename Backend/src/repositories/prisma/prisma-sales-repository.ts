@@ -47,15 +47,23 @@ export class PrismaSalesRepository implements SalesRepository {
                 saleId: sale.id,
                 pajamaId: pajama.pajamaId,
                 quantity: pajama.quantity,
-                price: pajama.quantity * (pajamasPriceMap.get(pajama.pajamaId) || 0)
+                price: pajama.quantity * (pajamasPriceMap.get(pajama.pajamaId) ?? 0)
             })
         ));
 
-        // Atualizando a quantidade de pijamas disponíveis em estoque após a compra:
+        // Atualizando/Decrementando a quantidade de
+        // pijamas disponíveis em estoque após a compra:
         const sizePajamasRepository = new PrismaPajamasSizeRepository();
-        
+        await Promise.all(
+            saleData.pajamasBought.map(pajamaBought => {
+                return sizePajamasRepository.decrementStockQuantity(
+                    pajamaBought.pajamaId,
+                    pajamaBought.size,
+                    pajamaBought.quantity
+                );
+            })
+        );
 
-        // TODO: PROMISE AWAIT ALL
         return sale;
     }
 
