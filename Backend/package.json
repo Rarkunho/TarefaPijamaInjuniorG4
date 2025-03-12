@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "@fastify/cookie": "11.0.2",
     "@fastify/cors": "11.0.0",
-    "@fastify/jwt": "9.0.4",
     "@prisma/client": "6.5.0",
     "abstract-logging": "2.0.1",
     "ajv": "8.17.1",
@@ -139,7 +137,9 @@
     "zod": "3.24.2"
   },
   "scripts": {
-    "dev": "tsx watch ./src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.ts",
+    "build": "tsup src --out-dir build"
   },
   "keywords": [],
   "author": "",
