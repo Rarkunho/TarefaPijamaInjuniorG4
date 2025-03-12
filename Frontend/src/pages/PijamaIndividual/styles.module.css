@@ -1,11 +1,16 @@
-.container {
+.mainContainer {
     background-image: linear-gradient(rgba(252, 252, 252, 0.76), rgba(234, 235, 240, 0.753)),
-                      url("../../assets/Vector.png");
+    url("../../assets/Vector.png");
     background-size: cover; /* A imagem vai cobrir toda a área da main */
     background-position: center; /* Centraliza a imagem */
     background-attachment: fixed; /* A imagem ficará fixa quando rolar a página */
     height: 100%; /* Garante que a imagem ocupe toda a altura da main */
     margin-bottom: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
     display: flex;
     flex-direction: row;
     gap: 60px;
@@ -152,4 +157,80 @@
 .carrinho > img {
     width: 86px;
     height: 86px;
+}
+
+.icones {
+    display: flex;
+    flex-direction: row;
+    padding-left: 90px;
+    padding-right: 90px;
+    padding-bottom: 40px;
+    align-items: center;
+    justify-content: center;
+    gap: 250px;
+}
+
+.icones > img {
+    width: 140px;
+    height: 140px;
+}
+
+.sectionContainer {
+    background-color: var(--azul300);
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 40px;
+}
+
+.sectionContainer > h2 {
+    color: var(--branco);
+    font-size: 40px;
+    font-weight: 400;
+    font-family: "Numans", sans-serif;
+    line-height: 100%;
+    letter-spacing: 4%;
+}
+
+.sectionContainer > p {
+    color: var(--branco);
+    font-size: 24px;
+    font-weight: 300;
+    font-family: "Nunito Sans", sans-serif;
+    line-height: 1.3;
+    letter-spacing: 4%;
+    word-spacing: 2px;
+}
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.lista > h3 {
+    color: var(--branco);
+    font-size: 28px;
+    font-weight: 450;
+    font-family: "Nunito Sans", sans-serif;
+    font-style: italic;
+    line-height: 100%;
+    letter-spacing: 4%;
+}
+
+.lista > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style-type: disc; /* Bolinhas padrão */
+    padding-left: 20px;
+}
+
+.lista > ul > li {
+    color: var(--branco);
+    font-size: 24px;
+    font-weight: 300;
+    font-family: "Nunito Sans", sans-serif;
+    line-height: 100%;
+    letter-spacing: 4%;
 }
