@@ -5,6 +5,7 @@ import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
 import { PaymentMethod } from "@prisma/client";
 import { UpdateSaleUseCase } from "src/use-cases/sales/update-sale-use-case";
 import { SaleUpdateFailedError } from "src/use-cases/errors/sale-update-failed-error";
+import { SaleUpdateInput } from "src/repositories/sales-repository";
 
 export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
     const updateSaleParamsSchema = z.object({
@@ -55,10 +56,7 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
     try {
         const updatedSale = await updateSaleUseCase.execute({
             id: saleId,
-            updateData: {
-                ...updateBody,
-                paymentMethod: updateBody.paymentMethod as PaymentMethod
-            }
+            updateData: updateBody as SaleUpdateInput
         });
         
         return await reply.status(200).send({
