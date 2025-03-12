@@ -16,25 +16,11 @@ export class PrismaSalesRepository implements SalesRepository {
     async create(saleData: SaleCreateInput): Promise<Sale> {
         // Verificando se o endereço fornecido já existe:
         const addressRepository = new PrismaAddressRepository();
-        const existingAddress = await addressRepository.findOrCreate(
-            saleData.addressId, {
-            zipCode: saleData.zipCode,
-            state: saleData.state,
-            city: saleData.city,
-            neighborhood: saleData.neighborhood,
-            address: saleData.address,
-            number: saleData.number
-        });
+        const existingAddress = await addressRepository.findOrCreate(saleData.pajamaSaleAddressData);
 
         const sale = await prismaClient.sale.create({
             data: {
-                buyerName: saleData.buyerName,
-                cpf: saleData.cpf,
-                price: saleData.price,
-                paymentMethod: saleData.paymentMethod,
-                installments: saleData.installments,
-                cardNumber: saleData.cardNumber,
-                
+                ...saleData.pajamaSaleData,                
                 addressId: existingAddress.id
             }
         });
@@ -43,7 +29,7 @@ export class PrismaSalesRepository implements SalesRepository {
         // Criando o relacionamento N:N entre Sale e Pajama (SalePajama):
 
         // Extraindo todos os ID's dos respectivos pijamas comprados:
-        const pajamasBoughtIds = saleData.PajamasBought.map(pajama => pajama.pajamaId);
+        const pajamasBoughtIds = saleData.pajamasBought.map(pajama => pajama.pajamaId);
 
         // Buscando os pijamas com base nos ID's extraídos:
         const pajamasBoughtInfo = await prismaClient.pajama.findMany({
@@ -59,7 +45,7 @@ export class PrismaSalesRepository implements SalesRepository {
         // maximizar a eficiência da criação de venda:
         const salePajamasRepository = new PrismaSalePajamasRepository();
         await prismaClient.$transaction(
-            saleData.PajamasBought.map(pajama => {
+            saleData.pajamasBought.map(pajama => {
                 return salePajamasRepository.asyncCreate({
                     saleId: sale.id,
                     pajamaId: pajama.pajamaId,

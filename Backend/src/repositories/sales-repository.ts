@@ -1,4 +1,4 @@
-import { PaymentMethod, Prisma, Sale } from "@prisma/client";
+import { PajamaSizes, Prisma, Sale } from "@prisma/client";
 
 export interface SaleInfoResponse
     extends Omit<Prisma.SaleUncheckedCreateInput, 'id'>,
@@ -12,10 +12,11 @@ export interface PajamaBoughtInfo {
     quantity: number;
 }
 
-export interface SaleCreateInput
-    extends Prisma.SaleUncheckedCreateInput,
-            Prisma.AddressUncheckedCreateInput {
-    PajamasBought: PajamaBoughtInfo[];
+// Omitindo os ID's para evitar conflitos:
+export interface SaleCreateInput {
+    pajamaSaleData: Omit<Prisma.SaleUncheckedCreateInput, 'addressId'>;
+    pajamaSaleAddressData: Prisma.AddressUncheckedCreateInput;
+    pajamasBought: PajamaBoughtInfo[];
 }
 
 export interface SaleUpdateInput

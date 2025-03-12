@@ -13,9 +13,9 @@ export class PrismaAddressRepository implements AddressRepository {
         return address;
     }
     
-    async findOrCreate(addressId: string, addressData: Prisma.AddressUncheckedCreateInput): Promise<Address> {
+    async findOrCreate(addressData: Prisma.AddressUncheckedCreateInput): Promise<Address> {
         const address = await prismaClient.address.upsert({
-            where: { id: addressId },
+            where: { zipCode_state_city_neighborhood_address_number: addressData },
             update: {},
             create: addressData
         });

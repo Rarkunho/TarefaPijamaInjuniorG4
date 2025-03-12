@@ -4,6 +4,7 @@ import { ZodError } from "zod";
 import { userRoutes } from "./http/controllers/users/routes";
 import { feedbackRoutes } from "./http/controllers/feedbacks/routes";
 import { pajamaRoutes } from "./http/controllers/pajamas/routes";
+import { saleRoutes } from "./http/controllers/sales/routes";
 
 export const app = fastify();
 
@@ -23,6 +24,8 @@ app.setErrorHandler(async (error, _, reply) => {
     return await reply.status(500).send({ message: 'Internal Server Error' });
 });
 
-app.register(userRoutes)
-app.register(feedbackRoutes)
-app.register(pajamaRoutes)
+
+app.register(feedbackRoutes);
+app.register(pajamaRoutes);
+app.register(userRoutes);
+app.register(saleRoutes);

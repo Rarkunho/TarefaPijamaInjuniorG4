@@ -6,7 +6,7 @@ import { getEmail } from "./get-email";
 import { update } from "./update";
 import { authenticate } from "./authenticate";
 
-export function userRoutes (app:FastifyInstance){
+export function userRoutes(app:FastifyInstance) {
     app.post('/users/', createUser)
     app.post('/users/login', authenticate)
     app.delete('/users/:id', deleteUser)
