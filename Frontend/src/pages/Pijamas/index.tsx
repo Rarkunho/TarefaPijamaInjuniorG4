@@ -1,5 +1,6 @@
 import styles from "./styles.module.css"
 import botao from "../../assets/lupa.png"
+import Cards from "../../components/Cards"
 
 export default function Pijamas() {
     return (
@@ -40,7 +41,14 @@ export default function Pijamas() {
                 </div>
             </section>
             <main>
-
+                <ul className={styles.pijamas}>
+                    <Cards/>
+                    <Cards/>
+                    <Cards/>
+                    <Cards/>
+                    <Cards/>
+                    <Cards/>
+                </ul>
             </main>
         </>
     )
