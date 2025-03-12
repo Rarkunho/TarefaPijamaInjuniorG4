@@ -1,4 +1,4 @@
-import { PaymentMethod } from "@prisma/client";
+import { PajamaSizes, PaymentMethod } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
 import { CreateSaleUseCase, CreateSaleUseCaseRequest } from "src/use-cases/sales/create-sale-use-case";
@@ -65,6 +65,8 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
             z.object({
                 pajamaId: z.string().nonempty().uuid(),
 
+                size: z.enum(Object.values(PajamaSizes) as [string, ...string[]]),
+
                 quantity: z.coerce.number()
                 .int({ message: "Quantity must be a integer number" })
                 .positive({ message: "Quantity must be a positive integer number" })
@@ -78,15 +80,7 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const createSaleUseCase = new CreateSaleUseCase(prismaSalesRepository);
 
     try {
-        const createdSale = await createSaleUseCase.execute({
-            createData: {
-                ...createSaleParams,
-                pajamaSaleData: {
-                    ...createSaleParams.pajamaSaleData,
-                    paymentMethod: createSaleParams.pajamaSaleData.paymentMethod as PaymentMethod
-                }
-            }
-        } as CreateSaleUseCaseRequest);
+        const createdSale = await createSaleUseCase.execute({ createData: createSaleParams } as CreateSaleUseCaseRequest);
         
         return await reply.status(201).send({
             status: "success",

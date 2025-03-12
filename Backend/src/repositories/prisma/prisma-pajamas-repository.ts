@@ -10,15 +10,12 @@ export class PrismaPajamasRepository implements PajamasRepository {
         });
 
         // Criando sizes na tabela pajamaSize:
-        const pajamaSizeRepository = new PrismaPajamasSizeRepository()
-        await prismaClient.$transaction(
-            Object.values(PajamaSizes).map(size => {
-                return pajamaSizeRepository.asyncCreate({
-                    size: size,
-                    pajamaId: pajama.id
-                });
-            })
-
+        const pajamaSizeRepository = new PrismaPajamasSizeRepository();
+        await pajamaSizeRepository.createMany(
+            Object.values(PajamaSizes).map(size => ({
+                pajamaId: pajama.id,
+                size: size
+            }))
         );
 
         return pajama;
