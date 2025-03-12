@@ -1,9 +1,10 @@
-body {
+.fundo {
     background-image: url("../../assets/Vector.png");
     background-size: cover; /* A imagem vai cobrir toda a área da main */
     background-position: center; /* Centraliza a imagem */
     background-attachment: fixed; /* A imagem ficará fixa quando rolar a página */
     height: 100%; /* Garante que a imagem ocupe toda a altura da main */
+    margin-bottom: 0px;
 }
 
 .container {
@@ -88,12 +89,18 @@ body {
     background-size: 35px;
 }
 
+.principal {
+    margin-bottom: 0px;
+}
+
 .pijamas {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px;
     padding: 0;
     margin: 50px;
+    margin-bottom: 0px;
+    padding-bottom: 50px;
 }
 
 
