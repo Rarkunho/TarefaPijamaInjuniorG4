@@ -5,6 +5,7 @@ import Cards from "../../components/Cards"
 export default function Pijamas() {
     return (
         <>
+        <div className={styles.fundo}>
             <section className={styles.container}>
                 <div className={styles.busca}>
                     <input 
@@ -40,7 +41,7 @@ export default function Pijamas() {
                     </select>
                 </div>
             </section>
-            <main>
+            <main className={styles.principal}>
                 <ul className={styles.pijamas}>
                     <Cards/>
                     <Cards/>
@@ -50,6 +51,7 @@ export default function Pijamas() {
                     <Cards/>
                 </ul>
             </main>
+        </div>
         </>
     )
 }

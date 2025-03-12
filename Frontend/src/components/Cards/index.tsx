@@ -1,17 +1,24 @@
 import styles from "./styles.module.css"
 import fotoTeste from "../../assets/pijamaTeste.png"
 import botaoCoracao from "../../assets/Favorito2.png"
+import { useNavigate } from "react-router-dom"
 
 interface CardsProps {
     className?: string
 }
 
 export default function Cards(props: CardsProps) {
+    const navigate = useNavigate()
+
     return (
         <>
-            <li {...props} className={`${styles.container} ${props.className}`}>
+            <li 
+                {...props} 
+                className={`${styles.container} ${props.className}`}
+                onClick={() => navigate("/pijama/1")}
+            >
                 <div className={styles.layout}>
-                    <img src={fotoTeste} alt="Botão de Pesquisa"/>
+                    <img src={fotoTeste} alt="Foto do Pijama"/>
                     <button 
                         //className={`${styles.likeButton} ${liked ? styles.liked : ''}`}
                         //onClick={handleLike}
