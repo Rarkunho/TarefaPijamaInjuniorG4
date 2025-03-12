@@ -7,7 +7,7 @@ import { z } from "zod";
 export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const createBodySchema = z.object({
         pajamaSaleData: z.object({
-            buyerName: z.string().nonempty(),
+            buyerName: z.string().nonempty().min(6),
             
             cpf: z.coerce.string()
             .nonempty()
@@ -74,13 +74,11 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     
     const createSaleParams = createBodySchema.parse(request.body);
 
-    createSaleParams.pajamaSaleAddressData
+    const prismaSalesRepository = new PrismaSalesRepository();
+    const createSaleUseCase = new CreateSaleUseCase(prismaSalesRepository);
 
     try {
-        const prismaSalesRepository = new PrismaSalesRepository();
-        const createSaleUseCase = new CreateSaleUseCase(prismaSalesRepository);
-
-        const saleCreated = await createSaleUseCase.execute({
+        const createdSale = await createSaleUseCase.execute({
             createData: {
                 ...createSaleParams,
                 pajamaSaleData: {
@@ -93,11 +91,11 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
         return await reply.status(201).send({
             status: "success",
             data: {
-                saleId: saleCreated.sale.id,
-                buyerName: saleCreated.sale.buyerName,
-                price: saleCreated.sale.price,
-                paymentMethod: saleCreated.sale.paymentMethod,
-                installments: saleCreated.sale.installments
+                saleId: createdSale.sale.id,
+                buyerName: createdSale.sale.buyerName,
+                price: createdSale.sale.price,
+                paymentMethod: createdSale.sale.paymentMethod,
+                installments: createdSale.sale.installments
             }
         });
 
