@@ -12,7 +12,6 @@ export interface PajamaBoughtInfo {
     quantity: number;
 }
 
-// Omitindo os ID's para evitar conflitos:
 export interface SaleCreateInput {
     pajamaSaleData: Omit<Prisma.SaleUncheckedCreateInput, 'addressId'>;
     pajamaSaleAddressData: Prisma.AddressUncheckedCreateInput;

@@ -17,13 +17,15 @@ app.register(fastifyCors, {
 
 app.setErrorHandler(async (error, _, reply) => {
     if (error instanceof ZodError) {
-        return await reply.status(400).send({ message: 'Validation Error', issues: error.format() });
+        return await reply.status(400).send({
+            message: 'Validation Error',
+            issues: error.format()
+        });
     }
 
     console.error("Internal Error:", error.message);
     return await reply.status(500).send({ message: 'Internal Server Error' });
 });
-
 
 app.register(feedbackRoutes);
 app.register(pajamaRoutes);

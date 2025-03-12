@@ -1,4 +1,4 @@
-import { Pajama, PajamaSizes, PaymentMethod, Prisma } from "@prisma/client";
+import { Pajama, PajamaSizes, Prisma } from "@prisma/client";
 import { PajamaInfoResponse, PajamasRepository, PajamaUpdateInput } from "../pajamas-repository";
 import { prismaClient } from "src/lib/prisma";
 import { PrismaPajamasSizeRepository } from "./prisma-pajama-size-repository";

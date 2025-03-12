@@ -20,6 +20,5 @@ export class GetPajamaUseCase {
         }
 
         return { pajama } as GetPajamaUseCaseResponse;
-
     }
 } 

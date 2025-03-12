@@ -22,6 +22,5 @@ export class UpdatePajamaUseCase {
         }
 
         return { pajama: pajamaUpdated } as UpdatePajamaUseCaseResponse;
-
     }
 } 
