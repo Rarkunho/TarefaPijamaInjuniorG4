@@ -54,26 +54,26 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
     const updateSaleUseCase = new UpdateSaleUseCase(prismaSalesRepository);
 
     try {
-        const updatedSale = await updateSaleUseCase.execute({
+        const updatedSaleResponse = await updateSaleUseCase.execute({
             id: saleId,
             updateData: updateBody as SaleUpdateInput
         });
         
-        return await reply.status(200).send({
+        return reply.status(200).send({
             status: "success",
-            data: updatedSale.sale
+            data: updatedSaleResponse.sale
         });
         
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return await reply.status(404).send({
+            return reply.status(404).send({
                 status: "error",
                 message: error.message
             });
         }
 
         if (error instanceof SaleUpdateFailedError) {
-            return await reply.status(500).send({
+            return reply.status(500).send({
                 status: "error",
                 message: error.message
             });

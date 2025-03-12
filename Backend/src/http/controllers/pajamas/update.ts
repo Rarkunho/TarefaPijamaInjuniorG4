@@ -34,11 +34,11 @@ export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply)
             data: updateBody
         });
 
-        return await reply.status(200).send(pajama);
+        return reply.status(200).send(pajama);
 
     } catch (error) {
         if (error instanceof (ResourceNotFoundError)) {
-            return await reply.status(404).send({ message: error.message });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

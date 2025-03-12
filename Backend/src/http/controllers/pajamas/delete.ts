@@ -16,11 +16,11 @@ export async function deletePajama(request: FastifyRequest, reply: FastifyReply)
         const deletePajamaUseCase = new DeletePajamaUseCase(prismaPajamasRepository);
         const pajama = await deletePajamaUseCase.execute({ id });
         
-        return await reply.status(204).send(pajama);
+        return reply.status(204).send(pajama);
 
     } catch (error) {
         if (error instanceof (ResourceNotFoundError)) {
-            return await reply.status(404).send({ message: error.message });
+            return reply.status(404).send({ message: error.message });
         }
         
         throw error;

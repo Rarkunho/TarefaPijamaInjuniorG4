@@ -23,27 +23,27 @@ export async function updateStockQuantity(request: FastifyRequest, reply: Fastif
     const updateStockQuantityUseCase = new UpdatePajamaSizeQuantityUseCase(prismaPajamasSizeRepository);
 
     try {
-        const updatedPajamaSize = await updateStockQuantityUseCase.execute({
+        const updatedPajamaSizeResponse = await updateStockQuantityUseCase.execute({
             pajamaId: updateStockQuantityParams.pajamaId,
             size: updateStockQuantityParams.size as PajamaSizes,
             updateData: updateStockQuantityBody.quantity
         });
 
-        return await reply.status(200).send({
+        return reply.status(200).send({
             status: "success",
-            data: updatedPajamaSize
+            data: updatedPajamaSizeResponse.pajamaSize
         });
 
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return await reply.status(404).send({
+            return reply.status(404).send({
                 status: "error",
                 message: error.message
             });
         }
 
         if (error instanceof PajamaSizeUpdateFailedError) {
-            return await reply.status(500).send({
+            return reply.status(500).send({
                 status: "error",
                 message: error.message
             });

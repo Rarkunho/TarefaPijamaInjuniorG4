@@ -26,7 +26,6 @@ export class PrismaSalesRepository implements SalesRepository {
             }
         });
 
-
         // Criando o relacionamento N:N entre Sale e Pajama (SalePajama):
 
         // Extraindo todos os ID's dos respectivos pijamas comprados:

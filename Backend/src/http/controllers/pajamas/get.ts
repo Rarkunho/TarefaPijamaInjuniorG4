@@ -16,11 +16,11 @@ export async function getPajama(request : FastifyRequest, reply : FastifyReply){
         const getPajamaUseCase = new GetPajamaUseCase(prismaPajamasRepository);
         const pajama = await getPajamaUseCase.execute({ id });
         
-        return await reply.status(200).send(pajama);
+        return reply.status(200).send(pajama);
 
     } catch (error) {
         if (error instanceof (ResourceNotFoundError)) {
-            return await reply.status(404).send({ message: error.message });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

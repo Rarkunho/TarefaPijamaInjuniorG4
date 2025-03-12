@@ -80,21 +80,21 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const createSaleUseCase = new CreateSaleUseCase(prismaSalesRepository);
 
     try {
-        const createdSale = await createSaleUseCase.execute({ createData: createBody } as CreateSaleUseCaseRequest);
+        const createdSaleResponse = await createSaleUseCase.execute({ createData: createBody } as CreateSaleUseCaseRequest);
         
-        return await reply.status(201).send({
+        return reply.status(201).send({
             status: "success",
             data: {
-                saleId: createdSale.sale.id,
-                buyerName: createdSale.sale.buyerName,
-                price: createdSale.sale.price,
-                paymentMethod: createdSale.sale.paymentMethod,
-                installments: createdSale.sale.installments
+                saleId: createdSaleResponse.sale.id,
+                buyerName: createdSaleResponse.sale.buyerName,
+                price: createdSaleResponse.sale.price,
+                paymentMethod: createdSaleResponse.sale.paymentMethod,
+                installments: createdSaleResponse.sale.installments
             }
         });
 
     } catch (error) {
-        return await reply.status(400).send({
+        return reply.status(500).send({
             status: "error",
             message: "Error while Creating Sale Instance in Database"
         });

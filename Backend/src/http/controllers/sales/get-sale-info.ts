@@ -16,23 +16,23 @@ export async function getSaleInfo(request: FastifyRequest, reply: FastifyReply) 
     const getSaleSaleInfoUseCase = new GetSaleInfoUseCase(prismaSalesRepository);
 
     try {
-        const saleInfo = await getSaleSaleInfoUseCase.execute({ id: saleId });
+        const saleInfoResponse = await getSaleSaleInfoUseCase.execute({ id: saleId });
         
-        return await reply.status(200).send({
+        return reply.status(200).send({
             status: "success",
-            data: saleInfo
+            data: saleInfoResponse.saleInfo
         });
         
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return await reply.status(404).send({
+            return reply.status(404).send({
                 status: "error",
                 message: error.message
             });
         }
 
         if (error instanceof SaleInfoRetrievalFailedError) {
-            return await reply.status(500).send({
+            return reply.status(500).send({
                 status: "error",
                 message: error.message
             });

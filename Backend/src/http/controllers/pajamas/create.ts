@@ -29,5 +29,5 @@ export async function CreatePajama(request: FastifyRequest, reply: FastifyReply)
         throw error;
     }
 
-    return await reply.status(201).send('Pijama adicionado com sucesso');
+    return reply.status(201).send('Pijama adicionado com sucesso');
 }

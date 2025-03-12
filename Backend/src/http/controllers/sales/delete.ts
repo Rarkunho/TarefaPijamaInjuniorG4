@@ -17,18 +17,18 @@ export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
 
     try {
         await deleteSaleUseCase.execute({ id: saleId });
-        return await reply.status(204).send();
+        return reply.status(204).send();
 
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return await reply.status(404).send({
+            return reply.status(404).send({
                 status: "error",
                 message: error.message
             });
         }
 
         if (error instanceof SaleDeletionFailedError) {
-            return await reply.status(500).send({
+            return reply.status(500).send({
                 status: "error",
                 message: error.message
             });

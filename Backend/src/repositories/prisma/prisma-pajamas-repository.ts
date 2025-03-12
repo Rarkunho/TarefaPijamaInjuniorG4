@@ -57,6 +57,12 @@ export class PrismaPajamasRepository implements PajamasRepository {
         return pajamaInfoResponse;
     }
 
+    async getAllPajamas(): Promise<Pajama[]> {
+        const allPajamas = await prismaClient.pajama.findMany({});
+
+        return allPajamas;
+    }
+
     async update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama | null> {
         const updatedPajama = await prismaClient.pajama.update({
             where: { id: pajamaId },
