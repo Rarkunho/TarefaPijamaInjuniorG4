@@ -1,0 +1,38 @@
+import { PajamaSize, PajamaSizes, Sale } from "@prisma/client";
+import { ResourceNotFoundError } from "../errors/resource-not-found";
+import { PajamasSizeRepository } from "src/repositories/pajamas-size-repository";
+import { PajamaSizeUpdateFailedError } from "../errors/pajama-size-update-failed-error";
+
+interface UpdatePajamaSizeQuantityUseCaseRequest {
+    pajamaId: string;
+    size: PajamaSizes;
+    updateData: number;
+}
+
+interface UpdatePajamaSizeQuantityUseCaseResponse {
+    pajamaSize: PajamaSize;
+}
+
+export class UpdatePajamaSizeQuantityUseCase {
+    constructor(private readonly pajamasSizeRepository: PajamasSizeRepository) {}
+
+    async execute(pajamaSizeUpdateInput: UpdatePajamaSizeQuantityUseCaseRequest): Promise<UpdatePajamaSizeQuantityUseCaseResponse> {
+        const existingPajamaSize = await this.pajamasSizeRepository.findPajamaSize(pajamaSizeUpdateInput.pajamaId, pajamaSizeUpdateInput.size);
+        
+        if (existingPajamaSize === null) {
+            throw new ResourceNotFoundError();
+        }
+
+        const pajamaSizeUpdated = await this.pajamasSizeRepository.updateStockQuantity(
+                                                                    pajamaSizeUpdateInput.pajamaId,
+                                                                    pajamaSizeUpdateInput.size,
+                                                                    pajamaSizeUpdateInput.updateData
+                                                                    );
+
+        if (pajamaSizeUpdated === null) {
+            throw new PajamaSizeUpdateFailedError();
+        }
+
+        return { pajamaSize: pajamaSizeUpdated } as UpdatePajamaSizeQuantityUseCaseResponse;
+    }
+}

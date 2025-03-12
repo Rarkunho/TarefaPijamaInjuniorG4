@@ -74,13 +74,13 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
         ).min(1, { message: "It is necessary to buy at least one pajama" })
     });
     
-    const createSaleParams = createBodySchema.parse(request.body);
+    const createBody = createBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();
     const createSaleUseCase = new CreateSaleUseCase(prismaSalesRepository);
 
     try {
-        const createdSale = await createSaleUseCase.execute({ createData: createSaleParams } as CreateSaleUseCaseRequest);
+        const createdSale = await createSaleUseCase.execute({ createData: createBody } as CreateSaleUseCaseRequest);
         
         return await reply.status(201).send({
             status: "success",
