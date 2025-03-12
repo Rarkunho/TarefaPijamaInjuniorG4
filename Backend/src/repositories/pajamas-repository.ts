@@ -1,4 +1,4 @@
-import { Pajama, PajamaSizes, Prisma } from "@prisma/client";
+import { Pajama, Prisma } from "@prisma/client";
 
 export interface PajamaUpdateInput
     extends Partial<Prisma.PajamaUncheckedCreateInput> {}
