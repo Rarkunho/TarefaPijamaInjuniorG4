@@ -1,4 +1,4 @@
-import { PajamaSizes, Prisma, Sale } from "@prisma/client";
+import { Prisma, Sale } from "@prisma/client";
 
 export interface SaleInfoResponse
     extends Omit<Prisma.SaleUncheckedCreateInput, 'id'>,

@@ -1,28 +1,25 @@
-import { Pajama } from "@prisma/client"
 import { PajamaInfoResponse, PajamasRepository } from "src/repositories/pajamas-repository"
 import { ResourceNotFoundError } from "../errors/resource-not-found"
 
-
 interface GetPajamaUseCaseRequest {
-    id: string
+    id: string;
 }
 
 interface GetPajamaUseCaseResponse {
-    pajama : PajamaInfoResponse
+    pajama: PajamaInfoResponse;
 }
 
-export class GetPajamaUseCase{
+export class GetPajamaUseCase {
+    constructor(private readonly pajamaRepository: PajamasRepository) {}
 
-    constructor(private pajamaRepository : PajamasRepository){}
+    async execute({ id }: GetPajamaUseCaseRequest): Promise<GetPajamaUseCaseResponse> {
+        const pajama = await this.pajamaRepository.getPajamaInfo(id);
 
-    async execute ({ id } : GetPajamaUseCaseRequest): Promise<GetPajamaUseCaseResponse> {
-        const pajama = await this.pajamaRepository.getPajamaInfo(id)
-
-        if(!pajama){
-            throw new ResourceNotFoundError()
+        if (!pajama) {
+            throw new ResourceNotFoundError();
         }
 
-        return { pajama }
+        return { pajama } as GetPajamaUseCaseResponse;
 
     }
 } 
