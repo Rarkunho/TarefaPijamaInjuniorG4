@@ -1,0 +1,109 @@
+.container {
+    width: 408px;
+    height: 837px;
+    background-color: var(--azul0);
+    box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.2),
+                0px -12px 12px rgba(0, 0, 0, 0.2); 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.layout {
+    position: relative;
+}
+
+.layout > img {
+    width: 408px;
+    height: 620px;
+}
+
+.layout > button {
+    position: absolute;
+    top: 0px; /* Posiciona o botão perto da parte inferior da imagem */
+    left: 0px; /* Posiciona o botão à direita da imagem */
+    border: none;
+    background-color: transparent;
+    margin-left: 15px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.layout > button > img {
+    width: 64px;
+    height: 67.25px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 5px;
+    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+}
+
+.desconto {
+    position: absolute;
+    top: 80px;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: var(--vermelho200);
+}
+
+.desconto::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%; 
+    height: 1px; 
+    background-color: var(--vermelho200); 
+}
+
+.info > h2 {
+    color: var(--azul300);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 100%;
+    font-family: "Numans", sans-serif;
+    letter-spacing: 5%;
+    align-self: flex-start;
+    text-transform: uppercase;
+}
+
+.preco {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.preco > h3 {
+    color: var(--azul400);
+    font-family: "Numans", sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.preco > p {
+    color: var(--azul400);
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.preco > p > span {
+    font-weight: 800;
+}
