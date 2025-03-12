@@ -1,24 +1,28 @@
 import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
-import { DeleteSaleUseCase } from "src/use-cases/sales/delete-sale-use-case";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
-import { SaleDeletionFailedError } from "src/use-cases/errors/sale-deletion-failed-error";
+import { GetSaleInfoUseCase } from "src/use-cases/sales/get-sale-info-use-case";
+import { SaleInfoRetrievalFailedError } from "src/use-cases/errors/sale-info-retrieval-failed-error";
 
-export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
-    const deleteParamsSchema = z.object({
+export async function getSaleInfo(request: FastifyRequest, reply: FastifyReply) {
+    const getSaleInfoParamsSchema = z.object({
         saleId: z.string().uuid()
     });
     
-    const { saleId } = deleteParamsSchema.parse(request.params);
+    const { saleId } = getSaleInfoParamsSchema.parse(request.params);
 
     const prismaSalesRepository = new PrismaSalesRepository();
-    const deleteSaleUseCase = new DeleteSaleUseCase(prismaSalesRepository);
+    const getSaleSaleInfoUseCase = new GetSaleInfoUseCase(prismaSalesRepository);
 
     try {
-        await deleteSaleUseCase.execute({ id: saleId });
-        return await reply.status(204).send();
-
+        const saleInfo = await getSaleSaleInfoUseCase.execute({ id: saleId });
+        
+        return await reply.status(200).send({
+            status: "success",
+            data: saleInfo
+        });
+        
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
             return await reply.status(404).send({
@@ -27,7 +31,7 @@ export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
             });
         }
 
-        if (error instanceof SaleDeletionFailedError) {
+        if (error instanceof SaleInfoRetrievalFailedError) {
             return await reply.status(500).send({
                 status: "error",
                 message: error.message
