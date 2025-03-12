@@ -3,6 +3,7 @@ import { SaleCreateInput, SaleInfoResponse, SalesRepository, SaleUpdateInput } f
 import { prismaClient } from "src/lib/prisma";
 import { PrismaAddressRepository } from "./prisma-address-repository";
 import { PrismaSalePajamasRepository } from "./prisma-sale-pajamas-repository";
+import { PrismaPajamasSizeRepository } from "./prisma-pajama-size-repository";
 
 export class PrismaSalesRepository implements SalesRepository {
     async countAddressQuantity(addressId: string): Promise<number> {
@@ -41,20 +42,20 @@ export class PrismaSalesRepository implements SalesRepository {
         // Array associativo para cada id de pijama e seu respectivo preço:
         const pajamasPriceMap = new Map(pajamasBoughtInfo.map(pajama => [pajama.id, pajama.price]));
 
-        // Fazendo as requisições assíncronas independentemente (sem await) para
-        // maximizar a eficiência da criação de venda:
         const salePajamasRepository = new PrismaSalePajamasRepository();
-        await prismaClient.$transaction(
-            saleData.pajamasBought.map(pajama => {
-                return salePajamasRepository.asyncCreate({
-                    saleId: sale.id,
-                    pajamaId: pajama.pajamaId,
-                    quantity: pajama.quantity,
-                    price: pajama.quantity * (pajamasPriceMap.get(pajama.pajamaId) || 0)
-                });
+        await salePajamasRepository.createMany(saleData.pajamasBought.map(pajama => ({
+                saleId: sale.id,
+                pajamaId: pajama.pajamaId,
+                quantity: pajama.quantity,
+                price: pajama.quantity * (pajamasPriceMap.get(pajama.pajamaId) || 0)
             })
-        );
+        ));
 
+        // Atualizando a quantidade de pijamas disponíveis em estoque após a compra:
+        const sizePajamasRepository = new PrismaPajamasSizeRepository();
+        
+
+        // TODO: PROMISE AWAIT ALL
         return sale;
     }
 
