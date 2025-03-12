@@ -11,6 +11,6 @@ Front:
 
 - Autor1
 - Autor2
-- Autor3
-- [Italo Ferreira] (https://https://github.com/Rarkunho)
-- [Yasmin Macedo] (https://github.com/yasminmcedo11)
+- [Allber Ferreira](https://github.com/JamesStewart-314/)
+- [Italo Ferreira](https://https://github.com/Rarkunho)
+- [Yasmin Macedo](https://github.com/yasminmcedo11)
