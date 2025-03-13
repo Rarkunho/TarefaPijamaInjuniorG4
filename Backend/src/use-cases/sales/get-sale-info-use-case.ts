@@ -1,6 +1,8 @@
 import { SaleInfoResponse, SalesRepository } from "src/repositories/sales-repository";
 import { ResourceNotFoundError } from "../errors/resource-not-found";
 import { SaleInfoRetrievalFailedError } from "../errors/sale-info-retrieval-failed-error";
+import { AddressRepository } from "src/repositories/address-repository";
+import { SalePajamasRepository } from "src/repositories/sale-pajamas-repository";
 
 interface GetSaleInfoSaleUseCaseRequest {
     id: string;
@@ -11,20 +13,44 @@ interface GetSaleInfoSaleUseCaseResponse {
 }
 
 export class GetSaleInfoUseCase {
-    constructor(private readonly salesRepository: SalesRepository) {}
+    constructor(private readonly salesRepository: SalesRepository,
+                private readonly addressRepository: AddressRepository,
+                private readonly salePajamasRepository: SalePajamasRepository
+    ) {}
 
-    async execute(getSaleInfoData: GetSaleInfoSaleUseCaseRequest): Promise<GetSaleInfoSaleUseCaseResponse> {
-        const existingSale = await this.salesRepository.findById(getSaleInfoData.id);
-
-        if (existingSale === null) {
+    async execute({ id }: GetSaleInfoSaleUseCaseRequest): Promise<GetSaleInfoSaleUseCaseResponse> {
+        const currentSale = await this.salesRepository.findById(id);
+        
+        if (currentSale === null) {
             throw new ResourceNotFoundError();
         }
 
-        const saleInfo = await this.salesRepository.getSaleInfo(getSaleInfoData.id);
+        const currentAddress = await this.addressRepository.findById(currentSale.addressId);
 
-        if (saleInfo === null) {
-            throw new SaleInfoRetrievalFailedError();
+        if (currentAddress === null) {
+            throw new ResourceNotFoundError();
         }
+
+        const pajamasBought = await this.salePajamasRepository.findMany({ saleId: id });
+
+        const amountPajamasPurchased = pajamasBought.reduce((qtyAccum, currentPajama) => {
+            return qtyAccum + currentPajama.quantity
+        }, 0);
+
+        const { id: saleID, ...saleInfoFiltered } = currentSale;
+        const { id: addressID, ...addressInfoFiltered } = currentAddress;
+
+        const saleInfo = {
+            // Propriedades do endereço:
+            ...addressInfoFiltered,
+
+            // Propriedades da venda:
+            saleId: currentSale.id,
+            ...saleInfoFiltered,
+
+            // Quantidade comprada:
+            quantity: amountPajamasPurchased,
+        };
 
         return { saleInfo: saleInfo } as GetSaleInfoSaleUseCaseResponse;
     }

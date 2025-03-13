@@ -21,6 +21,16 @@ export class PrismaPajamasRepository implements PajamasRepository {
         return pajama;
     }
 
+    async findById(pajamaId: string): Promise<Pajama | null> {
+        const pajama = await prismaClient.pajama.findUnique({
+            where: {
+                id: pajamaId
+            }
+        });
+
+        return pajama;
+    }
+
     async delete(pajamaId: string): Promise<Pajama> {
         // { onDelete: Cascade } assegura a deleção automática dos tamanhos em pajamaSize:
         const deletedPajama = await prismaClient.pajama.delete({
@@ -63,12 +73,22 @@ export class PrismaPajamasRepository implements PajamasRepository {
         return allPajamas;
     }
 
-    async update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama | null> {
+    async update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama> {
         const updatedPajama = await prismaClient.pajama.update({
             where: { id: pajamaId },
             data: updateData
         });
 
         return updatedPajama;
+    }
+
+    async findManyById(pajamaIdArray: string[]): Promise<Pajama[]> {
+        const pajamaArray = await prismaClient.pajama.findMany({
+            where: {
+                id: { in: pajamaIdArray }
+            }
+        });
+
+        return pajamaArray;
     }
 }

@@ -1,8 +1,9 @@
 import { Pajama } from "@prisma/client"
 import { PajamasRepository, PajamaUpdateInput } from "src/repositories/pajamas-repository"
+import { ResourceNotFoundError } from "../errors/resource-not-found";
 
 
-interface UpdatePajamaUseCaseRequest {
+export interface UpdatePajamaUseCaseRequest {
     id: string;
     data: PajamaUpdateInput;
 }
@@ -12,14 +13,16 @@ interface UpdatePajamaUseCaseResponse {
 }
 
 export class UpdatePajamaUseCase {
-    constructor(private pajamaRepository: PajamasRepository) {}
+    constructor(private readonly pajamaRepository: PajamasRepository) {}
 
     async execute({ id, data }: UpdatePajamaUseCaseRequest): Promise<UpdatePajamaUseCaseResponse> {
-        const pajamaUpdated = await this.pajamaRepository.update(id, data);
-
-        if (!pajamaUpdated) {
-            throw new Error('Falha ao atualizar');
+        const existingPajama = await this.pajamaRepository.findById(id);
+        
+        if (existingPajama === null) {
+            throw new ResourceNotFoundError();
         }
+        
+        const pajamaUpdated = await this.pajamaRepository.update(id, data);
 
         return { pajama: pajamaUpdated } as UpdatePajamaUseCaseResponse;
     }

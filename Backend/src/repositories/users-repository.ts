@@ -8,5 +8,5 @@ export interface UsersRepository {
     delete(userId: string): Promise<User>;
     findById(userId: string): Promise<User | null>;
     findByEmail(userEmail: string): Promise<User | null>;
-    update(userId: string, updateData: UserUpdateInput): Promise<User | null>;
+    update(userId: string, updateData: UserUpdateInput): Promise<User>;
 }

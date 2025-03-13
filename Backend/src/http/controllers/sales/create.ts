@@ -1,5 +1,9 @@
 import { PajamaSizes, PaymentMethod } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaAddressRepository } from "src/repositories/prisma/prisma-address-repository";
+import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-pajama-size-repository";
+import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
+import { PrismaSalePajamasRepository } from "src/repositories/prisma/prisma-sale-pajamas-repository";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
 import { CreateSaleUseCase, CreateSaleUseCaseRequest } from "src/use-cases/sales/create-sale-use-case";
 import { z } from "zod";
@@ -77,26 +81,31 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const createBody = createBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();
-    const createSaleUseCase = new CreateSaleUseCase(prismaSalesRepository);
+    const prismaAddressRepository = new PrismaAddressRepository();
+    const prismaPajamasRepository = new PrismaPajamasRepository();
+    const prismaSalePajamasRepository = new PrismaSalePajamasRepository();
+    const prismaPajamasSizeRepository = new PrismaPajamasSizeRepository();
+    
+    const createSaleUseCase = new CreateSaleUseCase(
+        prismaSalesRepository,
+        prismaAddressRepository,
+        prismaPajamasRepository,
+        prismaSalePajamasRepository,
+        prismaPajamasSizeRepository
+    );
 
     try {
-        const createdSaleResponse = await createSaleUseCase.execute({ createData: createBody } as CreateSaleUseCaseRequest);
+        const createdSaleResponse = await createSaleUseCase.execute(createBody as CreateSaleUseCaseRequest);
         
         return reply.status(201).send({
-            status: "success",
-            data: {
-                saleId: createdSaleResponse.sale.id,
-                buyerName: createdSaleResponse.sale.buyerName,
-                price: createdSaleResponse.sale.price,
-                paymentMethod: createdSaleResponse.sale.paymentMethod,
-                installments: createdSaleResponse.sale.installments
-            }
+            saleId: createdSaleResponse.sale.id,
+            buyerName: createdSaleResponse.sale.buyerName,
+            price: createdSaleResponse.sale.price,
+            paymentMethod: createdSaleResponse.sale.paymentMethod,
+            installments: createdSaleResponse.sale.installments
         });
 
     } catch (error) {
-        return reply.status(500).send({
-            status: "error",
-            message: "Error while Creating Sale Instance in Database"
-        });
+        throw error;
     }
 }

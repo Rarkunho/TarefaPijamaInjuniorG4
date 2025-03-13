@@ -59,24 +59,11 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
             updateData: updateBody as SaleUpdateInput
         });
         
-        return reply.status(200).send({
-            status: "success",
-            data: updatedSaleResponse.sale
-        });
+        return reply.status(200).send(updatedSaleResponse.sale);
         
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return reply.status(404).send({
-                status: "error",
-                message: error.message
-            });
-        }
-
-        if (error instanceof SaleUpdateFailedError) {
-            return reply.status(500).send({
-                status: "error",
-                message: error.message
-            });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

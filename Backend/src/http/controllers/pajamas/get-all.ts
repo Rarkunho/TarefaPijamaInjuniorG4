@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
-import { GetAllPajamasUseCase } from "src/use-cases/pajamas/get-all-pajamas";
+import { GetAllPajamasUseCase } from "src/use-cases/pajamas/get-all-pajamas-use-case";
 
 export async function getAllPajama(request: FastifyRequest, reply: FastifyReply) {
     const prismaPajamasRepository = new PrismaPajamasRepository();

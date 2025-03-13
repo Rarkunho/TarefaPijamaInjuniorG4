@@ -12,8 +12,10 @@ export interface PajamaInfoResponse
 
 export interface PajamasRepository {
     create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama>;
+    findById(pajamaId: string): Promise<Pajama | null>;
+    findManyById(pajamaIdArray: string[]): Promise<Pajama[]>;
     delete(pajamaId: string): Promise<Pajama>;
     getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
     getAllPajamas(): Promise<Pajama[]>;
-    update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama | null>;
+    update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama>;
 }

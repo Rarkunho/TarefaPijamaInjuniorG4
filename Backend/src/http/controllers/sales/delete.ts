@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
 import { DeleteSaleUseCase } from "src/use-cases/sales/delete-sale-use-case";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
-import { SaleDeletionFailedError } from "src/use-cases/errors/sale-deletion-failed-error";
+import { PrismaAddressRepository } from "src/repositories/prisma/prisma-address-repository";
 
 export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
     const deleteParamsSchema = z.object({
@@ -13,25 +13,17 @@ export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
     const { saleId } = deleteParamsSchema.parse(request.params);
 
     const prismaSalesRepository = new PrismaSalesRepository();
-    const deleteSaleUseCase = new DeleteSaleUseCase(prismaSalesRepository);
+    const prismaAddressRepository = new PrismaAddressRepository();
+    const deleteSaleUseCase = new DeleteSaleUseCase(prismaSalesRepository, prismaAddressRepository);
 
     try {
         await deleteSaleUseCase.execute({ id: saleId });
+
         return reply.status(204).send();
 
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return reply.status(404).send({
-                status: "error",
-                message: error.message
-            });
-        }
-
-        if (error instanceof SaleDeletionFailedError) {
-            return reply.status(500).send({
-                status: "error",
-                message: error.message
-            });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

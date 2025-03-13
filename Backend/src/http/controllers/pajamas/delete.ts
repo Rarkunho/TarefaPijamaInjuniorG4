@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
-import { DeletePajamaUseCase } from "src/use-cases/pajamas/delete";
+import { DeletePajamaUseCase } from "src/use-cases/pajamas/delete-pajama-use-case";
 import { z } from "zod";
 
 export async function deletePajama(request: FastifyRequest, reply: FastifyReply) {

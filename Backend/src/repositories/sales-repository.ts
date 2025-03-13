@@ -23,9 +23,16 @@ export interface SaleUpdateInput
     extends Partial<Prisma.SaleUncheckedCreateInput> {}
 
 export interface SalesRepository {
-    create(saleData: SaleCreateInput): Promise<Sale>;
-    delete(saleId: string): Promise<Sale | null>;
+    // CREATE refatorado
+    create(saleData: Prisma.SaleUncheckedCreateInput): Promise<Sale>;
+
     findById(saleId: string): Promise<Sale | null>;
-    getSaleInfo(saleId: string): Promise<SaleInfoResponse | null>;
-    update(saleId: string, updateData: SaleUpdateInput): Promise<Sale | null>;
+    
+    // DELETE refatorado
+    delete(saleId: string): Promise<Sale>;
+    countAddressQuantity(addressId: string): Promise<number>;
+    
+    // TODO: refatorar em use cases
+
+    update(saleId: string, updateData: SaleUpdateInput): Promise<Sale>;
 }

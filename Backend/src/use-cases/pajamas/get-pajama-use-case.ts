@@ -13,12 +13,12 @@ export class GetPajamaUseCase {
     constructor(private readonly pajamaRepository: PajamasRepository) {}
 
     async execute({ id }: GetPajamaUseCaseRequest): Promise<GetPajamaUseCaseResponse> {
-        const pajama = await this.pajamaRepository.getPajamaInfo(id);
+        const pajama = await this.pajamaRepository.findById(id);
 
-        if (!pajama) {
+        if (pajama === null) {
             throw new ResourceNotFoundError();
         }
 
-        return { pajama } as GetPajamaUseCaseResponse;
+        return { pajama: pajama } as GetPajamaUseCaseResponse;
     }
 } 

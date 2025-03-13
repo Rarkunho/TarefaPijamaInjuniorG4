@@ -11,7 +11,7 @@ export async function updateStockQuantity(request: FastifyRequest, reply: Fastif
         pajamaId: z.string().uuid().nonempty(),
         size: z.enum(Object.values(PajamaSizes) as [string, ...string[]])
     });
-    
+
     const updateStockQuantityBodySchema = z.object({
         quantity: z.coerce.number().int().min(0)
     });
