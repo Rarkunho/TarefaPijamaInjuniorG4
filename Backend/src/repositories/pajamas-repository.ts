@@ -1,4 +1,5 @@
 import { Pajama, Prisma } from "@prisma/client";
+import { GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
 
 export interface PajamaUpdateInput
     extends Partial<Prisma.PajamaUncheckedCreateInput> {}
@@ -17,7 +18,7 @@ export interface PajamasRepository {
     delete(pajamaId: string): Promise<Pajama>;
     getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
     update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama>;
-    getAllPajamas(): Promise<Pajama[]>;
-    getPajamasCount(): Promise<number>;
-    getPajamasPaginated(skipQuantity: number, itemsPerPage: number): Promise<Pajama[]>;
+    getAllPajamas(searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>): Promise<Pajama[]>;
+    getPajamasCount(searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>): Promise<number>;
+    getPajamasPaginated(skipQuantity: number, itemsPerPage: number, searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>): Promise<Pajama[]>;
 }

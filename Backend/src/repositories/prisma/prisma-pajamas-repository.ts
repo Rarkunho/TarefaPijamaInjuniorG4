@@ -2,6 +2,7 @@ import { Pajama, PajamaSizes, Prisma } from "@prisma/client";
 import { PajamaInfoResponse, PajamasRepository, PajamaUpdateInput } from "../pajamas-repository";
 import { prismaClient } from "src/lib/prisma";
 import { PrismaPajamasSizeRepository } from "./prisma-pajama-size-repository";
+import { GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
 
 export class PrismaPajamasRepository implements PajamasRepository {
     async create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama> {
@@ -67,8 +68,15 @@ export class PrismaPajamasRepository implements PajamasRepository {
         return pajamaInfoResponse;
     }
 
-    async getAllPajamas(): Promise<Pajama[]> {
-        const allPajamas = await prismaClient.pajama.findMany({});
+    async getAllPajamas(
+        searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>
+    ): Promise<Pajama[]> {
+
+        const allPajamas = await prismaClient.pajama.findMany({
+            where: {
+                ...searchFilters
+            }
+        });
 
         return allPajamas;
     }
@@ -92,14 +100,29 @@ export class PrismaPajamasRepository implements PajamasRepository {
         return pajamaArray;
     }
 
-    async getPajamasCount(): Promise<number> {
-        const pajamasCount = await prismaClient.pajama.count();
+    async getPajamasCount(
+        searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>
+    ): Promise<number> {
+
+        const pajamasCount = await prismaClient.pajama.count({
+            where: {
+                ...searchFilters
+            }
+        });
 
         return pajamasCount;
     }
 
-    async getPajamasPaginated(skipQuantity: number, itemsPerPage: number): Promise<Pajama[]> {
+    async getPajamasPaginated(
+        skipQuantity: number,
+        itemsPerPage: number,
+        searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>
+    ): Promise<Pajama[]> {
+
         const pajamas = await prismaClient.pajama.findMany({
+            where: {
+                ...searchFilters
+            },
             skip: skipQuantity,
             take: itemsPerPage
         });
