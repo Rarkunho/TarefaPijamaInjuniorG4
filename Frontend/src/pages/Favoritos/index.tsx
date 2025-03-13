@@ -78,10 +78,10 @@ export default function Favoritos() {
                 />
                 <h2 className={styles.title}>Favoritos</h2>
             </nav>
-            <div className={styles.favcards__carrosel}>
+            <div className={`${styles.favcards__carrosel} ${styles.fundo}`}>
                 <img
                     ref={btnEsqRef}
-                    className={`${styles.botao}`}
+                    className={`${styles.botao} ${styles.btnInactive}`}
                     src={BotaoEsq}
                     alt="Botão de rolagem esquerda"
                     onClick={scrollLeft}
