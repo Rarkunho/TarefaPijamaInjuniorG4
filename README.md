@@ -21,7 +21,7 @@ Front:
 ## Autores:
 
 - Autor1
-- Autor2
+- [Bruno Coitinho](https://github.com/brunocoitinho)
 - [Allber Ferreira](https://github.com/JamesStewart-314/)
 - [Italo Ferreira](https://https://github.com/Rarkunho)
 - [Yasmin Macedo](https://github.com/yasminmcedo11)
