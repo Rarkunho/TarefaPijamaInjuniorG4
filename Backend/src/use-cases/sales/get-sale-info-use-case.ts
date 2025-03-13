@@ -36,16 +36,14 @@ export class GetSaleInfoUseCase {
             return qtyAccum + currentPajama.quantity
         }, 0);
 
-        const { id: saleID, ...saleInfoFiltered } = currentSale;
         const { id: addressID, ...addressInfoFiltered } = currentAddress;
 
         const saleInfo = {
+            // Propriedades da venda:
+            ...currentSale,
+            
             // Propriedades do endereço:
             ...addressInfoFiltered,
-
-            // Propriedades da venda:
-            saleId: currentSale.id,
-            ...saleInfoFiltered,
 
             // Quantidade comprada:
             quantity: amountPajamasPurchased,

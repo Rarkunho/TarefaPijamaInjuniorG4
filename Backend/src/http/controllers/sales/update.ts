@@ -43,11 +43,28 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
             message: "The input must be a string containing only digits"
         })
         .optional()
+
+    }).refine(data => {
+        if (data.paymentMethod === PaymentMethod.CREDIT_CARD) {
+            return data.cardNumber !== undefined;
+        }
+
+        if (data.cardNumber !== undefined) {
+            return data.paymentMethod === PaymentMethod.CREDIT_CARD
+        }
+
+        if (data.paymentMethod === PaymentMethod.PIX) {
+            data.installments = 1;
+        }
+
+        return true;
+    }, {
+        message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
     });
     
     const { saleId } = updateSaleParamsSchema.parse(request.params);
 
-    const updateBody = updateSaleBodySchema.parse(request.params);
+    const updateBody = updateSaleBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();
     const updateSaleUseCase = new UpdateSaleUseCase(prismaSalesRepository);

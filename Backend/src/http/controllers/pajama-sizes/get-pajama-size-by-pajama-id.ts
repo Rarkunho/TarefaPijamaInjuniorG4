@@ -19,17 +19,11 @@ export async function getPajamaSizeByPajamaId(request: FastifyRequest, reply: Fa
     try {
         const pajamaSizeResponse = await getPajamaSizeByPajamaIdUseCaseUseCase.execute({ pajamaId: pajamaId, size: size } as GetPajamaSizeByPajamaIdUseCaseRequest);
 
-        return reply.status(200).send({
-            status: "success",
-            data: pajamaSizeResponse.pajamaSize
-        });
+        return reply.status(200).send(pajamaSizeResponse.pajamaSize);
 
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return reply.status(404).send({
-                status: "error",
-                message: error.message
-            });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

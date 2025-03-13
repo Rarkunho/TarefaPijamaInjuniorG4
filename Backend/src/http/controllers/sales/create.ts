@@ -21,12 +21,6 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
             .refine((cpf) => /^\d+$/.test(cpf), {
                 message: "The input must be a string containing only digits"
             }),
-            
-            price: z.coerce.number()
-            .positive({ message: "The price must be a positive number" })
-            .refine((price) => /^\d+(\.\d{1,2})?$/.test(price.toString()), {
-                message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
-            }),
 
             paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]]),
             
@@ -47,10 +41,20 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
             
         }).refine(data => {
             if (data.paymentMethod === PaymentMethod.CREDIT_CARD) {
-                return !!data.cardNumber;
+                return data.cardNumber !== undefined;
             }
+
+            if (data.cardNumber !== undefined) {
+                return data.paymentMethod === PaymentMethod.CREDIT_CARD
+            }
+
+            if (data.paymentMethod === PaymentMethod.PIX) {
+                data.installments = 1;
+            }
+
+            return true;
         }, {
-            message: "Missing Card Number in Credit Card Payment Method"
+            message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
         }),
         
         pajamaSaleAddressData: z.object({

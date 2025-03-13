@@ -1,9 +1,6 @@
 import { Prisma, Sale } from "@prisma/client";
-import { SaleCreateInput, SaleInfoResponse, SalesRepository, SaleUpdateInput } from "../sales-repository";
+import { SalesRepository, SaleUpdateInput } from "../sales-repository";
 import { prismaClient } from "src/lib/prisma";
-import { PrismaAddressRepository } from "./prisma-address-repository";
-import { PrismaSalePajamasRepository } from "./prisma-sale-pajamas-repository";
-import { PrismaPajamasSizeRepository } from "./prisma-pajama-size-repository";
 
 export class PrismaSalesRepository implements SalesRepository {
     async countAddressQuantity(addressId: string): Promise<number> {

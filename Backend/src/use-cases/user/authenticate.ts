@@ -1,5 +1,5 @@
 import { UsersRepository } from "src/repositories/users-repository"
-import { InvalidCredentialsError } from "../errors/invalid-credentials"
+import { InvalidCredentialsError } from "../errors/invalid-credentials-error"
 import { compare } from "bcryptjs"
 
 interface AuthenticateUserUseCaseRequest{

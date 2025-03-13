@@ -26,7 +26,8 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
 
         gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
 
-        onSale: z.string().transform((val, ctx) => {
+        onSale: z.string()
+        .transform((val, ctx) => {
             if (val === 'true') return true;
             if (val === 'false') return false;
 
@@ -40,11 +41,11 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
         .optional()
 
     }).refine(data => {
-        if (data.page && !data.perPage) {
+        if (data.page !== undefined && data.perPage === undefined) {
             data.perPage = 10;
         }
 
-        if (!data.page && data.perPage) {
+        if (data.page === undefined && data.perPage !== undefined) {
             data.page = 1;
         }
 

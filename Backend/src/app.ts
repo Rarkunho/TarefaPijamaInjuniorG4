@@ -5,7 +5,7 @@ import { userRoutes } from "./http/controllers/users/routes";
 import { feedbackRoutes } from "./http/controllers/feedbacks/routes";
 import { pajamaRoutes } from "./http/controllers/pajamas/routes";
 import { saleRoutes } from "./http/controllers/sales/routes";
-import { pajamaSizeRoutes } from "./http/controllers/pajama-sizes/routes";
+import { pajamaStockRoutes } from "./http/controllers/pajama-sizes/routes";
 
 export const app = fastify();
 
@@ -32,4 +32,4 @@ app.register(feedbackRoutes);
 app.register(pajamaRoutes);
 app.register(userRoutes);
 app.register(saleRoutes);
-app.register(pajamaSizeRoutes);
+app.register(pajamaStockRoutes);
