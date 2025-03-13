@@ -7,8 +7,18 @@ import iconeInverno from "../../assets/climaInverno.png"
 import SizeButton from "../../components/Buttons/SizeButton"
 import AddToCartButton from "../../components/Buttons/AddToCartButton"
 import QuantityButton from "../../components/Buttons/QuantityButton"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 export default function PijamaIndividual() {
+    const navigate = useNavigate()
+    const [ativo, setAtivo] = useState<string | null>(null)
+    const sizes = ["PP", "P", "M", "G", "GG"]
+
+    function handleSizeButton(size: string) {
+        setAtivo(size)
+    }
+
     return (
         <>
             <main className={styles.mainContainer}>
@@ -29,11 +39,14 @@ export default function PijamaIndividual() {
                         <div className={styles.size}>
                             <h2 className={styles.tituloItalico}>Tamanhos:</h2>
                             <div>
-                                <SizeButton text="PP"/>
-                                <SizeButton text="P"/>
-                                <SizeButton text="M"/>
-                                <SizeButton text="G"/>
-                                <SizeButton text="GG"/>
+                                {sizes.map((size) => (
+                                    <SizeButton
+                                        key={size}
+                                        text={size}
+                                        isActive={ativo === size}
+                                        onClick={() => handleSizeButton(size)}
+                                    />
+                                ))}
                             </div>
                             <p>Ainda temos <span>x</span> peças do tamanho escolhido <br/>em nosso estoque!</p>
                         </div>
@@ -46,7 +59,7 @@ export default function PijamaIndividual() {
                             <img className={styles.favoritos} 
                                 src={botaoCoracao} 
                                 alt="Ícone de Favoritos"
-                                //onClick={() => navigate("/favoritos")}
+                                onClick={() => navigate("/favoritos")}
                             />
                         </div>
                     </div>

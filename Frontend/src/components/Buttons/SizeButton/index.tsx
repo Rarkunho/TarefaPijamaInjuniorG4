@@ -1,10 +1,19 @@
 import styles from "./styles.module.css"
 
-export default function SizeButton () {
-    const buttonText = "P"
+interface ButtonProps {
+    text: string
+    isActive: boolean
+    onClick: () => void
+}
+
+export default function SizeButton (props: ButtonProps) {
+    const buttonText = props.text
 
     return (
-        <button className={styles.button}>
+        <button 
+            className={props.isActive ? styles.buttonActive : styles.button}
+            onClick={props.onClick}
+        >
             {buttonText}
         </button>
     )

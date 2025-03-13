@@ -157,6 +157,7 @@
 .carrinho > img {
     width: 86px;
     height: 86px;
+    cursor: pointer;
 }
 
 .icones {
