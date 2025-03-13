@@ -3,6 +3,8 @@
     background-size: cover; /* A imagem vai cobrir toda a área da main */
     background-position: center; /* Centraliza a imagem */
     background-attachment: fixed; /* A imagem ficará fixa quando rolar a página */
+    background-color: rgba(255,255,255,0.7);
+    background-blend-mode: lighten;
     height: 100%; /* Garante que a imagem ocupe toda a altura da main */
     margin-bottom: 0px;
 }
