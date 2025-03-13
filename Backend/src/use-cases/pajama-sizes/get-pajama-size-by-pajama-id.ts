@@ -1,6 +1,6 @@
-import { PajamasSizeRepository } from "src/repositories/pajamas-size-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
 import { PajamaSize, PajamaSizes } from "@prisma/client";
+import { PajamasSizeRepository } from "src/repositories/pajamas-size-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 export interface GetPajamaSizeByPajamaIdUseCaseRequest {
     pajamaId: string;

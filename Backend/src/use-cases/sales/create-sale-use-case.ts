@@ -1,11 +1,11 @@
-import { Prisma, Sale } from "@prisma/client";
+import { Sale } from "@prisma/client";
 import { AddressRepository } from "src/repositories/address-repository";
 import { PajamasRepository } from "src/repositories/pajamas-repository";
 import { PajamasSizeRepository } from "src/repositories/pajamas-size-repository";
 import { SalePajamaCreateInput, SalePajamasRepository } from "src/repositories/sale-pajamas-repository";
-import { PajamaBoughtInfo, SaleCreateInput, SalesRepository } from "src/repositories/sales-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
+import { SaleCreateInput, SalesRepository } from "src/repositories/sales-repository";
 import { InsufficientPajamaSizeStockQuantityError } from "../errors/insufficient-pajama-size-stock-quantity-error";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 export interface CreateSaleUseCaseRequest
     extends SaleCreateInput {}

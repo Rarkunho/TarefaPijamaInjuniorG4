@@ -1,5 +1,5 @@
-import { PajamaInfoResponse, PajamasRepository } from "src/repositories/pajamas-repository"
-import { ResourceNotFoundError } from "../errors/resource-not-found"
+import { PajamaInfoResponse, PajamasRepository } from "src/repositories/pajamas-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface GetPajamaInfoUseCaseRequest {
     id: string;

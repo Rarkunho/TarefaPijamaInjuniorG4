@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUsersRepository } from "src/repositories/prisma/prisma-users-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { UpdateUserUseCase } from "src/use-cases/user/update";
 import { z } from "zod";
 

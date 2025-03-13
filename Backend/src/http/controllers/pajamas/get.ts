@@ -1,21 +1,21 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { GetPajamaUseCase } from "src/use-cases/pajamas/get-pajama-use-case";
 import { z } from "zod";
 
-export async function getPajama(request : FastifyRequest, reply : FastifyReply){
+export async function getPajama(request: FastifyRequest, reply: FastifyReply) {
     const getParamsSchema = z.object({
-        id: z.string().uuid()
+        pajamaId: z.string().uuid()
     });
 
-    const { id } = getParamsSchema.parse(request.params);
+    const { pajamaId } = getParamsSchema.parse(request.params);
 
     try {
         const prismaPajamasRepository = new PrismaPajamasRepository();
         const getPajamaUseCase = new GetPajamaUseCase(prismaPajamasRepository);
-        const getPajamaResponse = await getPajamaUseCase.execute({ id });
-        
+        const getPajamaResponse = await getPajamaUseCase.execute({ pajamaId });
+
         return reply.status(200).send(getPajamaResponse.pajama);
 
     } catch (error) {

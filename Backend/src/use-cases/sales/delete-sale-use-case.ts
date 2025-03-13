@@ -1,7 +1,7 @@
-import { SalesRepository } from "src/repositories/sales-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
 import { Sale } from "@prisma/client";
 import { AddressRepository } from "src/repositories/address-repository";
+import { SalesRepository } from "src/repositories/sales-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface DeleteSaleUseCaseRequest {
     id: string;

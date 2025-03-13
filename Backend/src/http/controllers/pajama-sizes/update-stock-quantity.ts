@@ -2,7 +2,7 @@ import { PajamaSizes } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-pajama-size-repository";
 import { PajamaSizeUpdateFailedError } from "src/use-cases/errors/pajama-size-update-failed-error";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { UpdatePajamaSizeQuantityUseCase } from "src/use-cases/pajama-sizes/update-quantity-pajama-size-use-case";
 import { z } from "zod";
 

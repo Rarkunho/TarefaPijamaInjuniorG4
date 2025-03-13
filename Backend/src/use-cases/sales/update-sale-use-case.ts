@@ -1,6 +1,6 @@
 import { Sale } from "@prisma/client";
 import { SalesRepository, SaleUpdateInput } from "src/repositories/sales-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { SaleUpdateFailedError } from "../errors/sale-update-failed-error";
 
 interface UpdateSaleUseCaseRequest {

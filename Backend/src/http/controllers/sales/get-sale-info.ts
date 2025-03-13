@@ -1,10 +1,10 @@
-import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
-import { GetSaleInfoUseCase } from "src/use-cases/sales/get-sale-info-use-case";
 import { PrismaAddressRepository } from "src/repositories/prisma/prisma-address-repository";
 import { PrismaSalePajamasRepository } from "src/repositories/prisma/prisma-sale-pajamas-repository";
+import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
+import { GetSaleInfoUseCase } from "src/use-cases/sales/get-sale-info-use-case";
+import { z } from "zod";
 
 export async function getSaleInfo(request: FastifyRequest, reply: FastifyReply) {
     const getSaleInfoParamsSchema = z.object({
@@ -16,7 +16,7 @@ export async function getSaleInfo(request: FastifyRequest, reply: FastifyReply) 
     const prismaSalesRepository = new PrismaSalesRepository();
     const prismaAddressRepository = new PrismaAddressRepository();
     const prismaSalePajamasRepository = new PrismaSalePajamasRepository();
-    
+
     const getSaleSaleInfoUseCase = new GetSaleInfoUseCase(
         prismaSalesRepository,
         prismaAddressRepository,

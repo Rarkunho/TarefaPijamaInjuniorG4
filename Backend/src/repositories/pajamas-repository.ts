@@ -16,6 +16,8 @@ export interface PajamasRepository {
     findManyById(pajamaIdArray: string[]): Promise<Pajama[]>;
     delete(pajamaId: string): Promise<Pajama>;
     getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
-    getAllPajamas(): Promise<Pajama[]>;
     update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama>;
+    getAllPajamas(): Promise<Pajama[]>;
+    getPajamasCount(): Promise<number>;
+    getPajamasPaginated(skipQuantity: number, itemsPerPage: number): Promise<Pajama[]>;
 }

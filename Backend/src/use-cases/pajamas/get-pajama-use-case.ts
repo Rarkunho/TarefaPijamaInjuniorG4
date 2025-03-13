@@ -1,8 +1,8 @@
-import { PajamaInfoResponse, PajamasRepository } from "src/repositories/pajamas-repository"
-import { ResourceNotFoundError } from "../errors/resource-not-found"
+import { PajamaInfoResponse, PajamasRepository } from "src/repositories/pajamas-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface GetPajamaUseCaseRequest {
-    id: string;
+    pajamaId: string;
 }
 
 interface GetPajamaUseCaseResponse {
@@ -12,8 +12,8 @@ interface GetPajamaUseCaseResponse {
 export class GetPajamaUseCase {
     constructor(private readonly pajamaRepository: PajamasRepository) {}
 
-    async execute({ id }: GetPajamaUseCaseRequest): Promise<GetPajamaUseCaseResponse> {
-        const pajama = await this.pajamaRepository.findById(id);
+    async execute({ pajamaId }: GetPajamaUseCaseRequest): Promise<GetPajamaUseCaseResponse> {
+        const pajama = await this.pajamaRepository.findById(pajamaId);
 
         if (pajama === null) {
             throw new ResourceNotFoundError();

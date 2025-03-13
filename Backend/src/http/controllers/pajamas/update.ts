@@ -1,13 +1,13 @@
 import { PajamaGender, PajamaSeason } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { UpdatePajamaUseCase, UpdatePajamaUseCaseRequest } from "src/use-cases/pajamas/update-pajama-use-case";
 import { z } from "zod";
 
 export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply) {
     const updateParamsSchema = z.object({
-        id: z.string().uuid()
+        pajamaId: z.string().uuid()
     });
 
     const updateBodySchema = z.object({
@@ -43,7 +43,7 @@ export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply)
         .optional()
     });
 
-    const { id } = updateParamsSchema.parse(request.params);
+    const { pajamaId } = updateParamsSchema.parse(request.params);
     const updateBody = updateBodySchema.parse(request.body);
 
     try {
@@ -51,7 +51,7 @@ export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply)
         const updatePajamasUseCase = new UpdatePajamaUseCase(prismaPajamasRepository);
         
         const pajama = await updatePajamasUseCase.execute({
-            id,
+            pajamaId,
             data: updateBody
         } as UpdatePajamaUseCaseRequest);
 

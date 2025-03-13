@@ -4,7 +4,7 @@ import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-
 import { CreatePajamaUseCase, CreatePajamaUseCaseRequest } from "src/use-cases/pajamas/create-pajama-use-case";
 import { z } from "zod";
 
-export async function CreatePajama(request: FastifyRequest, reply: FastifyReply) {
+export async function createPajama(request: FastifyRequest, reply: FastifyReply) {
     const registerBodySchema = z.object({
         name: z.string()
         .min(5)
@@ -28,7 +28,7 @@ export async function CreatePajama(request: FastifyRequest, reply: FastifyReply)
 
         price: z.number()
         .positive({ message: "The price must be a positive number" })
-        .refine((price) => /^\d+(\.\d{2})?$/.test(price.toString()), {
+        .refine((price) => /^\d+(\.\d{1,2})?$/.test(price.toString()), {
             message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
         }),
 
@@ -47,7 +47,7 @@ export async function CreatePajama(request: FastifyRequest, reply: FastifyReply)
         const createPajamaResponse = await createPajamaCase.execute(registerBody as CreatePajamaUseCaseRequest);
 
         return reply.status(201).send(createPajamaResponse.pajama);
-        
+
     } catch (error) {
         throw error;
     }

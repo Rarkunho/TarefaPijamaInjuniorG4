@@ -1,6 +1,6 @@
 import { Feedback } from "@prisma/client"
 import { FeedbacksRepository } from "src/repositories/feedbacks-repository"
-import { ResourceNotFoundError } from "../errors/resource-not-found"
+import { ResourceNotFoundError } from "../errors/resource-not-found-error"
 
 
 interface GetFeedbackUseCaseRequest {

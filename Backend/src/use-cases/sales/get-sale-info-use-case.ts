@@ -1,8 +1,7 @@
-import { SaleInfoResponse, SalesRepository } from "src/repositories/sales-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
-import { SaleInfoRetrievalFailedError } from "../errors/sale-info-retrieval-failed-error";
 import { AddressRepository } from "src/repositories/address-repository";
 import { SalePajamasRepository } from "src/repositories/sale-pajamas-repository";
+import { SaleInfoResponse, SalesRepository } from "src/repositories/sales-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface GetSaleInfoSaleUseCaseRequest {
     id: string;

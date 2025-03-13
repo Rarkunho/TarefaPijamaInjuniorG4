@@ -1,11 +1,10 @@
-import { z } from "zod";
+import { PaymentMethod } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
-import { PaymentMethod } from "@prisma/client";
-import { UpdateSaleUseCase } from "src/use-cases/sales/update-sale-use-case";
-import { SaleUpdateFailedError } from "src/use-cases/errors/sale-update-failed-error";
 import { SaleUpdateInput } from "src/repositories/sales-repository";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
+import { UpdateSaleUseCase } from "src/use-cases/sales/update-sale-use-case";
+import { z } from "zod";
 
 export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
     const updateSaleParamsSchema = z.object({

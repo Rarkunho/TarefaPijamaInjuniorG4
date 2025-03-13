@@ -22,7 +22,7 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
             
             price: z.coerce.number()
             .positive({ message: "The price must be a positive number" })
-            .refine((price) => /^\d+(\.\d{2})?$/.test(price.toString()), {
+            .refine((price) => /^\d+(\.\d{1,2})?$/.test(price.toString()), {
                 message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
             }),
 

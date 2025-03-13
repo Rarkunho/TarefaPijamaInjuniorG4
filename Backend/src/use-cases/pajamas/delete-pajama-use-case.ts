@@ -1,9 +1,9 @@
 import { Pajama } from "@prisma/client";
 import { PajamasRepository } from "src/repositories/pajamas-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface DeletePajamaUseCaseRequest {
-    id: string;
+    pajamaId: string;
 }
 
 interface DeletePajamaUseCaseResponse {
@@ -13,14 +13,14 @@ interface DeletePajamaUseCaseResponse {
 export class DeletePajamaUseCase {
     constructor(private readonly pajamaRepository: PajamasRepository) {}
 
-    async execute({ id }: DeletePajamaUseCaseRequest): Promise<DeletePajamaUseCaseResponse> {
-        const existingPajama = await this.pajamaRepository.findById(id);
+    async execute({ pajamaId }: DeletePajamaUseCaseRequest): Promise<DeletePajamaUseCaseResponse> {
+        const existingPajama = await this.pajamaRepository.findById(pajamaId);
 
         if (existingPajama === null) {
             throw new ResourceNotFoundError();
         }
         
-        const deletedPajama = await this.pajamaRepository.delete(id);
+        const deletedPajama = await this.pajamaRepository.delete(pajamaId);
 
         return { pajama: deletedPajama } as DeletePajamaUseCaseResponse;
     }

@@ -1,9 +1,9 @@
-import { z } from "zod";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
-import { DeleteSaleUseCase } from "src/use-cases/sales/delete-sale-use-case";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
 import { PrismaAddressRepository } from "src/repositories/prisma/prisma-address-repository";
+import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
+import { DeleteSaleUseCase } from "src/use-cases/sales/delete-sale-use-case";
+import { z } from "zod";
 
 export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
     const deleteParamsSchema = z.object({

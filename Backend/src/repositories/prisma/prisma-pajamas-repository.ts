@@ -91,4 +91,19 @@ export class PrismaPajamasRepository implements PajamasRepository {
 
         return pajamaArray;
     }
+
+    async getPajamasCount(): Promise<number> {
+        const pajamasCount = await prismaClient.pajama.count();
+
+        return pajamasCount;
+    }
+
+    async getPajamasPaginated(skipQuantity: number, itemsPerPage: number): Promise<Pajama[]> {
+        const pajamas = await prismaClient.pajama.findMany({
+            skip: skipQuantity,
+            take: itemsPerPage
+        });
+
+        return pajamas;
+    }
 }
