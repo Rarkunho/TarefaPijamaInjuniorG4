@@ -6,6 +6,7 @@ import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-
 import { PrismaSalePajamasRepository } from "src/repositories/prisma/prisma-sale-pajamas-repository";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
 import { InsufficientPajamaSizeStockQuantityError } from "src/use-cases/errors/insufficient-pajama-size-stock-quantity-error";
+import { PurchaseNotAllowedError } from "src/use-cases/errors/purchase-not-allowed-error";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { CreateSaleUseCase, CreateSaleUseCaseRequest } from "src/use-cases/sales/create-sale-use-case";
 import { z } from "zod";
@@ -124,6 +125,10 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
 
         if (error instanceof InsufficientPajamaSizeStockQuantityError) {
             return reply.status(422).send({ message: error.message });
+        }
+
+        if (error instanceof PurchaseNotAllowedError) {
+            return reply.status(400).send({ message: error.message });
         }
         
         throw error;

@@ -6,6 +6,7 @@ import { SalePajamaCreateInput, SalePajamasRepository } from "src/repositories/s
 import { SaleCreateInput, SalesRepository } from "src/repositories/sales-repository";
 import { InsufficientPajamaSizeStockQuantityError } from "../errors/insufficient-pajama-size-stock-quantity-error";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { PurchaseNotAllowedError } from "../errors/purchase-not-allowed-error";
 
 export interface CreateSaleUseCaseRequest
     extends Omit<SaleCreateInput, 'price'> {}
@@ -41,6 +42,12 @@ export class CreateSaleUseCase {
 
         // Buscando os pijamas com base nos ID's extraídos:
         const pajamasBoughtInfo = await this.pajamasRepository.findManyById(pajamasBoughtIds);
+
+        // Verificando se todos os pijamas comprados estão com a flag { onSale: true }:
+        for (const pajamaBought of pajamasBoughtInfo) {
+            if (pajamaBought.onSale) continue;
+            throw new PurchaseNotAllowedError(pajamaBought.id);
+        }
         
         // Array associativo para cada id de pijama e seu respectivo preço:
         const pajamasPriceMap = new Map(pajamasBoughtInfo.map(pajama => [pajama.id, pajama.price]));
