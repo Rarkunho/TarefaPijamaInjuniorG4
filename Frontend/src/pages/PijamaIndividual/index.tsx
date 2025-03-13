@@ -29,11 +29,11 @@ export default function PijamaIndividual() {
                         <div className={styles.size}>
                             <h2 className={styles.tituloItalico}>Tamanhos:</h2>
                             <div>
-                                <SizeButton/>
-                                <SizeButton/>
-                                <SizeButton/>
-                                <SizeButton/>
-                                <SizeButton/>
+                                <SizeButton text="PP"/>
+                                <SizeButton text="P"/>
+                                <SizeButton text="M"/>
+                                <SizeButton text="G"/>
+                                <SizeButton text="GG"/>
                             </div>
                             <p>Ainda temos <span>x</span> peças do tamanho escolhido <br/>em nosso estoque!</p>
                         </div>
