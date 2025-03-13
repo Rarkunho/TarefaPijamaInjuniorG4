@@ -15,7 +15,7 @@ Front:
 - [x] pajamaRoutes
 - [ ] userRoutes
 - [x] saleRoutes
-- [ ] pajamaSizeRoutes
+- [x] pajamaSizeRoutes
 
 
 ## Autores:
