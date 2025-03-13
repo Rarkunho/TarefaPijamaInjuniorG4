@@ -20,7 +20,7 @@ export default function Favoritos() {
     const movement = 500
 
     for (let index = 0; index < totalFavs; index++) {
-        arrayCards.push(<Cards key={index} />);
+        arrayCards.push(<Cards className={styles.card} key={index} />);
     }
 
     const scrollLeft = () => {
@@ -52,7 +52,7 @@ export default function Favoritos() {
         if (containerRef.current) {
             containerRef.current.scrollBy({ left: movement, behavior: 'smooth' });
             console.log(containerRef.current.scrollLeft);
-            if (containerRef.current.scrollLeft > Number(containerRef.current.clientWidth) - Number(containerRef.current.clientWidth) / arrayCards.length){
+            if (containerRef.current.scrollLeft > 1){
                 btnDirRef.current?.classList.add(styles.btnInactive);
             }
         }
