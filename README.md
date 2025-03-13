@@ -14,7 +14,7 @@ Front:
 - [ ] feedbackRoutes
 - [x] pajamaRoutes
 - [ ] userRoutes
-- [ ] saleRoutes
+- [x] saleRoutes
 - [ ] pajamaSizeRoutes
 
 
