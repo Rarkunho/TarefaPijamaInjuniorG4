@@ -1,3 +1,64 @@
-.title{
-    font-family: inherit;
+.fundo {
+    background-image: url("../../assets/Vector.png");
+    background-size: cover; /* A imagem vai cobrir toda a área da main */
+    background-position: center; /* Centraliza a imagem */
+    background-attachment: fixed; /* A imagem ficará fixa quando rolar a página */
+    height: 100%; /* Garante que a imagem ocupe toda a altura da main */
+    margin-bottom: 0px;
 }
+
+
+.title{
+    font-size: 2.5rem;
+    color: var(--vermelho300);
+}
+
+.inactive{
+    color: var(--cinza200);
+}
+
+.nav{
+    display: flex;
+    margin-top: 3rem;
+    margin-left: 2.5rem;
+    margin-bottom: 1.125rem;
+}
+
+.favcards__container{
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1.0625rem;
+    scrollbar-color: transparent;
+    scrollbar-width: none;
+}
+
+
+.favcards__carrosel{
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.favcards__carrosel::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 4.3125rem;
+    width: 7rem;
+    height: 100%;
+    background: linear-gradient(to right, transparent, white);
+    pointer-events: none;
+}
+
+.botao{
+    height: fit-content;
+}
+
+.botao.btnInactive{
+    filter: grayscale(100%) opacity(50%);
+    transition: .2s ease-in-out;
+    cursor: not-allowed;
+}
+

@@ -67,7 +67,7 @@ export default function Favoritos() {
                     alt="Ícone de Carrinhos"
                     onClick={() => navigate("/carrinho")}
                 />
-                <h2 className={`${styles.title} ${styles.inactive}`}>
+                <h2 className={`${styles.title} ${styles.inactive}`} onClick={() => navigate("/carrinho")}>
                     Carrinho
                 </h2>
                 <img
@@ -76,7 +76,7 @@ export default function Favoritos() {
                     alt="Ícone de Favoritos"
                     onClick={() => navigate("/favoritos")}
                 />
-                <h2 className={styles.title}>Favoritos</h2>
+                <h2 className={styles.title}  onClick={() => navigate("/favoritos")}>Favoritos</h2>
             </nav>
             <div className={`${styles.favcards__carrosel} ${styles.fundo}`}>
                 <img
