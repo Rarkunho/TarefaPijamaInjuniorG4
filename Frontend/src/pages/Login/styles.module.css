@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Numans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Numans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Numans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.corpo{
+    background-image: url("/src/assets/backgroundLogin.png");
+    background-size: cover; /* Faz a imagem cobrir todo o espaço */
+    background-position: center; /* Centraliza a imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+.container{
+    background-color: rgba(116, 1, 11, 1);
+    color: white;
+    width: 488px;
+    height: 600px;
+    margin: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.container h1{
+    font-size: 48px;
+    font-family: "Numans", sans-serif !important;
+    font-weight: 400;
+    margin-bottom: 20px;
+    letter-spacing: 0.4rem;
+}
+.container p{
+    font-size: 20px;
+    font-family: "Roboto Serif", sans-serif !important;
+    font-weight: 400;
+    letter-spacing: 0.12rem;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-width: 400px;
+    margin-top: 3rem;
+    font-size: 20px; 
+    
+}
+input{
+    width: 350px;
+    height: 40px;
+    border: none;
+    padding: 0 10px;
+    font-size: 20px;
+    font-family: "Roboto", sans-serif !important;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.15rem;
+}
+form ::placeholder{
+    color:#00000078;
+}
+form span{
+    font-family: "Roboto", sans-serif ;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    text-align: left;
+    margin-top: -10px;
+    margin-left: 9px;
+}
+
+.botao1 button{
+    width: 350px;
+    height: 40px;
+    background-color: rgba(163, 22, 33, 1);
+    color: white;
+    border: none;
+    font-size: 20px;
+    font-family: "Montserrat", sans-serif !important;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer !important;
+}
+
+.botao1 hr{
+    width: 390px;
+    border-radius: 2px;
+    margin-top: 30px;
+}
+.botao2 button{
+    width: 220px;
+    height: 44px;
+    background-color: rgba(163, 22, 33, 1);
+    color: white;
+    border: none;
+    font-size: 20px;
+    margin-top: 35px;
+    font-family: "Montserrat", sans-serif !important;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.esqueceuSenha p{
+    color: rgba(237, 142, 150, 1);
+    font-family: "Roboto", sans-serif ;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.6px;
+    text-align: left;
+    margin-top: 2px;
+    text-decoration: underline;
+    margin-top: -7px;
+}
+
+.botao1 button:hover{
+    background-color: rgba(81, 11, 17, 0.8);
+}
+
+
+
+.campoSenha {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 350px;
+    height: 40px; /* Garante que o campo de senha tenha o mesmo tamanho */
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white; /* Para manter o mesmo fundo */
+    padding: 0 19px 0 0;
+}
+
+.campoSenha input {
+    flex: 1;
+    height: 100%; /* Mantém o input preenchendo toda a altura */
+    padding-right: 49px; /* Garante espaço para o botão de visibilidade */
+    border: none;
+    font-size: 20px;
+    font-family: "Roboto", sans-serif !important;
+    letter-spacing: 0.15rem;
+    outline: none; /* Remove a borda ao focar */
+    background: transparent; /* Mantém o fundo igual */
+}
+
+.toggleSenha {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.iconeSenha {
+    width: 20px;
+    height: 20px;
+    opacity: 0.6; /* Ícone levemente transparente */
+    transition: opacity 0.2s ease-in-out;
+}
+
+.toggleSenha:hover .iconeSenha {
+    opacity: 1; /* Ícone mais visível ao passar o mouse */
+}
