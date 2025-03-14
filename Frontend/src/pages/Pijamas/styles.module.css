@@ -1,5 +1,6 @@
 .fundo {
-    background-image: url("../../assets/Vector.png");
+    background-image: linear-gradient(rgba(252, 252, 252, 0.76), rgba(234, 235, 240, 0.753)),
+    url("../../assets/Vector.png");
     background-size: cover; /* A imagem vai cobrir toda a área da main */
     background-position: center; /* Centraliza a imagem */
     background-attachment: fixed; /* A imagem ficará fixa quando rolar a página */
@@ -101,6 +102,15 @@
     margin: 50px;
     margin-bottom: 0px;
     padding-bottom: 50px;
+}
+
+.paginacao {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 30px;
+    margin: 0;
 }
 
 

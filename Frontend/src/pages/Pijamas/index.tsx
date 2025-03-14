@@ -4,6 +4,7 @@ import Cards from "../../components/Cards"
 import { useParams } from 'react-router-dom';
 import usePijamaStore from "../../stores/usePijamaStore";
 import { useEffect, useState } from "react";
+import Pagination from "../../components/Paginacao";
 import Pijama from "../../types/Pijama";
 
 type GenreParams = Record<string, string | undefined>;
@@ -17,10 +18,18 @@ export default function Pijamas() {
     const [typeFilter, setTypeFilter] = useState<string>(param || "todos")
     const [seasonFilter, setSeasonFilter] = useState<string>('todos')
     const [filtro, setFiltro] = useState<string>("")
-    //const [filteredPijamas, setFilteredPijamas] = useState<Pijama[]>([])
+    const [filteredPijamas, setFilteredPijamas] = useState<Pijama[]>([])
+    const [paginaAtual, setPaginaAtual] = useState<number>(1)
 
     const genderOptions = ["MALE", "FEMALE", "UNISEX", "FAMILY"]
     const typeOptions = ["ADULT", "CHILD"]
+    const itensPorPagina = 12
+
+    const indiceInicial = (paginaAtual - 1) * itensPorPagina;
+    const indiceFinal = indiceInicial + itensPorPagina;
+    const pijamasPaginados = filteredPijamas.slice(indiceInicial, indiceFinal);
+
+    const totalPaginas = Math.ceil(pijamas.length / itensPorPagina);
 
 
     
@@ -28,27 +37,33 @@ export default function Pijamas() {
         getPijamas(); // dispara a atualização
     }, [getPijamas]);
 
+
+    useEffect(() => {
+        const result = pijamas
+            .filter(pijama => (genderFilter === "todos" || pijama.gender === genderFilter))
+            .filter(pijama => (typeFilter === "todos" || pijama.type === typeFilter))
+            .filter(pijama => (seasonFilter === "todos" || pijama.season === seasonFilter))
+
+        setFilteredPijamas(result)
+    }, [genderFilter, typeFilter, seasonFilter, pijamas])
+
+   // useEffect(() => {
+    //    if (genderFilter !== "todos") {
+    //        filterByGender(genderFilter) 
+    //    }
+   // }, [genderFilter, filterByGender])
+
     //useEffect(() => {
-    //    console.log(pijamas, "carregado"); // só roda quando 'pijamas' mudar
-    //}, [pijamas]);
+     //   if (typeFilter !== "todos") {
+      //      filterByType(typeFilter); 
+     //   }
+    //}, [typeFilter, filterByType])
 
-    useEffect(() => {
-        if (genderFilter !== "todos") {
-            filterByGender(genderFilter) 
-        }
-    }, [genderFilter, filterByGender])
-
-    useEffect(() => {
-        if (typeFilter !== "todos") {
-            filterByType(typeFilter); 
-        }
-    }, [typeFilter, filterByType])
-
-    useEffect(() => {
-        if (seasonFilter !== "todos") {
-            filterBySeason(seasonFilter); 
-        }
-    }, [seasonFilter, filterBySeason])
+    //useEffect(() => {
+     //   if (seasonFilter !== "todos") {
+      //      filterBySeason(seasonFilter); 
+       // }
+    //}, [seasonFilter, filterBySeason])
 
     const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setGenderFilter(event.target.value);
@@ -147,13 +162,20 @@ export default function Pijamas() {
             </section>
             <main className={styles.principal}>
                 <ul className={styles.pijamas}>
-                {pijamas.map((pijama, index) => (
+                {pijamasPaginados.map((pijama, index) => (
                     <Cards 
                         key={index} 
                         pijama={pijama} 
                     />
                 ))}
                 </ul>
+                <div className={styles.paginacao}>
+                    <Pagination 
+                        totalPages={totalPaginas} 
+                        currentPage={paginaAtual} 
+                        onPageChange={setPaginaAtual} 
+                    />
+            </div>
             </main>
         </div>
         </>

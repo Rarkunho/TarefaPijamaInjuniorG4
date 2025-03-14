@@ -16,6 +16,13 @@ export default function Cards({ pijama, ...props }: CardsProps) {
     const navigate = useNavigate()
     const [preco, setPreco] = useState<number>(pijama.price)
     const [liked, setLiked] = useState<boolean>(pijama.favorite)
+    const {addToFavorite} = usePijamaStore();
+
+    function handleClick() {
+        addToFavorite(pijama.id)
+        console.log(pijama.id)
+        navigate("/favoritos")
+    }
 
 
     useEffect(() => {
@@ -29,19 +36,23 @@ export default function Cards({ pijama, ...props }: CardsProps) {
         <>
             <li 
                 {...props} 
-                key={pijama.key}
+                key={pijama.id}
                 className={`${styles.container} ${props.className}`}
-                onClick={() => navigate(`/pijama/${pijama.key}`)}
             >
                 <div className={styles.layout}>
                     <img src={pijama.image} alt="Foto do Pijama"/>
-                    <button //onClick={handleLike}
-                     >
-                        <img src={liked ? botaoCoracaoAtivo : botaoCoracaoInativo} alt="Botão de Curtir"/>
+                    <button onClick={liked ? undefined : handleClick}>
+                        <img 
+                            src={liked ? botaoCoracaoAtivo : botaoCoracaoInativo} 
+                            alt="Botão de Curtir" 
+                        />
                     </button>
                 </div>
-                <div  className={`${styles.info} 
-                ${pijama.salePercent !== undefined && pijama.salePercent > 0 ? styles.precoComDesconto : styles.precoSemDesconto}`}>
+                <div  
+                    className={`${styles.info} 
+                    ${pijama.salePercent !== undefined && pijama.salePercent > 0 ? styles.precoComDesconto : styles.precoSemDesconto}`}
+                    onClick={() => navigate(`/pijama/${pijama.id}`)}
+                >
                     <h2>{pijama.name}</h2>
                     <div className={styles.preco}>
                         <div>

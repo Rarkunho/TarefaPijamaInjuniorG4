@@ -1,15 +1,20 @@
 import { create } from "zustand";
 import api from "../services/api";
 import Pijama from "../types/Pijama";
+import PijamaSizes from "../types/PijamaSizes";
 
 interface PijamaStore {
     pijamas: Pijama[]
+    pijamaSelecionado?: Pijama
+    pijamaSizes?: PijamaSizes[]
     getPijamas: () => Promise<void>
     filterByGender: (gender: string) => Promise<void>
     filterByType: (type: string) => Promise<void>
     filterBySeason: (station: string) => Promise<void>
-    filterById: (key: number) => Promise<void>
+    filterById: (id: string) => Promise<void>
     filterByFavorite: () => Promise<void>
+    addToFavorite: (id: string) => Promise<void>
+    filterBySizes: (id: string, size: string) => Promise<void>
 }
 
 
@@ -17,11 +22,14 @@ interface PijamaStore {
 const usePijamaStore = create<PijamaStore>((set) => (
     {
         pijamas: [],
+        pijamaSelecionado: undefined,
+        pijamaSizes: undefined,
         getPijamas: async () => {
             try {
                 const response = await api.get("/pajamas")
                 console.log(response.data.pajamas, "pijamas store");
                 set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
+                console.log(response.data)
             } catch (error) {
                 console.error("Erro ao buscar os pijamas:", error)
             }
@@ -67,14 +75,35 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 console.error("Erro ao filtrar por estação:", error)
             }
         },
-        filterById: async (id) => {
+        filterById: async (id: string) => {
             try {
                 const response = await api.get("/pajamas", {
                     params: { id }
+                });
+                console.log("resposta: ", response.data.pajamas)
+                const pijamaSelecionado = response.data.pajamas.find((pijama: Pijama) => pijama.id === id)
+                set({ pijamaSelecionado })
+            } catch (error) {
+                console.error("Erro ao buscar pijama pelo ID:", error);
+            }
+        },
+        addToFavorite: async (id: string) => {
+            try {
+                const response = await api.patch(`/pajamas/${id}`, {
+                    favorite: true
                 })
                 set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
+            } catch (error){
+                console.error("Erro ao adicionar pijama aos favoritos:", error)
+            }
+        },
+        filterBySizes: async (id: string, size: string) => {
+            try {
+                const resposta = await api.get(`/pajamas/stock/${encodeURIComponent(id)}/${encodeURIComponent(size)}`)
+                console.log("resposta do sizes",resposta.data)
+                set({ pijamaSizes: resposta.data })
             } catch (error) {
-                console.error("Erro ao buscar pijama pelo ID:", error)
+                console.error("Erro ao buscar tamanhos de pijama pelo ID:", error);
             }
         }
 }))

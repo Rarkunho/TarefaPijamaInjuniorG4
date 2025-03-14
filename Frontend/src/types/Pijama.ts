@@ -11,7 +11,8 @@ interface Pijama {
     favorite: boolean
     onSale: boolean
     salePercent?: number
-    key: number
+    id: string
 }
+
 
 export default Pijama
