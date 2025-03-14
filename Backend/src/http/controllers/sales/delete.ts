@@ -7,7 +7,9 @@ import { z } from "zod";
 
 export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
     const deleteParamsSchema = z.object({
-        saleId: z.string().uuid()
+        saleId: z.string()
+            .nonempty("Sale ID cannot be empty")
+            .uuid("Sale ID must be a valid UUID")
     });
 
     const { saleId } = deleteParamsSchema.parse(request.params);

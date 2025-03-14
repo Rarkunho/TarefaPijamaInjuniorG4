@@ -4,26 +4,30 @@ import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-e
 import { GetFeedbackUseCase } from "src/use-cases/feedbacks/get-feedback-use-case";
 import { z } from "zod";
 
-export async function getFeedback(request : FastifyRequest, reply : FastifyReply){
+export async function getFeedback(request: FastifyRequest, reply: FastifyReply) {
     const getParamsSchema = z.object({
-        id: z.string().uuid()
-    })
+        feedbackId: z.string()
+            .nonempty("Feedback ID cannot be empty")
+            .uuid("Feedback ID must be a valid UUID")
+    });
 
-    const { id } = getParamsSchema.parse(request.params)
+    const { feedbackId } = getParamsSchema.parse(request.params);
     
+    const prismaFeedbacksRepository = new PrismaFeedbacksRepository();
+    const getFeedbackUseCase = new GetFeedbackUseCase(prismaFeedbacksRepository);
+
     try {
-        const prismaFeedbacksRepository = new PrismaFeedbacksRepository()
-        const getFeedbackCase = new GetFeedbackUseCase(prismaFeedbacksRepository)
-        const feedback = await getFeedbackCase.execute({
-            id
-        })
-        return reply.status(200).send(feedback)
-    } catch (error) {
-        if ( error instanceof ( ResourceNotFoundError )){
-            return reply.status(404).send({message : error.message})
-        }
-        throw error
-    }
+        const getFeedbackResponse = await getFeedbackUseCase.execute({
+            feedbackId
+        });
 
-    
+        return reply.status(200).send(getFeedbackResponse.feedback);
+
+    } catch (error) {
+        if (error instanceof ResourceNotFoundError) {
+            return reply.status(404).send({ message: error.message })
+        }
+
+        throw error;
+    }
 }

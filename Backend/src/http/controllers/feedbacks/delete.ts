@@ -4,26 +4,30 @@ import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-e
 import { DeleteFeedbackUseCase } from "src/use-cases/feedbacks/delete-feedback-use-case";
 import { z } from "zod";
 
-export async function deleteFeedback(request : FastifyRequest, reply : FastifyReply){
-    const getParamsSchema = z.object({
-        id: z.string().uuid()
-    })
+export async function deleteFeedback(request: FastifyRequest, reply: FastifyReply) {
+    const deleteParamsSchema = z.object({
+        feedbackId: z.string()
+            .nonempty("Feedback ID cannot be empty")
+            .uuid("Feedback ID must be a valid UUID")
+    });
 
-    const { id } = getParamsSchema.parse(request.params)
-    
+    const { feedbackId } = deleteParamsSchema.parse(request.params);
+
+    const prismaFeedbacksRepository = new PrismaFeedbacksRepository();
+    const deleteFeedbackUseCase = new DeleteFeedbackUseCase(prismaFeedbacksRepository);
+
     try {
-        const prismaFeedbacksRepository = new PrismaFeedbacksRepository()
-        const deleteFeedbackCase = new DeleteFeedbackUseCase(prismaFeedbacksRepository)
-        const feedback = await deleteFeedbackCase.execute({
-            id
-        })
-        return reply.status(204).send(feedback)
-    } catch (error) {
-        if ( error instanceof ( ResourceNotFoundError )){
-            return reply.status(404).send({message : error.message})
-        }
-        throw error
-    }
+        await deleteFeedbackUseCase.execute({
+            feedbackId
+        });
 
-    
+        return reply.status(204).send();
+
+    } catch (error) {
+        if (error instanceof ResourceNotFoundError) {
+            return reply.status(404).send({ message: error.message });
+        }
+
+        throw error;
+    }
 }

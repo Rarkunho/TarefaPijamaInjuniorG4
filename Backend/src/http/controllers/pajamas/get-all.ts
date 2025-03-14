@@ -2,13 +2,19 @@ import { PajamaGender, PajamaType } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { GetAllPajamasUseCase, GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
-import { z, ZodError } from "zod";
+import { z } from "zod";
 
 export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply) {
     const getAllPajamasQuerySchema = z.object({
-        page: z.coerce.number().int().positive().optional(),
+        page: z.coerce.number()
+            .int("Page must be an integer")
+            .positive("Page must be a positive number")
+            .optional(),
 
-        perPage: z.coerce.number().int().positive().optional(),
+        perPage: z.coerce.number()
+            .int("PerPage must be an integer")
+            .positive("PerPage must be a positive number")
+            .optional(),
 
         favorite: z.string()
             .transform((val, ctx) => {
@@ -17,7 +23,7 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
 
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
-                    message: 'Invalid boolean value. Expected \'true\' or \'false\''
+                    message: 'Invalid boolean value for favorite. Expected "true" or "false"',
                 });
 
                 return z.NEVER;
@@ -31,16 +37,24 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
 
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
-                    message: 'Invalid boolean value. Expected \'true\' or \'false\''
+                    message: 'Invalid boolean value for onSale. Expected "true" or "false"',
                 });
 
                 return z.NEVER;
             })
             .optional(),
 
-        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
+        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]])
+            .optional()
+            .refine(val => Object.values(PajamaGender).includes(val as PajamaGender), {
+                message: 'Invalid gender. Expected one of: ' + Object.values(PajamaGender).join(', '),
+            }).optional(),
 
-        type: z.enum(Object.values(PajamaType) as [string, ...string[]]).optional()
+        type: z.enum(Object.values(PajamaType) as [string, ...string[]])
+            .optional()
+            .refine(val => Object.values(PajamaType).includes(val as PajamaType), {
+                message: 'Invalid pajama type. Expected one of: ' + Object.values(PajamaType).join(', '),
+            }).optional(),
 
     }).refine(data => {
         if (data.page !== undefined && data.perPage === undefined) {
@@ -53,8 +67,9 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
 
         return true;
     }, {
-        message: "Invalid Query Params"
+        message: "Invalid Query Params: Either both page and perPage must be provided, or at least one should be set.",
     });
+
 
     const { page, perPage, ...queryProps } = getAllPajamasQuerySchema.parse(request.query);
 

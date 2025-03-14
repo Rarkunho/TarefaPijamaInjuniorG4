@@ -1,19 +1,26 @@
+import { Feedback } from "@prisma/client";
 import { FeedbacksRepository } from "src/repositories/feedbacks-repository";
 
-interface CreateFeedbackRequest{
-    name: string,
-    description : string,
-    rating : number
+interface CreateFeedbackUseCaseRequest {
+    name: string;
+    description: string;
+    rating: number;
 }
 
-export class CreateFeedbackCase{
-    constructor (private feedbackRepository : FeedbacksRepository){}
+interface CreateFeedbackUseCaseResponse {
+    feedback: Feedback;
+}
 
-    async execute ({name, description, rating} : CreateFeedbackRequest){
-        await this.feedbackRepository.create({
+export class CreateFeedbackCase {
+    constructor(private readonly feedbackRepository: FeedbacksRepository) {}
+
+    async execute({ name, description, rating }: CreateFeedbackUseCaseRequest) {
+        const feedbackCreated = await this.feedbackRepository.create({
             name,
             description,
             rating
-        })
+        });
+
+        return { feedback: feedbackCreated } as CreateFeedbackUseCaseResponse;
     }
 }

@@ -1,28 +1,25 @@
-import { Feedback } from "@prisma/client"
-import { FeedbacksRepository } from "src/repositories/feedbacks-repository"
-import { ResourceNotFoundError } from "../errors/resource-not-found-error"
-
+import { Feedback } from "@prisma/client";
+import { FeedbacksRepository } from "src/repositories/feedbacks-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface GetFeedbackUseCaseRequest {
-    id: string
+    feedbackId: string;
 }
 
 interface GetFeedbackUseCaseResponse {
-    feedback : Feedback
+    feedback: Feedback;
 }
 
 export class GetFeedbackUseCase {
-    constructor(private readonly feedbackRepository : FeedbacksRepository){
+    constructor(private readonly feedbackRepository: FeedbacksRepository) {}
 
-    }
-    async execute( { id } : GetFeedbackUseCaseRequest): Promise<GetFeedbackUseCaseResponse>{
-        const feedback = await this.feedbackRepository.getById(id)
+    async execute({ feedbackId }: GetFeedbackUseCaseRequest): Promise<GetFeedbackUseCaseResponse> {
+        const feedback = await this.feedbackRepository.findById(feedbackId);
 
-        if (!feedback){
-            throw new ResourceNotFoundError()
+        if (feedback === null) {
+            throw new ResourceNotFoundError();
         }
 
-        return { feedback }
+        return { feedback: feedback } as GetFeedbackUseCaseResponse;
     }
-
 }

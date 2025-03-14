@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { createUser } from "./create";
+import { createUser } from "./register";
 import { deleteUser } from "./delete";
 import { authenticateUser } from "./authenticate";
 import { getUser } from "./get";

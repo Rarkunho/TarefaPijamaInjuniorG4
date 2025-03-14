@@ -8,7 +8,9 @@ import { z } from "zod";
 
 export async function getSaleInfo(request: FastifyRequest, reply: FastifyReply) {
     const getSaleInfoParamsSchema = z.object({
-        saleId: z.string().uuid()
+        saleId: z.string()
+            .nonempty("Sale ID cannot be empty")
+            .uuid("Sale ID must be a valid UUID")
     });
 
     const { saleId } = getSaleInfoParamsSchema.parse(request.params);

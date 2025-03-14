@@ -1,27 +1,27 @@
-import { Feedback } from "@prisma/client"
-import { FeedbacksRepository } from "src/repositories/feedbacks-repository"
-import { ResourceNotFoundError } from "../errors/resource-not-found-error"
+import { Feedback } from "@prisma/client";
+import { FeedbacksRepository } from "src/repositories/feedbacks-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface DeleteFeedbackUseCaseRequest {
-    id : string
+    feedbackId: string;
 }
 
 interface DeleteFeedbackUseCaseResponse {
-    feedback : Feedback
+    feedback: Feedback;
 }
 
-export class DeleteFeedbackUseCase{
-    constructor(private feedbackRepository : FeedbacksRepository){
-        
-    }
+export class DeleteFeedbackUseCase {
+    constructor(private readonly feedbackRepository: FeedbacksRepository) {}
 
-    async execute( { id } : DeleteFeedbackUseCaseRequest): Promise<DeleteFeedbackUseCaseResponse>{
-        const feedback = await this.feedbackRepository.delete(id)
+    async execute({ feedbackId }: DeleteFeedbackUseCaseRequest): Promise<DeleteFeedbackUseCaseResponse> {
+        const existingFeedback = await this.feedbackRepository.findById(feedbackId);
 
-        if(!feedback) { 
-            throw new ResourceNotFoundError()
+        if (existingFeedback === null) {
+            throw new ResourceNotFoundError();
         }
 
-        return { feedback }
+        const deletedFeedback = await this.feedbackRepository.delete(feedbackId);
+
+        return { feedback: deletedFeedback } as DeleteFeedbackUseCaseResponse;
     }
 }

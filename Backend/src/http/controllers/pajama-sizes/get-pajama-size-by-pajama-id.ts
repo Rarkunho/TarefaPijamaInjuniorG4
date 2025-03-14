@@ -7,7 +7,10 @@ import { z } from "zod";
 
 export async function getPajamaSizeByPajamaId(request: FastifyRequest, reply: FastifyReply) {
     const getPajamaSizeByPajamaIdParamsSchema = z.object({
-        pajamaId: z.string().nonempty().uuid(),
+        pajamaId: z.string()
+            .nonempty("Pajama ID cannot be empty")
+            .uuid("Pajama ID must be a valid UUID"),
+            
         size: z.enum(Object.values(PajamaSizes) as [string, ...string[]])
     });
 
