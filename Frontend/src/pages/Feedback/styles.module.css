@@ -1,30 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Numans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Numans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Numans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@100..900&family=Inter:wght@100..900&family=Manrope:wght@200..800&family=Montserrat:wght@100..900&family=Numans&family=Nunito+Sans:wght@200..1000&family=Roboto+Serif:wght@100..900&family=Roboto:wght@100..900&display=swap');
 
 
 .corpo{
     background-image: url("/src/assets/backgroundLogin.png");
-    background-size: cover; /* Faz a imagem cobrir todo o espaço */
-    background-position: center; /* Centraliza a imagem */
+    background-size: cover;
+    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    text-align: center;
+    min-height: 100vh; /* Garante que o container ocupe toda a altura da tela */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
 }
 .container{
     background-color: rgba(116, 1, 11, 1);
     color: white;
     width: 488px;
-    height: 600px;
-    margin: 80px;
+    min-height: 600px; /* Garante que o container tenha um tamanho mínimo */
+    padding: 20px;
+    margin: 80px auto; /* Mantém centralizado horizontalmente */
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    justify-content: space-evenly; /* Distribui os elementos de forma equilibrada */
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 .container h1{
     font-size: 48px;
@@ -32,6 +34,7 @@
     font-weight: 400;
     margin-bottom: 34px;
     letter-spacing: 0.4rem;
+    margin-top: 26px;
 }
 .container p{
     font-size: 20px;
@@ -40,20 +43,11 @@
     letter-spacing: 0.12rem;
     margin-bottom: 19px;
 }
-form{
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    max-width: 400px;
-    margin-top: 3rem;
-    font-size: 20px; 
-    
-}
 input{
     width: 350px;
     height: 40px;
     border: none;
-    padding: 0 10px;
+    padding: 0 8px;
     font-size: 20px;
     font-family: "Roboto", sans-serif !important;
     border-radius: 2px;
@@ -67,6 +61,13 @@ input{
     border: none;
     text-align: left;
     padding: 0 10px;
+    font-size: 20px;
+    font-family: "Roboto", sans-serif !important;
+    padding: 7px 8px;
+    border-radius: 2px;
+}
+.descricao::placeholder{
+    color:#00000078;
 }
 
 form ::placeholder{
@@ -91,3 +92,73 @@ form ::placeholder{
 .botao1 button:hover{
     background-color: rgba(206, 56, 68, 0.8);
 }
+/* Estrelas */
+.starContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Reduzi o espaçamento para melhor alinhamento */
+    margin: 15px 0;
+}
+
+.star {
+    width: 40px; /* Tamanho mais adequado para responsividade */
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.star:hover {
+    transform: scale(1.1);
+}
+  
+.starSection {
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+.starSection p {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  /* Erros */
+.error {
+    color: rgb(175, 74, 74);
+    font-size: 18px;
+  }
+  
+  /* Modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+  
+.modal button {
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+.modal button:hover {
+    background-color: #b71c1c;
+  }
