@@ -23,11 +23,18 @@ enum PajamaSizes {
 enum PajamaGender {
   MALE
   FEMALE
+  UNISEX
+  FAMILY
 }
 
 enum PajamaSeason {
   SUMMER
   WINTER
+}
+
+enum PajamaType {
+  ADULT
+  CHILD
 }
 
 model User {
@@ -106,7 +113,7 @@ model Pajama {
   description String
   image       String
   season      PajamaSeason
-  type        String
+  type        PajamaType
   gender      PajamaGender
   favorite    Boolean
   onSale      Boolean

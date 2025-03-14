@@ -1,4 +1,4 @@
-import { PajamaGender } from "@prisma/client";
+import { PajamaGender, PajamaType } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { GetAllPajamasUseCase, GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
@@ -24,8 +24,6 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
         })
         .optional(),
 
-        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
-
         onSale: z.string()
         .transform((val, ctx) => {
             if (val === 'true') return true;
@@ -38,7 +36,11 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
 
             return z.NEVER;
         })
-        .optional()
+        .optional(),
+
+        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
+
+        type: z.enum(Object.values(PajamaType) as [string, ...string[]])
 
     }).refine(data => {
         if (data.page !== undefined && data.perPage === undefined) {

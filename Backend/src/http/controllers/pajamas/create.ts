@@ -1,4 +1,4 @@
-import { PajamaGender, PajamaSeason } from "@prisma/client";
+import { PajamaGender, PajamaSeason, PajamaType } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { CreatePajamaUseCase, CreatePajamaUseCaseRequest } from "src/use-cases/pajamas/create-pajama-use-case";
@@ -18,7 +18,7 @@ export async function createPajama(request: FastifyRequest, reply: FastifyReply)
 
         season: z.enum(Object.values(PajamaSeason) as [string, ...string[]]),
 
-        type: z.string().nonempty(),
+        type: z.enum(Object.values(PajamaType) as [string, ...string[]]),
 
         gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]),
 
