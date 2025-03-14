@@ -18,9 +18,9 @@ export default function Header() {
                 />
                 <nav>
                     <p onClick={() => navigate("/pijamas")}>Pijamas</p>
-                    <p onClick={() => navigate("/pijamas/feminino")}>Feminino</p>
-                    <p onClick={() => navigate("/pijamas/masculino")}>Masculino</p>
-                    <p onClick={() => navigate("/pijamas/infantil")}>Infantil</p>
+                    <p onClick={() => navigate("/pijamas/FEMALE")}>Feminino</p>
+                    <p onClick={() => navigate("/pijamas/MALE")}>Masculino</p>
+                    <p onClick={() => navigate("/pijamas/CHILD")}>Infantil</p>
                 </nav>
                 <div className={styles.container}>
                     <div>

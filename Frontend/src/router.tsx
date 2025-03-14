@@ -11,6 +11,7 @@ import Pijamas from "./pages/Pijamas";
 
 
 const router = createBrowserRouter([
+    
     {
         path: "/",
         element: <RooterLayout/>,
@@ -44,8 +45,8 @@ const router = createBrowserRouter([
                 element: <PijamaIndividual/>
             },
             {
-                path: "/pijamas/:genre?",
-                element: <Pijamas/>
+                path: "/pijamas/:param?",
+                element: <Pijamas/>,
             }
         ]
     }

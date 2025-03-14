@@ -7,7 +7,7 @@ interface PijamaStore {
     getPijamas: () => Promise<void>
     filterByGender: (gender: string) => Promise<void>
     filterByType: (type: string) => Promise<void>
-    filterByStation: (station: string) => Promise<void>
+    filterBySeason: (station: string) => Promise<void>
     filterById: (key: number) => Promise<void>
 }
 
@@ -31,7 +31,7 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 const response = await api.get("/pajamas", {
                     params: { gender }
                 })
-                set({ pijamas: response.data })
+                set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
             } catch (error) {
                 console.error("Erro ao filtrar por gênero:", error)
             }
@@ -41,19 +41,20 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 const response = await api.get("/pajamas", {
                     params: { type }
                 })
-                set({ pijamas: response.data })
+                set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
             } catch (error) {
-                console.error("Erro ao filtrar por gênero:", error)
+                console.error("Erro ao filtrar por tipo:", error)
             }
         },
-        filterByStation: async (station: string) => {
+        filterBySeason: async (season: string) => {
             try {
                 const response = await api.get("/pajamas", {
-                    params: { station }
+                    params: { season }
                 })
-                set({ pijamas: response.data })
+                //console.log(response.data)
+                set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
             } catch (error) {
-                console.error("Erro ao filtrar por gênero:", error)
+                console.error("Erro ao filtrar por estação:", error)
             }
         },
         filterById: async (id) => {
@@ -61,7 +62,7 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 const response = await api.get("/pajamas", {
                     params: { id }
                 })
-                set({ pijamas: response.data })
+                set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
             } catch (error) {
                 console.error("Erro ao buscar pijama pelo ID:", error)
             }

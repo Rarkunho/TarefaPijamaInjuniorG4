@@ -1,35 +1,104 @@
 import styles from "./styles.module.css"
 import botao from "../../assets/lupa.png"
 import Cards from "../../components/Cards"
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import usePijamaStore from "../../stores/usePijamaStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Pijama from "../../types/Pijama";
 
 type GenreParams = Record<string, string | undefined>;
 
-export default function Pijamas() {
-    const { genre } = useParams<GenreParams>();
-    //const { pijamas, getPijamas, filterByGender, filterByType, filterByStation} = usePijamaStore(); 
-    //const pijamas = usePijamaStore((state) => state.pijamas)
-    //const getPijamas = usePijamaStore((state) => state.getPijamas)
-    //const filterByGender = usePijamaStore((state) => state.filterByGender)
-    //const filterByType = usePijamaStore((state) => state.filterByType)
-    //const filterByStation = usePijamaStore((state) => state.filterByStation)
 
-    //useEffect(() => {
-    //    console.log("cheguei aqui")
-    //    getPijamas();
-    //  }, []);
-    const { pijamas, getPijamas } = usePijamaStore(); 
+export default function Pijamas() {
+    const { param } = useParams<GenreParams>()
+    const { pijamas, getPijamas, filterByGender, filterByType, filterBySeason} = usePijamaStore() 
+    
+    const [genderFilter, setGenderFilter] = useState<string>(param || "todos")
+    const [typeFilter, setTypeFilter] = useState<string>(param || "todos")
+    const [seasonFilter, setSeasonFilter] = useState<string>('todos')
+    const [filtro, setFiltro] = useState<string>("")
+    //const [filteredPijamas, setFilteredPijamas] = useState<Pijama[]>([])
+
+    const genderOptions = ["MALE", "FEMALE", "UNISEX", "FAMILY"]
+    const typeOptions = ["ADULT", "CHILD"]
 
     
     useEffect(() => {
         getPijamas(); // dispara a atualização
     }, [getPijamas]);
 
+    //useEffect(() => {
+    //    console.log(pijamas, "carregado"); // só roda quando 'pijamas' mudar
+    //}, [pijamas]);
+
     useEffect(() => {
-        console.log(pijamas, "carregado"); // só roda quando 'pijamas' mudar
-    }, [pijamas]);
+        if (genderFilter !== "todos") {
+            filterByGender(genderFilter) 
+        }
+    }, [genderFilter, filterByGender])
+
+    useEffect(() => {
+        if (typeFilter !== "todos") {
+            filterByType(typeFilter); 
+        }
+    }, [typeFilter, filterByType])
+
+    useEffect(() => {
+        if (seasonFilter !== "todos") {
+            filterBySeason(seasonFilter); 
+        }
+    }, [seasonFilter, filterBySeason])
+
+    const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setGenderFilter(event.target.value);
+    }
+
+    const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setTypeFilter(event.target.value);
+    }
+
+    const handleSeasonChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSeasonFilter(event.target.value);
+    }
+
+    //function filterByName (name: string) {
+     //   const result = pijamas.filter(pijama =>
+      //      pijama.name.toLowerCase().includes(name.toLowerCase())  
+      //  )
+     //   setFilteredPijamas(result)
+    //}
+
+    //function handleSearch() {
+     //   filterByName(filtro)
+   // }
+
+    //useEffect(() => {
+    //    if (filtro) {
+    //        filterByName(filtro)
+    //    } else {
+    //        setFilteredPijamas(pijamas)
+   //     }
+    //}, [filtro, pijamas])
+
+    useEffect(() => {
+        if (param) {
+            if (genderOptions.includes(param)) {
+                setGenderFilter(param)
+                setTypeFilter("todos")
+                setSeasonFilter("todos")
+            }
+            else if (typeOptions.includes(param)) {
+                setTypeFilter(param)
+                setGenderFilter("todos")
+                setSeasonFilter("todos")
+            }
+        } else {
+            getPijamas()
+            setGenderFilter("todos")
+            setTypeFilter("todos")
+            setSeasonFilter("todos")
+        }   
+    }, [param])
 
 
     return (
@@ -38,35 +107,39 @@ export default function Pijamas() {
             <section className={styles.container}>
                 <div className={styles.busca}>
                     <input 
-                        className={styles.search}
+                        //className={styles.search}
                         placeholder={`Pesquise pelo produto...`}
-                        //value={filtro}
-                    // onChange={(e) => setFiltro(e.target.value)}
+                        value={filtro}
+                        onChange={(e) => setFiltro(e.target.value)}
                     />
-                    <button>
+                    <button //onClick={handleSearch}
+                    >
                         <img src={botao} alt="Botão de Pesquisa"/>
                     </button>
                 </div>
                 <div className={styles.filtro}>
-                    <select>
-                        <option selected disabled>Gênero</option>
-                        <option value="todos">Todos</option>
-                        <option value="unissex">Unissex</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="feminino">Feminino</option>
-                        <option value="familia">Família</option>
+                    <select value={genderFilter} onChange={handleGenderChange}>
+                        <option value="todos" disabled={genderFilter !== 'todos'}>
+                            Gênero
+                        </option>
+                        <option value="UNISEX">Unissex</option>
+                        <option value="MALE">Masculino</option>
+                        <option value="FEMALE">Feminino</option>
+                        <option value="FAMILY">Família</option>
                     </select>
-                    <select>
-                        <option selected disabled>Tipo</option>
-                        <option value="todos">Todos</option>
-                        <option value="adulto">Adulto</option>
-                        <option value="infantil">Infantil</option>
+                    <select value={typeFilter} onChange={handleTypeChange}>
+                        <option value="todos" disabled={typeFilter !== 'todos'}>
+                            Tipo
+                        </option>
+                        <option value="ADULT">Adulto</option>
+                        <option value="CHILD">Infantil</option>
                     </select>
-                    <select>
-                        <option selected disabled>Estação</option>
-                        <option value="todos">Todos</option>
-                        <option value="inverno">Inverno</option>
-                        <option value="verao">Verão</option>
+                    <select value={seasonFilter} onChange={handleSeasonChange}>
+                        <option value="todos" disabled={seasonFilter !== 'todos'}>
+                            Estação
+                        </option>
+                        <option value="WINTER">Inverno</option>
+                        <option value="SUMMER">Verão</option>
                     </select>
                 </div>
             </section>
