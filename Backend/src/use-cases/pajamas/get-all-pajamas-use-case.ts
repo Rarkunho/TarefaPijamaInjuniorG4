@@ -1,13 +1,10 @@
 import { PajamasRepository } from "src/repositories/pajamas-repository";
-import { Pajama, PajamaGender } from "@prisma/client";
+import { Pajama, PajamaGender, Prisma } from "@prisma/client";
 
-export interface GetAllPajamasUseCaseRequest {
+export interface GetAllPajamasUseCaseRequest 
+    extends Pick<Partial<Prisma.PajamaUncheckedCreateInput>, 'season' | 'gender' | 'favorite' | 'onSale' | 'type'> {
     skipQuantity?: number;
     itemsPerPage?: number;
-
-    favorite?: boolean;
-    gender?: PajamaGender;
-    onSale?: boolean;
 }
 
 interface GetAllPajamasUseCaseResponseMetaData {
