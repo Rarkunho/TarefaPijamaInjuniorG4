@@ -39,7 +39,7 @@
 .info {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 35px;
     padding-top: 5px;
     justify-content: center;
     align-items: center;
@@ -49,8 +49,9 @@
 }
 
 .desconto {
-    position: absolute;
-    top: 80px;
+    position: relative; 
+    display: inline-block;
+    margin-top: 1px;
     font-family: "Nunito Sans", sans-serif;
     font-weight: 400;
     font-size: 16px;
@@ -62,7 +63,7 @@
 .desconto::before {
     content: "";
     position: absolute;
-    top: 50%;
+    top: 50%; 
     left: 0;
     width: 100%; 
     height: 1px; 
@@ -87,7 +88,14 @@
     gap: 15px;
 }
 
-.preco > h3 {
+.preco > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.preco > div > h3 {
     color: var(--azul400);
     font-family: "Numans", sans-serif;
     font-weight: 700;
