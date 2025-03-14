@@ -1,5 +1,6 @@
 import { PajamaInfoResponse, PajamasRepository } from "src/repositories/pajamas-repository";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { PajamasSizeRepository } from "src/repositories/pajamas-size-repository";
 
 interface GetPajamaInfoUseCaseRequest {
     pajamaId: string;
@@ -10,17 +11,28 @@ interface GetPajamaInfoUseCaseResponse {
 }
 
 export class GetPajamaInfoUseCase {
-    constructor(private readonly pajamaRepository: PajamasRepository) {}
+    constructor(
+        private readonly pajamasRepository: PajamasRepository,
+        private readonly pajamaSizeRepository: PajamasSizeRepository
+    ) {}
 
     async execute({ pajamaId }: GetPajamaInfoUseCaseRequest): Promise<GetPajamaInfoUseCaseResponse> {
-        const existingPajama = await this.pajamaRepository.findById(pajamaId);
+        const existingPajama = await this.pajamasRepository.findById(pajamaId);
 
         if (existingPajama === null) {
             throw new ResourceNotFoundError();
         }
-        
-        const pajamaInfo = await this.pajamaRepository.getPajamaInfo(pajamaId);
 
-        return { pajama: pajamaInfo } as GetPajamaInfoUseCaseResponse;
+        const allPajamasSize = await this.pajamaSizeRepository.findAllPajamasSize(pajamaId);
+
+        // Removendo o campo 'pajamaId' de todos os objetos:
+        const allPajamasSizeFiltered = allPajamasSize.map(({ pajamaId, ...props }) => props);
+
+        const pajamaInfoResponse = {
+            ...existingPajama,
+            pajamaSizesInfo: allPajamasSizeFiltered,
+        }
+
+        return { pajama: pajamaInfoResponse } as GetPajamaInfoUseCaseResponse;
     }
 } 

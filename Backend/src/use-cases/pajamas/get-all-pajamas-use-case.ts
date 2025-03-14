@@ -1,4 +1,4 @@
-import { PajamasRepository } from "src/repositories/pajamas-repository";
+import { PajamasPaginationParams, PajamasRepository } from "src/repositories/pajamas-repository";
 import { Pajama, PajamaGender, Prisma } from "@prisma/client";
 
 export interface GetAllPajamasUseCaseRequest 
@@ -22,29 +22,32 @@ export class GetAllPajamasUseCase {
 
     async execute(GetAllPajamasInput: GetAllPajamasUseCaseRequest): Promise<GetAllPajamasUseCaseResponse> {
         const { skipQuantity, itemsPerPage, ...searchFilters } = GetAllPajamasInput;
+
+        const paginationFilters = {
+            skip: skipQuantity,
+            take: itemsPerPage
+        } as PajamasPaginationParams;
         
         if (skipQuantity !== undefined && itemsPerPage !== undefined) {
             const [allPajamas, totalItems] = await Promise.all([
-                this.pajamasRepository.getPajamasPaginated(
-                    skipQuantity,
-                    itemsPerPage,
-                    searchFilters
+                this.pajamasRepository.getAllPajamas(
+                    searchFilters,
+                    paginationFilters
                 ),
+                
                 this.pajamasRepository.getPajamasCount(searchFilters)
             ]);
-    
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
+
             return {
                 pajamas: allPajamas,
                 meta: {
                     totalItems: totalItems,
-                    totalPages: totalPages
+                    totalPages: Math.ceil(totalItems / itemsPerPage)
                 }
             }
             
         } else {
-            const allPajamas = await this.pajamasRepository.getAllPajamas(searchFilters);
+            const allPajamas = await this.pajamasRepository.getAllPajamas(searchFilters, {});
     
             return { pajamas: allPajamas } as GetAllPajamasUseCaseResponse;
         }

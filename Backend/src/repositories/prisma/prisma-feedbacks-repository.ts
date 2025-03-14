@@ -1,5 +1,5 @@
 import { Feedback, Prisma } from "@prisma/client";
-import { FeedbacksRepository, SearchFilters } from "../feedbacks-repository";
+import { FeedbackPaginationParams, FeedbacksRepository, SearchFeedbackFilters } from "../feedbacks-repository";
 import { prismaClient } from "src/lib/prisma";
 
 export class PrismaFeedbacksRepository implements FeedbacksRepository {
@@ -31,8 +31,9 @@ export class PrismaFeedbacksRepository implements FeedbacksRepository {
         return feedback;
     }
 
-    async getAllFeedbacks(searchFilters: SearchFilters): Promise<Feedback[]> {
+    async getAllFeedbacks(searchFilters: SearchFeedbackFilters, paginationParams: FeedbackPaginationParams): Promise<Feedback[]> {
         const allFeedbacks = await prismaClient.feedback.findMany({
+            ...paginationParams,
             where: {
                 ...searchFilters
             }
@@ -41,8 +42,9 @@ export class PrismaFeedbacksRepository implements FeedbacksRepository {
         return allFeedbacks;
     }
 
-    async getAllFeedbacksWithRatingGTE(rating: number): Promise<Feedback[]> {
+    async getAllFeedbacksWithRatingGTE(rating: number, paginationParams: FeedbackPaginationParams): Promise<Feedback[]> {
         const allFeedbacks = await prismaClient.feedback.findMany({
+            ...paginationParams,
             where: {
                 rating: {
                     gte: rating
@@ -51,5 +53,27 @@ export class PrismaFeedbacksRepository implements FeedbacksRepository {
         });
 
         return allFeedbacks;
+    }
+
+    async getFeedbacksCount(searchFilters: SearchFeedbackFilters): Promise<number> {
+        const feedbacksCount = await prismaClient.feedback.count({
+            where: {
+                ...searchFilters
+            }
+        });
+
+        return feedbacksCount;
+    }
+
+    async getAllFeedbacksCountWithRatingGTE(rating: number): Promise<number> {
+        const feedbacksGTECount = await prismaClient.feedback.count({
+            where: {
+                rating: {
+                    gte: rating
+                }
+            }
+        });
+
+        return feedbacksGTECount;
     }
 }

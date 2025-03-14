@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-pajama-size-repository";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { GetPajamaInfoUseCase } from "src/use-cases/pajamas/get-pajama-info-use-case";
@@ -15,7 +16,9 @@ export async function getPajama(request: FastifyRequest, reply: FastifyReply) {
     const { pajamaId } = getParamsSchema.parse(request.params);
     
     const prismaPajamasRepository = new PrismaPajamasRepository();
-    const getPajamaUseCase = new GetPajamaInfoUseCase(prismaPajamasRepository);
+    const prismaPajamaSizeRepository = new PrismaPajamasSizeRepository();
+    
+    const getPajamaUseCase = new GetPajamaInfoUseCase(prismaPajamasRepository, prismaPajamaSizeRepository);
 
     try {
         const getPajamaResponse = await getPajamaUseCase.execute({ pajamaId });

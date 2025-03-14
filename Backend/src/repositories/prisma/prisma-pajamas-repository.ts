@@ -1,5 +1,5 @@
 import { Pajama, PajamaSizes, Prisma } from "@prisma/client";
-import { PajamaInfoResponse, PajamasRepository, PajamaUpdateInput } from "../pajamas-repository";
+import { PajamaInfoResponse, PajamasPaginationParams, PajamasRepository, PajamaUpdateInput, SearchPajamaFilters } from "../pajamas-repository";
 import { prismaClient } from "src/lib/prisma";
 import { PrismaPajamasSizeRepository } from "./prisma-pajama-size-repository";
 import { GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
@@ -43,36 +43,9 @@ export class PrismaPajamasRepository implements PajamasRepository {
         return deletedPajama;
     }
 
-    async getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse> {
-        const pajamaType = await prismaClient.pajama.findUnique({
-            where: {
-                id: pajamaId
-            }
-        });
-
-        if (pajamaType === null) {
-            throw new Error('Pajama not Found in \'getPajamaInfo\' Method');
-        }
-
-        const pajamasSizeRepository = new PrismaPajamasSizeRepository();
-        const allPajamasSize = await pajamasSizeRepository.findAllPajamasSize(pajamaId);
-
-        // Removendo o campo 'pajamaId' de todos os objetos:
-        const allPajamasSizeFiltered = allPajamasSize.map(({ pajamaId, ...props }) => props);
-
-        const pajamaInfoResponse: PajamaInfoResponse = {
-            ...pajamaType,
-            pajamaSizesInfo: allPajamasSizeFiltered,
-        }
-
-        return pajamaInfoResponse;
-    }
-
-    async getAllPajamas(
-        searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>
-    ): Promise<Pajama[]> {
-
+    async getAllPajamas(searchFilters: SearchPajamaFilters, paginationParams: PajamasPaginationParams): Promise<Pajama[]> {
         const allPajamas = await prismaClient.pajama.findMany({
+            ...paginationParams,
             where: {
                 ...searchFilters
             }
@@ -100,10 +73,7 @@ export class PrismaPajamasRepository implements PajamasRepository {
         return pajamaArray;
     }
 
-    async getPajamasCount(
-        searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>
-    ): Promise<number> {
-
+    async getPajamasCount(searchFilters: SearchPajamaFilters): Promise<number> {
         const pajamasCount = await prismaClient.pajama.count({
             where: {
                 ...searchFilters
@@ -111,22 +81,5 @@ export class PrismaPajamasRepository implements PajamasRepository {
         });
 
         return pajamasCount;
-    }
-
-    async getPajamasPaginated(
-        skipQuantity: number,
-        itemsPerPage: number,
-        searchFilters: Omit<GetAllPajamasUseCaseRequest, 'skipQuantity' | 'itemsPerPage'>
-    ): Promise<Pajama[]> {
-
-        const pajamas = await prismaClient.pajama.findMany({
-            where: {
-                ...searchFilters
-            },
-            skip: skipQuantity,
-            take: itemsPerPage
-        });
-
-        return pajamas;
     }
 }
