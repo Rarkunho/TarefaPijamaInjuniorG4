@@ -21,7 +21,7 @@ export class PrismaFeedbacksRepository implements FeedbacksRepository {
         return deletedFeedback;
     }
 
-    async getById(feedbackId: string): Promise<Feedback | null> {
+    async findById(feedbackId: string): Promise<Feedback | null> {
         const feedback = await prismaClient.feedback.findUnique({
             where: {
                 id: feedbackId

@@ -54,7 +54,11 @@ export class CreateSaleUseCase {
 
         // Variável para armazenar o preço total da venda:
         let saleTotalPrice = saleCreateInputData.pajamasBought.reduce((accumulator, item) =>
-             (accumulator + (pajamasPriceMap.get(item.pajamaId)! * item.quantity)), 0);
+             (accumulator + (pajamasPriceMap.get(item.pajamaId)! * item.quantity)),
+        0);
+
+        // Formatando o valor de venda para duas casas decimais:
+        saleTotalPrice = Number(saleTotalPrice.toFixed(2));
         
         // Criando ou obtendo o endereço fornecido:
         const existingAddress = await this.addressRepository.findOrCreate(saleCreateInputData.pajamaSaleAddressData);
