@@ -30,7 +30,7 @@
     font-size: 48px;
     font-family: "Numans", sans-serif !important;
     font-weight: 400;
-    margin-bottom: 20px;
+    margin-bottom: 34px;
     letter-spacing: 0.4rem;
 }
 .container p{
@@ -38,6 +38,7 @@
     font-family: "Roboto Serif", sans-serif !important;
     font-weight: 400;
     letter-spacing: 0.12rem;
+    margin-bottom: 19px;
 }
 form{
     display: flex;
@@ -116,7 +117,11 @@ form span{
 }
 
 .botao1 button:hover{
-    background-color: rgba(81, 11, 17, 0.8);
+    background-color: rgba(206, 56, 68, 0.8);
+}
+
+.botao2 button:hover{
+    background-color: rgba(206, 56, 68, 0.8);
 }
 
 

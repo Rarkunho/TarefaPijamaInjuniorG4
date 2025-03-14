@@ -45,7 +45,7 @@ export default function Login() {
                         <input
                             type='text'
                             className={styles.input}
-                            placeholder='nome'
+                            placeholder='Nome'
                             {...register('nome')}
                         />
                         {errors.nome && <span>{errors.nome.message}</span>}
@@ -53,7 +53,7 @@ export default function Login() {
                         <input
                             type='text'
                             className={styles.input}
-                            placeholder='usuario'
+                            placeholder='Nome de usuario'
                             {...register('usuario')}
                         />
                         {errors.usuario && <span>{errors.usuario.message}</span>}
@@ -61,7 +61,7 @@ export default function Login() {
                         <input
                             type='text'
                             className={styles.input}
-                            placeholder='email'
+                            placeholder='E-mail'
                             {...register('email')}
                         />
                         {errors.email && <span>{errors.email.message}</span>}
@@ -69,15 +69,22 @@ export default function Login() {
                         <input
                             type='password'
                             className={styles.input}
-                            placeholder='senha'
+                            placeholder='Senha'
+                            {...register('password')}
+                        />
+                        {errors.password && <span>{errors.password.message}</span>}
+
+                        <input
+                            type='password'
+                            className={styles.input}
+                            placeholder='Confirmar senha'
                             {...register('password')}
                         />
                         {errors.password && <span>{errors.password.message}</span>}
 
 
                         <div className={styles.botao1}>
-                            <button className='botao1'>ENTRAR</button>
-                            <hr/>
+                            <button className='botao1'>Registrar</button>
                         </div>
                     </form>
                 </div>
