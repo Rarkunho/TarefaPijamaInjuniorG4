@@ -1,27 +1,25 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-// import "swiper/css/navigation";
-// import "swiper/css/pagination";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import styles from "./styles.module.css";
-import FeedbackCard from "../Feedback Cards/index";
-
+import FeedbackCard from "../Feedback Cards";
 
 const feedbacks = [
-  { name: "Fulano da Silva", rating: 4.5, text: "Ótima experiência, recomendo!" },
-  { name: "Beltrano Souza", rating: 4, text: "Muito bom, mas pode melhorar." },
-  { name: "Ciclano Mendes", rating: 5, text: "Excelente! Atendimento nota 10." },
-  { name: "Ana Pereira", rating: 3.5, text: "Bom, mas esperava mais." },
-  { name: "José Ricardo", rating: 5, text: "Tudo perfeito, comprarei novamente!" }
+  { name: "Fulano da Silva", rating: 4.5, text: "Lorem ipsum dolor sit amet. Et voluptatem officia ad sint voluptate qui  voluptas sunt non fugiat labore et consequatur voluptatem sed optio  veniam aut perferendis delectus! Aut Quis impedit a quas animi 33 alias  provident et ipsum deleniti eos pariatur quibusdam." },
+  { name: "Beltrano Souza", rating: 4, text: "Lorem ipsum dolor sit amet. Et voluptatem officia ad sint voluptate qui  voluptas sunt non fugiat labore et consequatur voluptatem sed optio  veniam aut perferendis delectus! Aut Quis impedit a quas animi 33 alias  provident et ipsum deleniti eos pariatur quibusdam." },
+  { name: "Ciclano Mendes", rating: 5, text: "Lorem ipsum dolor sit amet. Et voluptatem officia ad sint voluptate qui  voluptas sunt non fugiat labore et consequatur voluptatem sed optio  veniam aut perferendis delectus! Aut Quis impedit a quas animi 33 alias  provident et ipsum deleniti eos pariatur quibusdam." },
+  { name: "Ana Pereira", rating: 3.5, text: "Lorem ipsum dolor sit amet. Et voluptatem officia ad sint voluptate qui  voluptas sunt non fugiat labore et consequatur voluptatem sed optio  veniam aut perferendis delectus! Aut Quis impedit a quas animi 33 alias  provident et ipsum deleniti eos pariatur quibusdam." }
 ];
 
-export default function FeedbackCarousel() {
+export default function FeedbackCarrossel() {
   return (
     <div className={styles.carouselContainer}>
-      <h1 className={styles.title}>Feedbacks</h1>
       <Swiper
         modules={[Navigation, Pagination]}
         spaceBetween={20}
-        slidesPerView={4} // Exibir 4 por vez
+        slidesPerView={3} // Exibe 3 cards por vez
         navigation
         pagination={{ clickable: true }}
       >

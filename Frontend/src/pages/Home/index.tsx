@@ -53,6 +53,7 @@ export default function Home() {
                 </div>
                 <div className={styles.botaoFeedback}>
                     <button onClick={() => navigate("/feedback")}>Também quero dar um feedback</button>
+                    <br/><br/><br/>
                 </div>
                  
 

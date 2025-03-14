@@ -1,25 +1,41 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Numans&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 .card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .stars {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin-bottom: 10px;
-  }
-  
-  .star {
-    width: 24px;
-    height: 24px;
-  }
-  
+  background: hsla(348, 45%, 98%, 1);
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  height: 300px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  font-size: 38px;
+  margin: 15px;
+  font-weight: bold;
+  font-family: "Numans", sans-serif;
+  font-weight: 350;
+
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.star {
+  width: 35px;
+  height: 35px;
+}
+.text p{
+  font-size: 16px;
+  font-family: "Nunito Sans", sans-serif;
+  margin: 20px;
+  margin-top: 30px;
+  font-style: italic;
+  color: #333;
+} 
