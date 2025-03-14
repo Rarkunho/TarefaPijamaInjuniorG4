@@ -48,13 +48,13 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
             .optional()
             .refine(val => Object.values(PajamaGender).includes(val as PajamaGender), {
                 message: 'Invalid gender. Expected one of: ' + Object.values(PajamaGender).join(', '),
-            }),
+            }).optional(),
 
         type: z.enum(Object.values(PajamaType) as [string, ...string[]])
             .optional()
             .refine(val => Object.values(PajamaType).includes(val as PajamaType), {
                 message: 'Invalid pajama type. Expected one of: ' + Object.values(PajamaType).join(', '),
-            }),
+            }).optional(),
 
     }).refine(data => {
         if (data.page !== undefined && data.perPage === undefined) {

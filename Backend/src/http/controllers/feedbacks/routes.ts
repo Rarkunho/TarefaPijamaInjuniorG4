@@ -5,6 +5,6 @@ import { getFeedback } from "./get";
 
 export function feedbackRoutes(app : FastifyInstance){
     app.post('/feedbacks', createFeedback)
-    app.delete('/feedbacks/:id', deleteFeedback)
-    app.get('/feedbacks/:id', getFeedback)
+    app.delete('/feedbacks/:feedbackId', deleteFeedback)
+    app.get('/feedbacks/:feebackId', getFeedback)
 }

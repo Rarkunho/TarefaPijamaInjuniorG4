@@ -12,7 +12,7 @@ interface CreateFeedbackUseCaseResponse {
 }
 
 export class CreateFeedbackCase {
-    constructor(private feedbackRepository: FeedbacksRepository) {}
+    constructor(private readonly feedbackRepository: FeedbacksRepository) {}
 
     async execute({ name, description, rating }: CreateFeedbackUseCaseRequest) {
         const feedbackCreated = await this.feedbackRepository.create({

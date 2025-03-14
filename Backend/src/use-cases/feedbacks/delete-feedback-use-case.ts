@@ -3,22 +3,20 @@ import { FeedbacksRepository } from "src/repositories/feedbacks-repository"
 import { ResourceNotFoundError } from "../errors/resource-not-found-error"
 
 interface DeleteFeedbackUseCaseRequest {
-    id : string
+    feedbackId: string;
 }
 
 interface DeleteFeedbackUseCaseResponse {
-    feedback : Feedback
+    feedback: Feedback;
 }
 
-export class DeleteFeedbackUseCase{
-    constructor(private feedbackRepository : FeedbacksRepository){
-        
-    }
+export class DeleteFeedbackUseCase {
+    constructor(private readonly feedbackRepository: FeedbacksRepository) {}
 
-    async execute( { id } : DeleteFeedbackUseCaseRequest): Promise<DeleteFeedbackUseCaseResponse>{
-        const feedback = await this.feedbackRepository.delete(id)
+    async execute({ feedbackId }: DeleteFeedbackUseCaseRequest): Promise<DeleteFeedbackUseCaseResponse> {
+        const feedback = await this.feedbackRepository.delete(feedbackId)
 
-        if(!feedback) { 
+        if (!feedback) {
             throw new ResourceNotFoundError()
         }
 
