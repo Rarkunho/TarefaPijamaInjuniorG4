@@ -47,28 +47,28 @@ export class GetAllFeedbacksUseCase {
                 
                 break;
                 
-                case getAllFeedbacksInput.rating !== undefined:
-                    [allFeedbacks, totalItems] = await Promise.all([
-                        this.feedbackRepository.getAllFeedbacks(
-                            { rating: getAllFeedbacksInput.rating },
-                            paginationFilters
-                        ),
+            case getAllFeedbacksInput.rating !== undefined:
+                [allFeedbacks, totalItems] = await Promise.all([
+                    this.feedbackRepository.getAllFeedbacks(
+                        { rating: getAllFeedbacksInput.rating },
+                        paginationFilters
+                    ),
 
-                        this.feedbackRepository.getFeedbacksCount({})
-                    ]);
+                    this.feedbackRepository.getFeedbacksCount({ rating: getAllFeedbacksInput.rating })
+                ]);
 
-                    break;
-                    
-                default:
-                    [allFeedbacks, totalItems] = await Promise.all([
-                        this.feedbackRepository.getAllFeedbacks(
-                            {},
-                            paginationFilters
-                        ),
-                        this.feedbackRepository.getFeedbacksCount({})
-                    ]);
+                break;
+                
+            default:
+                [allFeedbacks, totalItems] = await Promise.all([
+                    this.feedbackRepository.getAllFeedbacks(
+                        {},
+                        paginationFilters
+                    ),
+                    this.feedbackRepository.getFeedbacksCount({})
+                ]);
 
-                    break;
+                break;
         }
                     
         if (itemsPerPage !== undefined && skipQuantity !== undefined) {
