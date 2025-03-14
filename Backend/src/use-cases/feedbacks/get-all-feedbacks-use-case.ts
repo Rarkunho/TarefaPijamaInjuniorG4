@@ -18,7 +18,7 @@ export class GetAllFeedbacksUseCase {
 
         switch (true) {
             case getAllFeedbacksInput["rating-gte"] !== undefined:
-                allFeedbacks = await this.feedbackRepository.getAllFeedbacksWithRatingGTE(getAllFeedbacksInput["rating-gt"]);
+                allFeedbacks = await this.feedbackRepository.getAllFeedbacksWithRatingGTE(getAllFeedbacksInput["rating-gte"]);
                 break;
             
             case getAllFeedbacksInput.rating !== undefined:
