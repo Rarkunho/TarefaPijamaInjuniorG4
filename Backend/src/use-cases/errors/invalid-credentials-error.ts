@@ -1,5 +1,5 @@
 export class InvalidCredentialsError extends Error {
     constructor() {
-        super('Invalid Credentials');
+        super('Email or Password do not Match');
     }
 }

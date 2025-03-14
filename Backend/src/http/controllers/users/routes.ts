@@ -1,16 +1,14 @@
 import { FastifyInstance } from "fastify";
 import { createUser } from "./create";
 import { deleteUser } from "./delete";
-import { get } from "./get";
-import { getEmail } from "./get-email";
-import { update } from "./update";
-import { authenticate } from "./authenticate";
+import { authenticateUser } from "./authenticate";
+import { getUser } from "./get";
+import { updateUser } from "./update";
 
-export function userRoutes(app:FastifyInstance) {
-    app.post('/users/', createUser)
-    app.post('/users/login', authenticate)
-    app.delete('/users/:id', deleteUser)
-    app.get('/users/id/:id', get)
-    app.get('/users/email/:email', getEmail)
-    app.patch('/users/:id', update)
+export function userRoutes(app: FastifyInstance) {
+    app.post('/users', createUser);
+    app.post('/users/login', authenticateUser);
+    app.delete('/users/:userId', deleteUser);
+    app.get('/users/:userId', getUser);
+    app.patch('/users/:userId', updateUser);
 }

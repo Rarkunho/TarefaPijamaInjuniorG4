@@ -7,10 +7,12 @@ import { z } from "zod";
 export async function createPajama(request: FastifyRequest, reply: FastifyReply) {
     const registerBodySchema = z.object({
         name: z.string()
-        .min(5)
-        .refine(name => /^[a-zA-Z\s]+$/.test(name), {
-            message: "Name must Contain Only Alphabetic Characters and Spaces"
-        }),
+            .nonempty("Name cannot be empty")
+            .min(6, "Name is too small, it must be at least 6 characters long")
+            .max(100, "Name is too big, it must be no longer than 100 characters")
+            .refine(name => /^[A-Za-z\s]+$/.test(name), {
+                message: "Name must contain only alphabetic characters and spaces",
+            }),
 
         description: z.string(),
 
@@ -27,15 +29,15 @@ export async function createPajama(request: FastifyRequest, reply: FastifyReply)
         onSale: z.coerce.boolean(),
 
         price: z.number()
-        .positive({ message: "The price must be a positive number" })
-        .refine((price) => /^\d+(\.\d{1,2})?$/.test(price.toString()), {
-            message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
-        }),
+            .positive({ message: "The price must be a positive number" })
+            .refine((price) => /^\d+(\.\d{1,2})?$/.test(price.toString()), {
+                message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
+            }),
 
         salePercent: z.coerce.number()
-        .min(0)
-        .max(100)
-        .optional()
+            .min(0, "Sale percent must be at least 0")
+            .max(100, "Sale percent must be no greater than 100")
+            .optional(),
     });
 
     const registerBody = registerBodySchema.parse(request.body);

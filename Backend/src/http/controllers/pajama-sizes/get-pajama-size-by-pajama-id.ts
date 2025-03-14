@@ -2,7 +2,7 @@ import { PajamaSizes } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-pajama-size-repository";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
-import { GetPajamaSizeByPajamaIdUseCaseRequest, GetPajamaSizeByPajamaIdUseCaseUseCase } from "src/use-cases/pajama-sizes/get-pajama-size-by-pajama-id";
+import { GetPajamaSizeByPajamaIdUseCaseRequest, GetPajamaSizeByPajamaIdUseCaseUseCase } from "src/use-cases/pajama-sizes/get-pajama-size-by-pajama-id-use-case";
 import { z } from "zod";
 
 export async function getPajamaSizeByPajamaId(request: FastifyRequest, reply: FastifyReply) {

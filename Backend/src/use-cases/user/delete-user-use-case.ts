@@ -4,23 +4,23 @@ import { ResourceNotFoundError } from "../errors/resource-not-found-error"
 
 
 interface DeleteUserUseCaseRequest {
-    id: string  
+    userId: string;
 }
 
 interface DeleteUserUseCaseResponse {
-    user: User
+    user: User;
 }
 
 export class DeleteUserUseCase {
     constructor(private readonly usersRepository: UsersRepository) {}
 
-    async execute({ id }: DeleteUserUseCaseRequest): Promise<DeleteUserUseCaseResponse> {
-        const user = await this.usersRepository.delete(id)
+    async execute({ userId }: DeleteUserUseCaseRequest): Promise<DeleteUserUseCaseResponse> {
+        const deletedUser = await this.usersRepository.delete(userId);
 
-        if (!user) {
-            throw new ResourceNotFoundError()
+        if (!deletedUser) {
+            throw new ResourceNotFoundError();
         }
 
-        return { user }
+        return { user: deletedUser } as DeleteUserUseCaseResponse;
     }
 }

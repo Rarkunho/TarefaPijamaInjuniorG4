@@ -15,31 +15,31 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const createBodySchema = z.object({
         pajamaSaleData: z.object({
             buyerName: z.string().nonempty().min(6),
-            
+
             cpf: z.coerce.string()
-            .nonempty()
-            .length(11)
-            .refine((cpf) => /^\d+$/.test(cpf), {
-                message: "The input must be a string containing only digits"
-            }),
+                .nonempty()
+                .length(11)
+                .refine((cpf) => /^\d+$/.test(cpf), {
+                    message: "The input must be a string containing only digits"
+                }),
 
             paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]]),
-            
+
             installments: z.coerce.number()
-            .int({ message: "The input must be an integer value" })
-            .positive({ message: "The input must be a positive value" })
-            .min(1, { message: "The minimum number of installments is 1" })
-            .max(6, { message: "The maximum number of installments is 6" })
-            .optional().default(1),
+                .int({ message: "The input must be an integer value" })
+                .positive({ message: "The input must be a positive value" })
+                .min(1, { message: "The minimum number of installments is 1" })
+                .max(6, { message: "The maximum number of installments is 6" })
+                .optional().default(1),
 
             cardNumber: z.coerce.string()
-            .min(13)
-            .max(19)
-            .refine((cardNumber) => /^\d+$/.test(cardNumber), {
-                message: "The input must be a string containing only digits"
-            })
-            .optional()
-            
+                .min(13)
+                .max(19)
+                .refine((cardNumber) => /^\d+$/.test(cardNumber), {
+                    message: "The input must be a string containing only digits"
+                })
+                .optional()
+
         }).refine(data => {
             if (data.paymentMethod === PaymentMethod.CREDIT_CARD) {
                 return data.cardNumber !== undefined;
@@ -57,13 +57,13 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
         }, {
             message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
         }),
-        
+
         pajamaSaleAddressData: z.object({
             zipCode: z.coerce.string()
-            .length(8, { message: "ZIP code must contain exactly 8 digits" })
-            .refine((zipcode) => /^\d+$/.test(zipcode), {
-                message: "The input must be a string containing only digits"
-            }),
+                .length(8, { message: "ZIP code must contain exactly 8 digits" })
+                .refine((zipcode) => /^\d+$/.test(zipcode), {
+                    message: "The input must be a string containing only digits"
+                }),
 
             state: z.string().nonempty(),
 
@@ -85,12 +85,12 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
                 size: z.enum(Object.values(PajamaSizes) as [string, ...string[]]),
 
                 quantity: z.coerce.number()
-                .int({ message: "Quantity must be a integer number" })
-                .positive({ message: "Quantity must be a positive integer number" })
+                    .int({ message: "Quantity must be a integer number" })
+                    .positive({ message: "Quantity must be a positive integer number" })
             })
         ).min(1, { message: "It is necessary to buy at least one pajama" })
     });
-    
+
     const createBody = createBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();
@@ -98,7 +98,7 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const prismaPajamasRepository = new PrismaPajamasRepository();
     const prismaSalePajamasRepository = new PrismaSalePajamasRepository();
     const prismaPajamasSizeRepository = new PrismaPajamasSizeRepository();
-    
+
     const createSaleUseCase = new CreateSaleUseCase(
         prismaSalesRepository,
         prismaAddressRepository,
@@ -109,7 +109,7 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
 
     try {
         const createdSaleResponse = await createSaleUseCase.execute(createBody as CreateSaleUseCaseRequest);
-        
+
         return reply.status(201).send({
             saleId: createdSaleResponse.sale.id,
             buyerName: createdSaleResponse.sale.buyerName,
@@ -130,7 +130,7 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
         if (error instanceof PurchaseNotAllowedError) {
             return reply.status(400).send({ message: error.message });
         }
-        
+
         throw error;
     }
 }

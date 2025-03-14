@@ -1,28 +1,35 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUsersRepository } from "src/repositories/prisma/prisma-users-repository";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
-import { GetUserUseCase } from "src/use-cases/user/get-id";
+import { GetUserUseCase } from "src/use-cases/user/get-user-use-case";
 import { z } from "zod";
 
-export async function get(request: FastifyRequest, reply: FastifyReply) {
+export async function getUser(request: FastifyRequest, reply: FastifyReply) {
     const getParamsSchema = z.object({
-        id: z.string().uuid()
-    })
+        userId: z.string().uuid()
+    });
 
-    const { id} = getParamsSchema.parse(request.params)
+    const { userId } = getParamsSchema.parse(request.params);
+
+    const prismaUsersRepository = new PrismaUsersRepository();
+    const getUserUseCase = new GetUserUseCase(prismaUsersRepository);
 
     try {
-        const prismaUsersRepository = new PrismaUsersRepository()
-        const getUserUseCase = new GetUserUseCase(prismaUsersRepository)
-        const user = await getUserUseCase.execute({
-            id 
-        })
-        return reply.status(200).send(user)
+        const getUserResponse = await getUserUseCase.execute({
+            userId
+        });
+
+        // Removendo a password da response:
+        const { password: userPassword, ...filteredUserResponse } = getUserResponse.user;
+
+        return reply.status(200).send(filteredUserResponse);
+
     } catch (error) {
-        if (error instanceof (ResourceNotFoundError)) {
-            return reply.status(404).send({ message: error.message })
+        if (error instanceof ResourceNotFoundError) {
+            return reply.status(404).send({ message: error.message });
         }
-        throw error
+
+        throw error;
     }
 
 }

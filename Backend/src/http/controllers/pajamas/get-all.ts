@@ -11,32 +11,32 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
         perPage: z.coerce.number().int().positive().optional(),
 
         favorite: z.string()
-        .transform((val, ctx) => {
-            if (val === 'true') return true;
-            if (val === 'false') return false;
+            .transform((val, ctx) => {
+                if (val === 'true') return true;
+                if (val === 'false') return false;
 
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: 'Invalid boolean value. Expected \'true\' or \'false\''
-            });
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Invalid boolean value. Expected \'true\' or \'false\''
+                });
 
-            return z.NEVER;
-        })
-        .optional(),
+                return z.NEVER;
+            })
+            .optional(),
 
         onSale: z.string()
-        .transform((val, ctx) => {
-            if (val === 'true') return true;
-            if (val === 'false') return false;
+            .transform((val, ctx) => {
+                if (val === 'true') return true;
+                if (val === 'false') return false;
 
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: 'Invalid boolean value. Expected \'true\' or \'false\''
-            });
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Invalid boolean value. Expected \'true\' or \'false\''
+                });
 
-            return z.NEVER;
-        })
-        .optional(),
+                return z.NEVER;
+            })
+            .optional(),
 
         gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
 
@@ -64,7 +64,7 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
         getAllPajamasInput.skipQuantity = (page - 1) * perPage;
         getAllPajamasInput.itemsPerPage = perPage;
     }
-    
+
     const prismaPajamasRepository = new PrismaPajamasRepository();
     const getAllPajamasUseCase = new GetAllPajamasUseCase(prismaPajamasRepository);
 

@@ -13,36 +13,36 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
 
     const updateSaleBodySchema = z.object({
         buyerName: z.string().nonempty().min(6).optional(),
-                    
+
         cpf: z.coerce.string()
-        .nonempty()
-        .length(11)
-        .refine((cpf) => /^\d+$/.test(cpf), {
-            message: "The input must be a string containing only digits"
-        }).optional(),
-        
+            .nonempty()
+            .length(11)
+            .refine((cpf) => /^\d+$/.test(cpf), {
+                message: "The input must be a string containing only digits"
+            }).optional(),
+
         price: z.coerce.number()
-        .positive({ message: "The price must be a positive number" })
-        .refine((price) => /^\d+(\.\d{2})?$/.test(price.toString()), {
-            message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
-        }).optional(),
+            .positive({ message: "The price must be a positive number" })
+            .refine((price) => /^\d+(\.\d{2})?$/.test(price.toString()), {
+                message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
+            }).optional(),
 
         paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]]).optional(),
-        
+
         installments: z.coerce.number()
-        .int({ message: "The input must be an integer value" })
-        .positive({ message: "The input must be a positive value" })
-        .min(1, { message: "The minimum number of installments is 1" })
-        .max(6, { message: "The maximum number of installments is 6" })
-        .optional(),
+            .int({ message: "The input must be an integer value" })
+            .positive({ message: "The input must be a positive value" })
+            .min(1, { message: "The minimum number of installments is 1" })
+            .max(6, { message: "The maximum number of installments is 6" })
+            .optional(),
 
         cardNumber: z.coerce.string()
-        .min(13)
-        .max(19)
-        .refine((cardNumber) => /^\d+$/.test(cardNumber), {
-            message: "The input must be a string containing only digits"
-        })
-        .optional()
+            .min(13)
+            .max(19)
+            .refine((cardNumber) => /^\d+$/.test(cardNumber), {
+                message: "The input must be a string containing only digits"
+            })
+            .optional()
 
     }).refine(data => {
         if (data.paymentMethod === PaymentMethod.CREDIT_CARD) {
@@ -61,7 +61,7 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
     }, {
         message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
     });
-    
+
     const { saleId } = updateSaleParamsSchema.parse(request.params);
 
     const updateBody = updateSaleBodySchema.parse(request.body);
@@ -74,9 +74,9 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
             id: saleId,
             updateData: updateBody as SaleUpdateInput
         });
-        
+
         return reply.status(200).send(updatedSaleResponse.sale);
-        
+
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
             return reply.status(404).send({ message: error.message });

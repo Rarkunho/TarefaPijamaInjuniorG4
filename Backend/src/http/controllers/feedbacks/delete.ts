@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaFeedbacksRepository } from "src/repositories/prisma/prisma-feedbacks-repository";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
-import { DeleteFeedbackUseCase } from "src/use-cases/feedbacks/delete";
+import { DeleteFeedbackUseCase } from "src/use-cases/feedbacks/delete-feedback-use-case";
 import { z } from "zod";
 
 export async function deleteFeedback(request : FastifyRequest, reply : FastifyReply){
