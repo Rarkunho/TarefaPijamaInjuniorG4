@@ -1,8 +1,10 @@
 
 import styles from './styles.module.css';
 import Carrossel from '../../components/Carrossel';
-import Cards from '../../components/Cards';
+// import Cards from '../../components/Cards';
 import { useNavigate } from "react-router-dom";
+import FeedbackCarousel from "../../components/Feedback Carrossel";
+
 
 export default function Home() {
     const navigate = useNavigate();
@@ -44,8 +46,10 @@ export default function Home() {
                 <div className={styles.titulo}>
                     <h2>Feedbacks</h2> 
                     <br/><br/><br/>
-                    {/* cards de feedback */}
-                    <br/><br/><br/>  
+                    <div>
+                        <FeedbackCarousel />
+                    </div>                    
+                <br/><br/><br/>  
                 </div>
                 <div className={styles.botaoFeedback}>
                     <button onClick={() => navigate("/feedback")}>Também quero dar um feedback</button>
