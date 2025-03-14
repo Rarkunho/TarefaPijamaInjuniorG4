@@ -2,7 +2,7 @@ import styles from "./styles.module.css"
 
 export default function Footer() {
     return (
-    <footer>
+        <footer>
         <div className={styles.footer}>
             <div className={styles.sobre}> 
                 <div className={styles.endereco}>
@@ -32,6 +32,6 @@ export default function Footer() {
         <div className={styles.copy}>
             <p>© Copyright 2025. IN Junior. Todos os direitos reservados. Niterói, Brasil.</p>
         </div>    
-    </footer>        
+    </footer>             
     )
 }

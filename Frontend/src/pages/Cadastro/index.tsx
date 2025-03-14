@@ -85,8 +85,6 @@ export default function Login() {
 
                         <div className={styles.botao1}>
                             <button className='botao1'>ENTRAR</button>
-                            <hr/>
-                            <button className='botao1'>CADASTRE-SE</button>
                         </div>
                     </form>
                 </div>

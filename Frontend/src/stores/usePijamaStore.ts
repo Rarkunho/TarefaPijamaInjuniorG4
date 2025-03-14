@@ -3,10 +3,16 @@ import api from "../services/api";
 import Pijama from "../types/Pijama";
 import PijamaSizes from "../types/PijamaSizes";
 
+interface CartItem{
+    pijama: Pijama;
+    quantity: number;
+}
+
 interface PijamaStore {
     pijamas: Pijama[]
     pijamaSelecionado?: Pijama
     pijamaSizes?: PijamaSizes[]
+    cartItems: CartItem[];
     getPijamas: () => Promise<void>
     filterByGender: (gender: string) => Promise<void>
     filterByType: (type: string) => Promise<void>
@@ -15,6 +21,9 @@ interface PijamaStore {
     filterByFavorite: () => Promise<void>
     addToFavorite: (id: string) => Promise<void>
     filterBySizes: (id: string, size: string) => Promise<void>
+    removeFromCart: (pijamaId: number) => void;
+    addToCart: (item:CartItem) => void;
+    getCart: ()=> void; 
 }
 
 
@@ -24,6 +33,7 @@ const usePijamaStore = create<PijamaStore>((set) => (
         pijamas: [],
         pijamaSelecionado: undefined,
         pijamaSizes: undefined,
+        cartItems: [],
         getPijamas: async () => {
             try {
                 const response = await api.get("/pajamas")
@@ -105,6 +115,21 @@ const usePijamaStore = create<PijamaStore>((set) => (
             } catch (error) {
                 console.error("Erro ao buscar tamanhos de pijama pelo ID:", error);
             }
+        },
+        addToCart: (item: CartItem) => {
+            set((state) => ({
+                cartItems: [...state.cartItems, item]
+            }))
+        },
+        removeFromCart: (pijamaId: number) => {
+            set((state) => ({
+                cartItems: state.cartItems.filter((item) => item.pijama.id !== pijamaId),
+            }))
+        },
+        getCart: () => {
+            set((state) => ({
+                cartItems: state.cartItems
+            }))
         }
 }))
 
