@@ -23,7 +23,6 @@ enum PajamaSizes {
 enum PajamaGender {
   MALE
   FEMALE
-  CHILDREN
 }
 
 enum PajamaSeason {

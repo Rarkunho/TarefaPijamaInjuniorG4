@@ -24,6 +24,7 @@
     "color-convert": "2.0.1",
     "color-name": "1.1.4",
     "commander": "4.1.1",
+    "concurrently": "9.1.2",
     "consola": "3.4.0",
     "cookie": "1.0.2",
     "cross-spawn": "7.0.6",
@@ -139,7 +140,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.ts",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir build",
+    "init": "concurrently \"npm run dev\" \"cd.. && cd Frontend && npx vite --open\""
   },
   "keywords": [],
   "author": "",
