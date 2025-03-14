@@ -1,0 +1,84 @@
+.fundo {
+    background-image: url("../../assets/Vector.png");
+    background-size: cover; /* A imagem vai cobrir toda a área da main */
+    background-position: center; /* Centraliza a imagem */
+    background-attachment: fixed; /* A imagem ficará fixa quando rolar a página */
+    background-color: rgba(255,255,255,0.7);
+    background-blend-mode: lighten;
+    height: 100%; /* Garante que a imagem ocupe toda a altura da main */
+    margin-bottom: 0px;
+}
+
+
+.title{
+    font-size: 2.5rem;
+    color: var(--vermelho300);
+}
+
+.inactive{
+    color: var(--cinza200);
+}
+
+
+.cart__item{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3.4375rem;
+}
+
+.cart__item__img{
+    width: 11.375rem;
+    height: 17.0625rem;
+    box-shadow: 16px 16px 16px #00000040;
+}
+
+.cart__item__infosize{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cart__item__title{
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+
+    color: var(--azul400);
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--nunito);
+    letter-spacing: 0%;
+    line-height: 100%;
+    text-transform: uppercase;
+}
+
+.cart__item__ref{
+    color: var(--azul300);
+    font-weight: 400;
+    font-family: var(--numans);
+    font-size: .875rem;
+    letter-spacing: 4%;
+    text-transform: initial;
+}
+
+.cart__item__qtdprice{
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.cart__item__price{
+    color: var(--preto);
+    min-width: 10rem;
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: "Nunito Sans", sans-serif;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.cart__item__msg{
+    width: 10.6875rem;
+    padding-top: .4rem;
+}
+

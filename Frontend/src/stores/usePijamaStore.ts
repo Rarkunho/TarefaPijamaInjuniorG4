@@ -2,14 +2,23 @@ import { create } from "zustand";
 import api from "../services/api";
 import Pijama from "../types/Pijama";
 
+interface CartItem{
+    pijama: Pijama;
+    quantity: number;
+}
+
 interface PijamaStore {
     pijamas: Pijama[]
+    cartItems: CartItem[];
     getPijamas: () => Promise<void>
     filterByGender: (gender: string) => Promise<void>
     filterByType: (type: string) => Promise<void>
     filterBySeason: (station: string) => Promise<void>
     filterById: (key: number) => Promise<void>
     filterByFavorite: () => Promise<void>
+    removeFromCart: (pijamaId: number) => void;
+    addToCart: (item:CartItem) => void;
+    getCart: ()=> void; 
 }
 
 
@@ -17,6 +26,7 @@ interface PijamaStore {
 const usePijamaStore = create<PijamaStore>((set) => (
     {
         pijamas: [],
+        cartItems: [],
         getPijamas: async () => {
             try {
                 const response = await api.get("/pajamas")
@@ -76,6 +86,21 @@ const usePijamaStore = create<PijamaStore>((set) => (
             } catch (error) {
                 console.error("Erro ao buscar pijama pelo ID:", error)
             }
+        },
+        addToCart: (item: CartItem) => {
+            set((state) => ({
+                cartItems: [...state.cartItems, item]
+            }))
+        },
+        removeFromCart: (pijamaId: number) => {
+            set((state) => ({
+                cartItems: state.cartItems.filter((item) => item.pijama.id !== pijamaId),
+            }))
+        },
+        getCart: () => {
+            set((state) => ({
+                cartItems: state.cartItems
+            }))
         }
 }))
 
