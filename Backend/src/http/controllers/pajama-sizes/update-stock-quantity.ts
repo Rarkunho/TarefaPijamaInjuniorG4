@@ -7,13 +7,19 @@ import { z } from "zod";
 
 export async function updateStockQuantity(request: FastifyRequest, reply: FastifyReply) {
     const updateStockQuantityParamsSchema = z.object({
-        pajamaId: z.string().uuid().nonempty(),
+        pajamaId: z.string()
+            .nonempty("Pajama ID cannot be empty")
+            .uuid("Pajama ID must be a valid UUID"),
+
         size: z.enum(Object.values(PajamaSizes) as [string, ...string[]])
     });
 
     const updateStockQuantityBodySchema = z.object({
-        quantity: z.coerce.number().int().min(0)
+        quantity: z.coerce.number()
+            .int("Quantity must be an integer")
+            .min(0, "Quantity cannot be negative"),
     });
+
 
     const updateStockQuantityParams = updateStockQuantityParamsSchema.parse(request.params);
     const updateStockQuantityBody = updateStockQuantityBodySchema.parse(request.body);

@@ -6,7 +6,9 @@ import { z } from "zod";
 
 export async function getUser(request: FastifyRequest, reply: FastifyReply) {
     const getParamsSchema = z.object({
-        userId: z.string().uuid()
+        userId: z.string()
+            .nonempty("User ID cannot be empty")
+            .uuid("User ID must be a valid UUID"),
     });
 
     const { userId } = getParamsSchema.parse(request.params);

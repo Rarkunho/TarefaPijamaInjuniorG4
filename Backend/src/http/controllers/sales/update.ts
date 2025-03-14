@@ -8,26 +8,38 @@ import { z } from "zod";
 
 export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
     const updateSaleParamsSchema = z.object({
-        saleId: z.string().uuid()
+        saleId: z.string()
+            .nonempty("Sale ID cannot be empty")
+            .uuid("Sale ID must be a valid UUID"),
     });
 
+
     const updateSaleBodySchema = z.object({
-        buyerName: z.string().nonempty().min(6).optional(),
+        buyerName: z.string()
+            .nonempty("Buyer name cannot be empty")
+            .min(6, { message: "Buyer name must have at least 6 characters" })
+            .optional(),
 
         cpf: z.coerce.string()
-            .nonempty()
-            .length(11)
+            .nonempty("CPF cannot be empty")
+            .length(11, { message: "CPF must have exactly 11 characters" })
             .refine((cpf) => /^\d+$/.test(cpf), {
                 message: "The input must be a string containing only digits"
-            }).optional(),
+            })
+            .optional(),
 
         price: z.coerce.number()
             .positive({ message: "The price must be a positive number" })
             .refine((price) => /^\d+(\.\d{2})?$/.test(price.toString()), {
-                message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
-            }).optional(),
+                message: "The input must be a valid price (e.g.: '100', '123.45', '110.1')"
+            })
+            .optional(),
 
-        paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]]).optional(),
+        paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]])
+            .optional()
+            .refine((method) => Object.values(PaymentMethod).includes(method as PaymentMethod), {
+                message: "Invalid payment method"
+            }),
 
         installments: z.coerce.number()
             .int({ message: "The input must be an integer value" })
@@ -37,8 +49,8 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
             .optional(),
 
         cardNumber: z.coerce.string()
-            .min(13)
-            .max(19)
+            .min(13, { message: "Card number must have at least 13 digits" })
+            .max(19, { message: "Card number can have a maximum of 19 digits" })
             .refine((cardNumber) => /^\d+$/.test(cardNumber), {
                 message: "The input must be a string containing only digits"
             })
@@ -50,7 +62,7 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
         }
 
         if (data.cardNumber !== undefined) {
-            return data.paymentMethod === PaymentMethod.CREDIT_CARD
+            return data.paymentMethod === PaymentMethod.CREDIT_CARD;
         }
 
         if (data.paymentMethod === PaymentMethod.PIX) {
@@ -59,8 +71,9 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
 
         return true;
     }, {
-        message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
+        message: `Credit Card Payment Method must Contain a Valid Credit Card Number and 'paymentMethod' field must be '${PaymentMethod.CREDIT_CARD}'`
     });
+
 
     const { saleId } = updateSaleParamsSchema.parse(request.params);
 

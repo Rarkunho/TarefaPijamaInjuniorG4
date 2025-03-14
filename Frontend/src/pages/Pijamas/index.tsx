@@ -9,11 +9,18 @@ type GenreParams = Record<string, string | undefined>;
 
 export default function Pijamas() {
     const { genre } = useParams<GenreParams>();
-    const { pijamas, getPijamas, filterByGender, filterByType, filterByStation} = usePijamaStore(); 
+    const { pijamas, getPijamas } = usePijamaStore(); 
+
+    
+    useEffect(() => {
+        getPijamas(); // dispara a atualização
+    }, [getPijamas]);
 
     useEffect(() => {
-        getPijamas();
-      }, [getPijamas]);
+        console.log(pijamas, "carregado"); // só roda quando 'pijamas' mudar
+    }, [pijamas]);
+
+
 
     return (
         <>

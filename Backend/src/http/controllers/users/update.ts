@@ -7,8 +7,11 @@ import { z } from "zod";
 
 export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
     const updateParamsSchema = z.object({
-        userId: z.string().uuid()
+        userId: z.string()
+            .nonempty("User ID cannot be empty")
+            .uuid("User ID must be a valid UUID"),
     });
+
 
     const updateBodySchema = z.object({
         name: z.string()

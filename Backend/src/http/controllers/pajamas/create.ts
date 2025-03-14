@@ -14,19 +14,35 @@ export async function createPajama(request: FastifyRequest, reply: FastifyReply)
                 message: "Name must contain only alphabetic characters and spaces",
             }),
 
-        description: z.string(),
+        description: z.string()
+            .nonempty("Description cannot be empty"),
 
-        image: z.string().nonempty().url(),
+        image: z.string()
+            .nonempty("Image URL cannot be empty")
+            .url("Image must be a valid URL"),
 
-        season: z.enum(Object.values(PajamaSeason) as [string, ...string[]]),
+        season: z.enum(Object.values(PajamaSeason) as [string, ...string[]])
+            .refine((season) => Object.values(PajamaSeason).includes(season as PajamaSeason), {
+                message: "Invalid pajama season",
+            }),
 
-        type: z.enum(Object.values(PajamaType) as [string, ...string[]]),
+        type: z.enum(Object.values(PajamaType) as [string, ...string[]])
+            .refine((type) => Object.values(PajamaType).includes(type as PajamaType), {
+                message: "Invalid pajama type",
+            }),
 
-        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]),
+        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]])
+            .refine((gender) => Object.values(PajamaGender).includes(gender as PajamaGender), {
+                message: "Invalid pajama gender",
+            }),
 
-        favorite: z.coerce.boolean(),
+        favorite: z.coerce.boolean({
+            invalid_type_error: "Favorite must be a boolean value (true or false)",
+        }),
 
-        onSale: z.coerce.boolean(),
+        onSale: z.coerce.boolean({
+            invalid_type_error: "OnSale must be a boolean value (true or false)",
+        }),
 
         price: z.number()
             .positive({ message: "The price must be a positive number" })
@@ -41,11 +57,11 @@ export async function createPajama(request: FastifyRequest, reply: FastifyReply)
     });
 
     const registerBody = registerBodySchema.parse(request.body);
+    
+    const prismaPajamaRepository = new PrismaPajamasRepository();
+    const createPajamaCase = new CreatePajamaUseCase(prismaPajamaRepository);
 
     try {
-        const prismaPajamaRepository = new PrismaPajamasRepository();
-        const createPajamaCase = new CreatePajamaUseCase(prismaPajamaRepository);
-
         const createPajamaResponse = await createPajamaCase.execute(registerBody as CreatePajamaUseCaseRequest);
 
         return reply.status(201).send(createPajamaResponse.pajama);

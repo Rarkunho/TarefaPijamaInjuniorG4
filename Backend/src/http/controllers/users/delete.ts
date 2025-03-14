@@ -5,11 +5,13 @@ import { DeleteUserUseCase } from "src/use-cases/user/delete-user-use-case"
 import { z } from 'zod'
 
 export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
-    const getParamsSchema = z.object({
-        userId: z.string().uuid()
+    const deleteParamsSchema = z.object({
+        userId: z.string()
+            .nonempty("User ID cannot be empty")
+            .uuid("User ID must be a valid UUID"),
     });
 
-    const { userId } = getParamsSchema.parse(request.params);
+    const { userId } = deleteParamsSchema.parse(request.params);
 
     const prismaUsersRepository = new PrismaUsersRepository();
     const deleteUserUseCase = new DeleteUserUseCase(prismaUsersRepository);
