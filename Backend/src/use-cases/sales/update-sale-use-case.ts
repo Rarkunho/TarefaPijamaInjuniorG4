@@ -1,7 +1,6 @@
 import { Sale } from "@prisma/client";
 import { SalesRepository, SaleUpdateInput } from "src/repositories/sales-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
-import { SaleUpdateFailedError } from "../errors/sale-update-failed-error";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface UpdateSaleUseCaseRequest {
     id: string;
@@ -23,10 +22,6 @@ export class UpdateSaleUseCase {
         }
 
         const saleUpdated = await this.salesRepository.update(saleUpdateInput.id, saleUpdateInput.updateData);
-
-        if (saleUpdated === null) {
-            throw new SaleUpdateFailedError();
-        }
 
         return { sale: saleUpdated } as UpdateSaleUseCaseResponse;
     }

@@ -1,7 +1,7 @@
-import { SalesRepository } from "src/repositories/sales-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
 import { Sale } from "@prisma/client";
-import { SaleDeletionFailedError } from "../errors/sale-deletion-failed-error";
+import { AddressRepository } from "src/repositories/address-repository";
+import { SalesRepository } from "src/repositories/sales-repository";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface DeleteSaleUseCaseRequest {
     id: string;
@@ -12,7 +12,8 @@ interface DeleteSaleUseCaseResponse {
 }
 
 export class DeleteSaleUseCase {
-    constructor(private readonly salesRepository: SalesRepository) {}
+    constructor(private readonly salesRepository: SalesRepository,
+                private readonly addressRepository: AddressRepository) {}
 
     async execute(saleDeleteInputData: DeleteSaleUseCaseRequest): Promise<DeleteSaleUseCaseResponse> {
         const existingSale = await this.salesRepository.findById(saleDeleteInputData.id);
@@ -21,10 +22,15 @@ export class DeleteSaleUseCase {
             throw new ResourceNotFoundError();
         }
 
+        // Contagem de Vendas com o Endereço Referenciado:
+        const addressCount = await this.salesRepository.countAddressQuantity(existingSale.addressId);
+
         const deletedSale = await this.salesRepository.delete(saleDeleteInputData.id);
 
-        if (deletedSale === null) {
-            throw new SaleDeletionFailedError();
+        // Requisito: Remover endereço que estava sendo
+        // referenciado unicamente pela venda recém removida:
+        if (addressCount <= 1) {
+            await this.addressRepository.delete(deletedSale.addressId);
         }
 
         return { sale: deletedSale } as DeleteSaleUseCaseResponse;

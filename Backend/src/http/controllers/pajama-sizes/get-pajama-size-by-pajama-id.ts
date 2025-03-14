@@ -1,7 +1,7 @@
 import { PajamaSizes } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-pajama-size-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { GetPajamaSizeByPajamaIdUseCaseRequest, GetPajamaSizeByPajamaIdUseCaseUseCase } from "src/use-cases/pajama-sizes/get-pajama-size-by-pajama-id";
 import { z } from "zod";
 
@@ -19,17 +19,11 @@ export async function getPajamaSizeByPajamaId(request: FastifyRequest, reply: Fa
     try {
         const pajamaSizeResponse = await getPajamaSizeByPajamaIdUseCaseUseCase.execute({ pajamaId: pajamaId, size: size } as GetPajamaSizeByPajamaIdUseCaseRequest);
 
-        return reply.status(200).send({
-            status: "success",
-            data: pajamaSizeResponse.pajamaSize
-        });
+        return reply.status(200).send(pajamaSizeResponse.pajamaSize);
 
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return reply.status(404).send({
-                status: "error",
-                message: error.message
-            });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

@@ -1,8 +1,7 @@
 import { PajamaSizes } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-pajama-size-repository";
-import { PajamaSizeUpdateFailedError } from "src/use-cases/errors/pajama-size-update-failed-error";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { UpdatePajamaSizeQuantityUseCase } from "src/use-cases/pajama-sizes/update-quantity-pajama-size-use-case";
 import { z } from "zod";
 
@@ -11,7 +10,7 @@ export async function updateStockQuantity(request: FastifyRequest, reply: Fastif
         pajamaId: z.string().uuid().nonempty(),
         size: z.enum(Object.values(PajamaSizes) as [string, ...string[]])
     });
-    
+
     const updateStockQuantityBodySchema = z.object({
         quantity: z.coerce.number().int().min(0)
     });
@@ -29,24 +28,11 @@ export async function updateStockQuantity(request: FastifyRequest, reply: Fastif
             updateData: updateStockQuantityBody.quantity
         });
 
-        return reply.status(200).send({
-            status: "success",
-            data: updatedPajamaSizeResponse.pajamaSize
-        });
+        return reply.status(200).send(updatedPajamaSizeResponse.pajamaSize);
 
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return reply.status(404).send({
-                status: "error",
-                message: error.message
-            });
-        }
-
-        if (error instanceof PajamaSizeUpdateFailedError) {
-            return reply.status(500).send({
-                status: "error",
-                message: error.message
-            });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

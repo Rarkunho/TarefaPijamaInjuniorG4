@@ -1,11 +1,10 @@
-import { z } from "zod";
+import { PaymentMethod } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
-import { PaymentMethod } from "@prisma/client";
-import { UpdateSaleUseCase } from "src/use-cases/sales/update-sale-use-case";
-import { SaleUpdateFailedError } from "src/use-cases/errors/sale-update-failed-error";
 import { SaleUpdateInput } from "src/repositories/sales-repository";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
+import { UpdateSaleUseCase } from "src/use-cases/sales/update-sale-use-case";
+import { z } from "zod";
 
 export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
     const updateSaleParamsSchema = z.object({
@@ -44,11 +43,28 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
             message: "The input must be a string containing only digits"
         })
         .optional()
+
+    }).refine(data => {
+        if (data.paymentMethod === PaymentMethod.CREDIT_CARD) {
+            return data.cardNumber !== undefined;
+        }
+
+        if (data.cardNumber !== undefined) {
+            return data.paymentMethod === PaymentMethod.CREDIT_CARD
+        }
+
+        if (data.paymentMethod === PaymentMethod.PIX) {
+            data.installments = 1;
+        }
+
+        return true;
+    }, {
+        message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
     });
     
     const { saleId } = updateSaleParamsSchema.parse(request.params);
 
-    const updateBody = updateSaleBodySchema.parse(request.params);
+    const updateBody = updateSaleBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();
     const updateSaleUseCase = new UpdateSaleUseCase(prismaSalesRepository);
@@ -59,24 +75,11 @@ export async function updateSale(request: FastifyRequest, reply: FastifyReply) {
             updateData: updateBody as SaleUpdateInput
         });
         
-        return reply.status(200).send({
-            status: "success",
-            data: updatedSaleResponse.sale
-        });
+        return reply.status(200).send(updatedSaleResponse.sale);
         
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
-            return reply.status(404).send({
-                status: "error",
-                message: error.message
-            });
-        }
-
-        if (error instanceof SaleUpdateFailedError) {
-            return reply.status(500).send({
-                status: "error",
-                message: error.message
-            });
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

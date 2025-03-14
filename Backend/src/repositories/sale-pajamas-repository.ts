@@ -1,8 +1,10 @@
 import { Prisma, PrismaPromise, SalePajama } from "@prisma/client";
 
 export interface SalePajamaCreateInput
-    extends Omit<Prisma.SalePajamaUncheckedCreateInput, 'saleId' | 'pajamaId'>,
-            Required<Pick<Prisma.SalePajamaUncheckedCreateInput, 'saleId' | 'pajamaId'>> {}
+    extends Omit<Prisma.SalePajamaUncheckedCreateInput, 'saleId' | 'pajamaId'> {
+    pajamaId: string;
+    saleId: string;
+}
 
 export interface SalePajamaSearchInput
     extends Partial<Prisma.SalePajamaUncheckedCreateInput> {}

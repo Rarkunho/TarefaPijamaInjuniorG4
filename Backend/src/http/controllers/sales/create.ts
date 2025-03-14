@@ -1,6 +1,13 @@
 import { PajamaSizes, PaymentMethod } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { PrismaAddressRepository } from "src/repositories/prisma/prisma-address-repository";
+import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-pajama-size-repository";
+import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
+import { PrismaSalePajamasRepository } from "src/repositories/prisma/prisma-sale-pajamas-repository";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
+import { InsufficientPajamaSizeStockQuantityError } from "src/use-cases/errors/insufficient-pajama-size-stock-quantity-error";
+import { PurchaseNotAllowedError } from "src/use-cases/errors/purchase-not-allowed-error";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { CreateSaleUseCase, CreateSaleUseCaseRequest } from "src/use-cases/sales/create-sale-use-case";
 import { z } from "zod";
 
@@ -14,12 +21,6 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
             .length(11)
             .refine((cpf) => /^\d+$/.test(cpf), {
                 message: "The input must be a string containing only digits"
-            }),
-            
-            price: z.coerce.number()
-            .positive({ message: "The price must be a positive number" })
-            .refine((price) => /^\d+(\.\d{2})?$/.test(price.toString()), {
-                message: "The input must be a valid price (e.g.: \'100\', \'123.45\', \'110.1\')",
             }),
 
             paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]]),
@@ -39,6 +40,22 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
             })
             .optional()
             
+        }).refine(data => {
+            if (data.paymentMethod === PaymentMethod.CREDIT_CARD) {
+                return data.cardNumber !== undefined;
+            }
+
+            if (data.cardNumber !== undefined) {
+                return data.paymentMethod === PaymentMethod.CREDIT_CARD
+            }
+
+            if (data.paymentMethod === PaymentMethod.PIX) {
+                data.installments = 1;
+            }
+
+            return true;
+        }, {
+            message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
         }),
         
         pajamaSaleAddressData: z.object({
@@ -77,26 +94,43 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const createBody = createBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();
-    const createSaleUseCase = new CreateSaleUseCase(prismaSalesRepository);
+    const prismaAddressRepository = new PrismaAddressRepository();
+    const prismaPajamasRepository = new PrismaPajamasRepository();
+    const prismaSalePajamasRepository = new PrismaSalePajamasRepository();
+    const prismaPajamasSizeRepository = new PrismaPajamasSizeRepository();
+    
+    const createSaleUseCase = new CreateSaleUseCase(
+        prismaSalesRepository,
+        prismaAddressRepository,
+        prismaPajamasRepository,
+        prismaSalePajamasRepository,
+        prismaPajamasSizeRepository
+    );
 
     try {
-        const createdSaleResponse = await createSaleUseCase.execute({ createData: createBody } as CreateSaleUseCaseRequest);
+        const createdSaleResponse = await createSaleUseCase.execute(createBody as CreateSaleUseCaseRequest);
         
         return reply.status(201).send({
-            status: "success",
-            data: {
-                saleId: createdSaleResponse.sale.id,
-                buyerName: createdSaleResponse.sale.buyerName,
-                price: createdSaleResponse.sale.price,
-                paymentMethod: createdSaleResponse.sale.paymentMethod,
-                installments: createdSaleResponse.sale.installments
-            }
+            saleId: createdSaleResponse.sale.id,
+            buyerName: createdSaleResponse.sale.buyerName,
+            price: createdSaleResponse.sale.price,
+            paymentMethod: createdSaleResponse.sale.paymentMethod,
+            installments: createdSaleResponse.sale.installments
         });
 
     } catch (error) {
-        return reply.status(500).send({
-            status: "error",
-            message: "Error while Creating Sale Instance in Database"
-        });
+        if (error instanceof ResourceNotFoundError) {
+            return reply.status(404).send({ message: error.message });
+        }
+
+        if (error instanceof InsufficientPajamaSizeStockQuantityError) {
+            return reply.status(422).send({ message: error.message });
+        }
+
+        if (error instanceof PurchaseNotAllowedError) {
+            return reply.status(400).send({ message: error.message });
+        }
+        
+        throw error;
     }
 }

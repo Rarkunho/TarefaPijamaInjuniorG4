@@ -1,7 +1,6 @@
-import { PajamaSize, PajamaSizes, Sale } from "@prisma/client";
-import { ResourceNotFoundError } from "../errors/resource-not-found";
+import { PajamaSize, PajamaSizes } from "@prisma/client";
 import { PajamasSizeRepository } from "src/repositories/pajamas-size-repository";
-import { PajamaSizeUpdateFailedError } from "../errors/pajama-size-update-failed-error";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 
 interface UpdatePajamaSizeQuantityUseCaseRequest {
     pajamaId: string;
@@ -28,10 +27,6 @@ export class UpdatePajamaSizeQuantityUseCase {
                                                                     pajamaSizeUpdateInput.size,
                                                                     pajamaSizeUpdateInput.updateData
                                                                     );
-
-        if (pajamaSizeUpdated === null) {
-            throw new PajamaSizeUpdateFailedError();
-        }
 
         return { pajamaSize: pajamaSizeUpdated } as UpdatePajamaSizeQuantityUseCaseResponse;
     }

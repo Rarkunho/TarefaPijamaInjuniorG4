@@ -3,7 +3,7 @@ import { PajamaSizes, Prisma, Sale } from "@prisma/client";
 export interface SaleInfoResponse
     extends Omit<Prisma.SaleUncheckedCreateInput, 'id'>,
             Omit<Prisma.AddressUncheckedCreateInput, 'id'> {
-    saleId: string;
+    id: string;
     quantity: number;
 }
 
@@ -23,9 +23,9 @@ export interface SaleUpdateInput
     extends Partial<Prisma.SaleUncheckedCreateInput> {}
 
 export interface SalesRepository {
-    create(saleData: SaleCreateInput): Promise<Sale>;
-    delete(saleId: string): Promise<Sale | null>;
+    create(saleData: Prisma.SaleUncheckedCreateInput): Promise<Sale>;
     findById(saleId: string): Promise<Sale | null>;
-    getSaleInfo(saleId: string): Promise<SaleInfoResponse | null>;
-    update(saleId: string, updateData: SaleUpdateInput): Promise<Sale | null>;
+    delete(saleId: string): Promise<Sale>;
+    countAddressQuantity(addressId: string): Promise<number>;
+    update(saleId: string, updateData: SaleUpdateInput): Promise<Sale>;
 }

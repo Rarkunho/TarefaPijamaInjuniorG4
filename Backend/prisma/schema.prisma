@@ -20,6 +20,16 @@ enum PajamaSizes {
   GG
 }
 
+enum PajamaGender {
+  MALE
+  FEMALE
+}
+
+enum PajamaSeason {
+  SUMMER
+  WINTER
+}
+
 model User {
   id       String @id @default(uuid())
   name     String
@@ -91,13 +101,13 @@ model PajamaSize {
 }
 
 model Pajama {
-  id          String  @id @default(uuid())
+  id          String       @id @default(uuid())
   name        String
   description String
   image       String
-  season      String
+  season      PajamaSeason
   type        String
-  gender      String
+  gender      PajamaGender
   favorite    Boolean
   onSale      Boolean
   price       Float

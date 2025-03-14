@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaFeedbacksRepository } from "src/repositories/prisma/prisma-feedbacks-repository";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found";
+import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
 import { DeleteFeedbackUseCase } from "src/use-cases/feedbacks/delete";
 import { z } from "zod";
 

@@ -7,7 +7,6 @@ export interface PajamasSizeRepository {
     findPajamaSize(pajamaId: string, size: PajamaSizes): Promise<PajamaSize | null>;
     findAllPajamasSize(pajamaId: string): Promise<PajamaSize[]>;
     
-    // TODO: Assegurar que quantity seja inteiro positivo:
     updateStockQuantity(pajamaId: string, size: PajamaSizes, newQuantity: number): Promise<PajamaSize>;
     updateManyStockQuantity(pajamaSizesUpdateData: PajamaBoughtInfo[]): Promise<PajamaSize[]>;
     

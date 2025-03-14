@@ -1,0 +1,34 @@
+.title{
+    font-size: 2.5rem;
+    color: var(--vermelho300);
+}
+
+.inactive{
+    color: var(--cinza200);
+}
+
+.nav{
+    display: flex;
+}
+
+.favcards__container{
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1.0625rem;
+}
+
+.favcards__carrosel{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.botao{
+    height: fit-content;
+}
+
+.botao.btnInactive{
+    filter: grayscale(100%) opacity(50%);
+    transition: .2s ease-in-out;
+}

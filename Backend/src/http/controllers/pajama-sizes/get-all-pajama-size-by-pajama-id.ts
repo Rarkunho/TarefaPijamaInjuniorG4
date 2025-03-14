@@ -16,10 +16,7 @@ export async function getAllPajamaSizeByPajamaId(request: FastifyRequest, reply:
     try {
         const allPajamaSizesResponse = await getAllPajamaSizeByPajamaIdUseCaseUseCase.execute({ pajamaId: pajamaId });
 
-        return reply.status(200).send({
-            status: "success",
-            data: allPajamaSizesResponse.pajamaSize
-        });
+        return reply.status(200).send(allPajamaSizesResponse.pajamaSize);
 
     } catch (error) {
         throw error;
