@@ -15,11 +15,11 @@ export default function Favoritos() {
     const btnEsqRef = useRef<HTMLImageElement | null>(null);
     const btnDirRef = useRef<HTMLImageElement | null>(null);
 
-    const { pijamas, filterByFavorite } = usePijamaStore(); 
+    const { pijamas, getPijamas } = usePijamaStore(); 
 
     useEffect(() => {
-            filterByFavorite(); // dispara a atualização
-        }, [filterByFavorite]);
+            getPijamas(); // dispara a atualização
+        }, [ getPijamas]);
     
     useEffect(() => {
         console.log(pijamas, "carregado"); // só roda quando 'pijamas' mudar
