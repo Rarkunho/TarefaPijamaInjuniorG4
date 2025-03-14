@@ -18,8 +18,9 @@ export async function createFeedback(request: FastifyRequest, reply: FastifyRepl
             .min(20, "Description is too small, it must be at least 20 characters long")
             .max(1000, "Description is too big, it must be no longer than 1000 characters"),
 
-        rating: z.number().refine((value) => {
-            return /^(0(\.0|\.5)?|[1-4](\.0|\.5)?|5\.0)$/.test(value.toFixed(1)) && /^-?\d+\.\d{1}$/.test(value.toString());
+        rating: z.number()
+        .refine((value) => {
+            return /^(0(\.0|\.5)?|[1-4](\.0|\.5)?|5(\.0)?)$/.test(value.toFixed(1));
         }, {
             message: "Rating must be a float value from 0.0 to 5.0 in steps of 0.5, with exactly one decimal place",
         }),
