@@ -40,7 +40,7 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
 
         gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
 
-        type: z.enum(Object.values(PajamaType) as [string, ...string[]])
+        type: z.enum(Object.values(PajamaType) as [string, ...string[]]).optional()
 
     }).refine(data => {
         if (data.page !== undefined && data.perPage === undefined) {

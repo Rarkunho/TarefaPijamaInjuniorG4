@@ -30,17 +30,17 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
 
     const { userId } = updateParamsSchema.parse(request.params);
     const updateUserData = updateBodySchema.parse(request.body);
-    
+
     const prismaUsersRepository = new PrismaUsersRepository();
     const updateUserUseCase = new UpdateUserUseCase(prismaUsersRepository);
 
     try {
-        const updatedUser = await updateUserUseCase.execute({
-            userId,
-            data: updateUserData
-        });
+        // const updatedUser = await updateUserUseCase.execute({
+        //     userId,
+        //     data: updateUserData
+        // });
 
-        return reply.status(200).send(user)
+        // return reply.status(200).send(user)
     } catch (error) {
         if (error instanceof (ResourceNotFoundError)) {
             return reply.status(404).send({ message: error.message })
