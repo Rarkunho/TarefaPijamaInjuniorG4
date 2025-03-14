@@ -2,11 +2,6 @@
 
 Projeto final desenvolvido para a etapa de trainee da IN Junior.
 
-## libs 
-
-Front:
-- react-router-dom
-
 ## Teste de Rotas da API no BackEnd
 
 ### Rotas testadas
