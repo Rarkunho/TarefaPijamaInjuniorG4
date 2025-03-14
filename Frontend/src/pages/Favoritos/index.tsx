@@ -5,10 +5,8 @@ import logoFavoritos from "../../assets/FavoritoActive.png";
 import BotaoEsq from "../../assets/botaoesq.png";
 import BotaoDir from "../../assets/botaodir.png";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
-import Pijama from "../../types/Pijama";
-import fotoTeste from "../../assets/pijamaTeste.png"
-// import axios from "axios";
+import { useEffect, useRef } from "react";
+import usePijamaStore from "../../stores/usePijamaStore";
 
 export default function Favoritos() {
     const navigate = useNavigate();
@@ -17,27 +15,21 @@ export default function Favoritos() {
     const btnEsqRef = useRef<HTMLImageElement | null>(null);
     const btnDirRef = useRef<HTMLImageElement | null>(null);
 
+    const { pijamas, filterByFavorite } = usePijamaStore(); 
 
-    const totalFavs = 5;
+    useEffect(() => {
+            filterByFavorite(); // dispara a atualização
+        }, [ filterByFavorite]);
+    
+    useEffect(() => {
+        console.log(pijamas, "carregado"); // só roda quando 'pijamas' mudar
+    }, [pijamas]);
+
     const arrayCards = [];
     const movement = 500
 
-    const meuPijama: Pijama = {
-        name: "Pijama Confortável",
-        description: "Pijama feito de algodão super macio.",
-        image: fotoTeste,
-        price: 99.90,
-        season: "Verão",
-        type: "Adulto", // ou um número, se desejar
-        gender: "Unissex", // ou um número, se desejar
-        favorite: true,
-        on_sale: false,
-        key: 1
-    };
-    
-
-    for (let index = 0; index < totalFavs; index++) {
-        arrayCards.push(<Cards key={index} pijama={meuPijama} />);
+    for (let index = 0; index < pijamas.length; index++) {
+        arrayCards.push(<Cards key={index} pijama={pijamas[index]} />);
     }
 
     const scrollLeft = () => {
@@ -69,7 +61,7 @@ export default function Favoritos() {
         if (containerRef.current) {
             containerRef.current.scrollBy({ left: movement, behavior: 'smooth' });
             console.log(containerRef.current.scrollLeft);
-            if (containerRef.current.scrollLeft > 1){
+            if (containerRef.current.scrollLeft >= Number(containerRef.current.scrollWidth) - Number(containerRef.current.clientWidth)){
                 btnDirRef.current?.classList.add(styles.btnInactive);
             }
         }

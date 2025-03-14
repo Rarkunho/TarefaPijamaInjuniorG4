@@ -4,6 +4,7 @@ import logoFavoritos from "../../assets/FavoritoInactive.png";
 import { useNavigate } from "react-router-dom";
 import fotoTeste from "../../assets/pijamaTeste.png"
 import SizeButton from "../../components/Buttons/SizeButton"
+import closeButton from "../../assets/X.png"
 
 import QuantityButton from "../../components/Buttons/QuantityButton"
 
@@ -50,7 +51,14 @@ export default function Carrinho() {
                             </div>
                         </div>
                         <div className={styles.cart__item__qtdprice}>
-                            <div></div>
+                            <div style={{display:"flex", justifyContent: "flex-end"}}>
+                                <img
+                                    className={`${styles.closeButton}`}
+                                    src={closeButton}
+                                    alt="icone de fechar"
+                                    onClick={() => navigate("/favoritos")}
+                                />
+                            </div>
                             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap:'2.7rem'}}>
                                 <div className={styles.quantidade}>
                                     <h2 className={styles.tituloItalico}>Quantidade: </h2>
