@@ -22,6 +22,7 @@ export default function Pijamas() {
     const genderOptions = ["MALE", "FEMALE", "UNISEX", "FAMILY"]
     const typeOptions = ["ADULT", "CHILD"]
 
+
     
     useEffect(() => {
         getPijamas(); // dispara a atualização
@@ -101,6 +102,7 @@ export default function Pijamas() {
     }, [param])
 
 
+
     return (
         <>
         <div className={styles.fundo}>
@@ -145,9 +147,12 @@ export default function Pijamas() {
             </section>
             <main className={styles.principal}>
                 <ul className={styles.pijamas}>
-                    {pijamas.map((pijama, index) => (
-                        <Cards key={index} pijama={pijama} />
-                    ))}
+                {pijamas.map((pijama, index) => (
+                    <Cards 
+                        key={index} 
+                        pijama={pijama} 
+                    />
+                ))}
                 </ul>
             </main>
         </div>

@@ -30,7 +30,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
         password: z.string()
             .min(6, "Password is too small, it must be at least 6 characters long")
             .max(100, "Password is too big, it must be no longer than 100 characters").optional(),
-    })
+    });
 
     const { userId } = updateParamsSchema.parse(request.params);
     const updateUserData = updateBodySchema.parse(request.body);

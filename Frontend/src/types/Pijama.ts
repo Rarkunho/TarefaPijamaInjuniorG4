@@ -9,8 +9,8 @@ interface Pijama {
     type: string | number
     gender: string | number
     favorite: boolean
-    onSale: boolean
-    salePercent?: number
+    on_sale: boolean
+    sale_percent?: number
     key: number
 }
 

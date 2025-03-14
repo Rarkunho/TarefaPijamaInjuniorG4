@@ -14,10 +14,10 @@ export async function getFeedback(request: FastifyRequest, reply: FastifyReply) 
     const { feedbackId } = getParamsSchema.parse(request.params);
     
     const prismaFeedbacksRepository = new PrismaFeedbacksRepository();
-    const getFeedbackCase = new GetFeedbackUseCase(prismaFeedbacksRepository);
+    const getFeedbackUseCase = new GetFeedbackUseCase(prismaFeedbacksRepository);
 
     try {
-        const getFeedbackResponse = await getFeedbackCase.execute({
+        const getFeedbackResponse = await getFeedbackUseCase.execute({
             feedbackId
         });
 

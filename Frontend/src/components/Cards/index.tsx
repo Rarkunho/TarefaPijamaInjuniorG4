@@ -1,57 +1,42 @@
 import styles from "./styles.module.css"
-import botaoCoracaoAtivo from "../../assets/FavoritoActive.png"
-import botaoCoracaoInativo from "../../assets/FavoritoInactive.png"
+import botaoCoracao from "../../assets/Favorito2.png"
 import { useNavigate } from "react-router-dom"
 import usePijamaStore from "../../stores/usePijamaStore"
 import Pijama from "../../types/Pijama"
-import { useEffect, useState } from "react"
-import formatarPreco from "../../hooks/usePrice"
 
 interface CardsProps {
     className?: string
-    pijama: Pijama
 }
 
-export default function Cards({ pijama, ...props }: CardsProps) {
+export default function Cards({ pijama }: { pijama: Pijama }) {
+    //const pijamas = usePijamaStore((state) => state.pijamas)
     const navigate = useNavigate()
-    const [preco, setPreco] = useState<number>(pijama.price)
-    const [liked, setLiked] = useState<boolean>(pijama.favorite)
-
-
-    useEffect(() => {
-        if (pijama.salePercent && pijama.salePercent > 0) {
-            const novoPreco = pijama.price - (pijama.price * (pijama.salePercent / 100));
-            setPreco(novoPreco); 
-        }
-    }, [pijama.price, pijama.salePercent])
 
     return (
         <>
             <li 
-                {...props} 
+                //{...props} 
                 key={pijama.key}
-                className={`${styles.container} ${props.className}`}
+                //className={`${styles.container} ${props.className}`}
                 onClick={() => navigate(`/pijama/${pijama.key}`)}
             >
                 <div className={styles.layout}>
                     <img src={pijama.image} alt="Foto do Pijama"/>
-                    <button //onClick={handleLike}
+                    <button 
+                        //className={`${styles.likeButton} ${liked ? styles.liked : ''}`}
+                        //onClick={handleLike}
                     >
-                        <img src={liked ? botaoCoracaoAtivo : botaoCoracaoInativo} alt="Botão de Curtir"/>
+                        <img src={botaoCoracao} alt="Botão de Pesquisa"/>
                     </button>
                 </div>
                 <div className={styles.info}>
+                    <span className={styles.desconto}>
+                        {pijama.sale_percent !== null ? `R$ ${pijama.sale_percent}% de desconto` : null}
+                    </span>
                     <h2>{pijama.name}</h2>
                     <div className={styles.preco}>
-                        <div>
-                            {pijama.salePercent !== undefined && pijama.salePercent > 0 ? (
-                                <span className={styles.desconto}>
-                                    {formatarPreco(pijama.price)}
-                                </span>
-                            ) : null}
-                            <h3>{formatarPreco(preco)}</h3>
-                        </div>
-                        <p>6x de <span>{formatarPreco(preco / 6)}</span></p>
+                        <h3>{pijama.price}</h3>
+                        <p>6x de <span>{pijama.price}</span></p>
                     </div>
                 </div>
             </li>

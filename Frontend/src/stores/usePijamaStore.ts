@@ -67,8 +67,7 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 console.error("Erro ao buscar pijama pelo ID:", error)
             }
         }
-    }
-))
+}))
 
 export default usePijamaStore
 
