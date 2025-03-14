@@ -22,7 +22,7 @@ export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
         return reply.status(204).send();
 
     } catch (error) {
-        if (error instanceof (ResourceNotFoundError)) {
+        if (error instanceof ResourceNotFoundError) {
             return reply.status(404).send({ message: error.message });
         }
 
