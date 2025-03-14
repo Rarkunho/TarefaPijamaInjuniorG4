@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaFeedbacksRepository } from "src/repositories/prisma/prisma-feedbacks-repository";
-import { CreateFeedbackCase } from "src/use-cases/feedbacks/create";
+import { CreateFeedbackCase } from "src/use-cases/feedbacks/create-feedback-use-case";
 import { z } from "zod";
 
 export async function createFeedback(request : FastifyRequest, reply : FastifyReply){
