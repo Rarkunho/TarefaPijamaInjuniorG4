@@ -36,7 +36,6 @@ export default function Login() {
        console.log(data)
        reset()
 
-
        // Após o login bem-sucedido, redireciona para a página Home
        navigate('/');
     }
@@ -82,21 +81,6 @@ export default function Login() {
                         
                         {errors.password && <span>{errors.password.message}</span>}
 
-
-
-
-
-
-
-
-
-                        {/* <input
-                            type='password'
-                            className={styles.input}
-                            placeholder='Senha'
-                            {...register('password')}
-                        /> */}
-
                         <div className={styles.esqueceuSenha}>
                             <p>Esqueceu a senha?</p>
                         </div>
@@ -108,7 +92,8 @@ export default function Login() {
                         </div>
                     </form>
                     <div className={styles.botao2}>
-                            <button className='botao2'>CADASTRE-SE</button>
+                            <button className='botao2' onClick={() => navigate('/cadastrar')}>
+                            CADASTRE-SE </button>
                         </div>
                 </div>
             </section>
