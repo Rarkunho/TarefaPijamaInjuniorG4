@@ -1,0 +1,21 @@
+.carouselContainer {
+    width: 90%;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 28px;
+    color: #8b1e1e;
+    margin-bottom: 20px;
+  }
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: #8b1e1e;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: #8b1e1e;
+  }
+  
