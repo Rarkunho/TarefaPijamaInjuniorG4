@@ -1,8 +1,13 @@
 import styles from "./styles.module.css"
 import botao from "../../assets/lupa.png"
 import Cards from "../../components/Cards"
+import { useParams } from "react-router-dom";
+
+type GenreParams = Record<string, string | undefined>;
 
 export default function Pijamas() {
+    const { genre } = useParams<GenreParams>();
+
     return (
         <>
         <div className={styles.fundo}>
