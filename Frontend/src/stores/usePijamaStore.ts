@@ -9,6 +9,7 @@ interface PijamaStore {
     // filterByType: (type: string) => Promise<void>
     // filterByStation: (station: string) => Promise<void>
     // filterById: (key: number) => Promise<void>
+    filterByFavorite: () => Promise<void>
 }
 
 
@@ -19,6 +20,15 @@ const usePijamaStore = create<PijamaStore>((set) => (
         getPijamas: async () => {
             try {
                 const response = await api.get("/pajamas")
+                console.log(response.data.pajamas, "pijamas store");
+                set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
+            } catch (error) {
+                console.error("Erro ao buscar os pijamas:", error)
+            }
+        },
+        filterByFavorite: async () => {
+            try {
+                const response = await api.get("/pajamas?favorite=true")
                 console.log(response.data.pajamas, "pijamas store");
                 set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
             } catch (error) {
