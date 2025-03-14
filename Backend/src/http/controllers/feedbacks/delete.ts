@@ -5,11 +5,13 @@ import { DeleteFeedbackUseCase } from "src/use-cases/feedbacks/delete-feedback-u
 import { z } from "zod";
 
 export async function deleteFeedback(request : FastifyRequest, reply : FastifyReply){
-    const getParamsSchema = z.object({
-        id: z.string().uuid()
-    })
+    const deleteParamsSchema = z.object({
+        feedbackId: z.string()
+            .nonempty("Feedback ID cannot be empty")
+            .uuid("Feedback ID must be a valid UUID")
+    });
 
-    const { id } = getParamsSchema.parse(request.params)
+    const { id } = deleteParamsSchema.parse(request.params)
     
     try {
         const prismaFeedbacksRepository = new PrismaFeedbacksRepository()

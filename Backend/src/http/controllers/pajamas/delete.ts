@@ -5,14 +5,14 @@ import { DeletePajamaUseCase } from "src/use-cases/pajamas/delete-pajama-use-cas
 import { z } from "zod";
 
 export async function deletePajama(request: FastifyRequest, reply: FastifyReply) {
-    const getParamsSchema = z.object({
+    const deleteParamsSchema = z.object({
         pajamaId: z.string()
             .nonempty("Pajama ID cannot be empty")
-            .uuid("Pajama ID must be a valid UUID"),
+            .uuid("Pajama ID must be a valid UUID")
     });
 
 
-    const { pajamaId } = getParamsSchema.parse(request.params);
+    const { pajamaId } = deleteParamsSchema.parse(request.params);
 
     const prismaPajamasRepository = new PrismaPajamasRepository();
     const deletePajamaUseCase = new DeletePajamaUseCase(prismaPajamasRepository);

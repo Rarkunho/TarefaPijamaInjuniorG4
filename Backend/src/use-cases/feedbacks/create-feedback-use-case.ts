@@ -1,9 +1,14 @@
+import { Feedback } from "@prisma/client";
 import { FeedbacksRepository } from "src/repositories/feedbacks-repository";
 
 interface CreateFeedbackUseCaseRequest {
     name: string;
     description: string;
     rating: number;
+}
+
+interface CreateFeedbackUseCaseResponse {
+    feedback: Feedback;
 }
 
 export class CreateFeedbackCase {
@@ -15,5 +20,7 @@ export class CreateFeedbackCase {
             description,
             rating
         });
+
+        return { feedback: feedbackCreated } as CreateFeedbackUseCaseResponse;
     }
 }

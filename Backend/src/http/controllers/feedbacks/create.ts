@@ -4,7 +4,7 @@ import { CreateFeedbackCase } from "src/use-cases/feedbacks/create-feedback-use-
 import { z } from "zod";
 
 export async function createFeedback(request: FastifyRequest, reply: FastifyReply) {
-    const registerBodySchema = z.object({
+    const createBodySchema = z.object({
         name: z.string()
             .nonempty("Name cannot be empty")
             .min(6, "Name is too small, it must be at least 6 characters long")
@@ -25,20 +25,21 @@ export async function createFeedback(request: FastifyRequest, reply: FastifyRepl
         }),
     });
 
-    const { name, description, rating } = registerBodySchema.parse(request.body);
+    const { name, description, rating } = createBodySchema.parse(request.body);
     
     const prismaFeedbacksRepository = new PrismaFeedbacksRepository();
     const createFeedbackUseCase = new CreateFeedbackCase(prismaFeedbacksRepository);
 
     try {
-        await createFeedbackUseCase.execute({
+        const createfeedbackResponse = await createFeedbackUseCase.execute({
             name,
             rating,
             description
-        })
+        });
+
+        return reply.status(201).send(createfeedbackResponse.feedback);
+
     } catch (error) {
         throw error
     }
-
-    return reply.status(201).send('feedback criado com sucesso')
 }

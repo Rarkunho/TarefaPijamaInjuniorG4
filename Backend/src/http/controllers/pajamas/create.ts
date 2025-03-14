@@ -5,7 +5,7 @@ import { CreatePajamaUseCase, CreatePajamaUseCaseRequest } from "src/use-cases/p
 import { z } from "zod";
 
 export async function createPajama(request: FastifyRequest, reply: FastifyReply) {
-    const registerBodySchema = z.object({
+    const createBodySchema = z.object({
         name: z.string()
             .nonempty("Name cannot be empty")
             .min(6, "Name is too small, it must be at least 6 characters long")
@@ -53,10 +53,10 @@ export async function createPajama(request: FastifyRequest, reply: FastifyReply)
         salePercent: z.coerce.number()
             .min(0, "Sale percent must be at least 0")
             .max(100, "Sale percent must be no greater than 100")
-            .optional(),
+            .optional()
     });
 
-    const registerBody = registerBodySchema.parse(request.body);
+    const registerBody = createBodySchema.parse(request.body);
     
     const prismaPajamaRepository = new PrismaPajamasRepository();
     const createPajamaCase = new CreatePajamaUseCase(prismaPajamaRepository);

@@ -2,7 +2,7 @@ import { PajamaGender, PajamaType } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { GetAllPajamasUseCase, GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
-import { z, ZodError } from "zod";
+import { z } from "zod";
 
 export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply) {
     const getAllPajamasQuerySchema = z.object({
