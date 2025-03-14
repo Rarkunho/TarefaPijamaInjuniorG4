@@ -14,6 +14,7 @@
     "asn1.js": "5.4.1",
     "atomic-sleep": "1.0.0",
     "avvio": "9.1.0",
+    "backend": "file:",
     "balanced-match": "1.0.2",
     "bcryptjs": "3.0.2",
     "bn.js": "4.12.1",

@@ -17,7 +17,7 @@ export default function Header() {
                     onClick={() => navigate("/")}
                 />
                 <nav>
-                    <p onClick={() => navigate("/pijamas/todos")}>Pijamas</p>
+                    <p onClick={() => navigate("/pijamas")}>Pijamas</p>
                     <p onClick={() => navigate("/pijamas/feminino")}>Feminino</p>
                     <p onClick={() => navigate("/pijamas/masculino")}>Masculino</p>
                     <p onClick={() => navigate("/pijamas/infantil")}>Infantil</p>
