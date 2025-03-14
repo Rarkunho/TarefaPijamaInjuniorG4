@@ -2,17 +2,6 @@
 
 Projeto final desenvolvido para a etapa de trainee da IN Junior.
 
-## Teste de Rotas da API no BackEnd
-
-### Rotas testadas
-
-- [ ] feedbackRoutes
-- [x] pajamaRoutes
-- [ ] userRoutes
-- [x] saleRoutes
-- [x] pajamaSizeRoutes
-
-
 ## Autores:
 
 - [Helena Scandian](https://github.com/lenascadz)
