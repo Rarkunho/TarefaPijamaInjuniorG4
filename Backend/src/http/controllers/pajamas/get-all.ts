@@ -1,4 +1,4 @@
-import { PajamaGender, PajamaType } from "@prisma/client";
+import { PajamaGender, PajamaSeason, PajamaType } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { GetAllPajamasUseCase, GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
@@ -54,6 +54,12 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
             .optional()
             .refine(val => Object.values(PajamaType).includes(val as PajamaType), {
                 message: 'Invalid pajama type. Expected one of: ' + Object.values(PajamaType).join(', '),
+            }).optional(),
+
+        season: z.enum(Object.values(PajamaSeason) as [string, ...string[]])
+            .optional()
+            .refine(val => Object.values(PajamaSeason).includes(val as PajamaSeason), {
+                message: 'Invalid pajama season. Expected one of: ' + Object.values(PajamaSeason).join(', '),
             }).optional(),
 
     }).refine(data => {
