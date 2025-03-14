@@ -2,11 +2,18 @@ import styles from "./styles.module.css"
 import botao from "../../assets/lupa.png"
 import Cards from "../../components/Cards"
 import { useParams } from "react-router-dom";
+import usePijamaStore from "../../stores/usePijamaStore";
+import { useEffect } from "react";
 
 type GenreParams = Record<string, string | undefined>;
 
 export default function Pijamas() {
     const { genre } = useParams<GenreParams>();
+    const { pijamas, getPijamas, filterByGender, filterByType, filterByStation} = usePijamaStore(); 
+
+    useEffect(() => {
+        getPijamas();
+      }, [getPijamas]);
 
     return (
         <>
@@ -48,12 +55,12 @@ export default function Pijamas() {
             </section>
             <main className={styles.principal}>
                 <ul className={styles.pijamas}>
-                    <Cards/>
-                    <Cards/>
-                    <Cards/>
-                    <Cards/>
-                    <Cards/>
-                    <Cards/>
+                {pijamas.map((pijama, index) => (
+                    <Cards 
+                        key={index} 
+                        pijama={pijama} 
+                    />
+                ))}
                 </ul>
             </main>
         </div>
