@@ -1,19 +1,53 @@
+import { PajamaGender, PajamaType } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
-import { GetAllPajamasUseCase } from "src/use-cases/pajamas/get-all-pajamas-use-case";
-import { z } from "zod";
+import { GetAllPajamasUseCase, GetAllPajamasUseCaseRequest } from "src/use-cases/pajamas/get-all-pajamas-use-case";
+import { z, ZodError } from "zod";
 
 export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply) {
     const getAllPajamasQuerySchema = z.object({
         page: z.coerce.number().int().positive().optional(),
 
         perPage: z.coerce.number().int().positive().optional(),
+
+        favorite: z.string()
+            .transform((val, ctx) => {
+                if (val === 'true') return true;
+                if (val === 'false') return false;
+
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Invalid boolean value. Expected \'true\' or \'false\''
+                });
+
+                return z.NEVER;
+            })
+            .optional(),
+
+        onSale: z.string()
+            .transform((val, ctx) => {
+                if (val === 'true') return true;
+                if (val === 'false') return false;
+
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Invalid boolean value. Expected \'true\' or \'false\''
+                });
+
+                return z.NEVER;
+            })
+            .optional(),
+
+        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
+
+        type: z.enum(Object.values(PajamaType) as [string, ...string[]]).optional()
+
     }).refine(data => {
-        if (data.page && !data.perPage) {
+        if (data.page !== undefined && data.perPage === undefined) {
             data.perPage = 10;
         }
 
-        if (!data.page && data.perPage) {
+        if (data.page === undefined && data.perPage !== undefined) {
             data.page = 1;
         }
 
@@ -22,15 +56,15 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
         message: "Invalid Query Params"
     });
 
-    const getAllPajamasQuery = getAllPajamasQuerySchema.parse(request.query);
+    const { page, perPage, ...queryProps } = getAllPajamasQuerySchema.parse(request.query);
 
-    const getAllPajamasInput: Record<string, number> = {};
+    const getAllPajamasInput = { ...queryProps } as GetAllPajamasUseCaseRequest;
 
-    if (getAllPajamasQuery.page && getAllPajamasQuery.perPage) {
-        getAllPajamasInput.skipQuantity = (getAllPajamasQuery.page - 1) * getAllPajamasQuery.perPage;
-        getAllPajamasInput.itemsPerPage = getAllPajamasQuery.perPage;
+    if (page !== undefined && perPage !== undefined) {
+        getAllPajamasInput.skipQuantity = (page - 1) * perPage;
+        getAllPajamasInput.itemsPerPage = perPage;
     }
-    
+
     const prismaPajamasRepository = new PrismaPajamasRepository();
     const getAllPajamasUseCase = new GetAllPajamasUseCase(prismaPajamasRepository);
 
@@ -41,9 +75,9 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
             return reply.status(200).send({
                 pajamas: allPajamasPaginatedResponse.pajamas,
                 meta: {
-                    ...allPajamasPaginatedResponse.meta,
-                    currentPage: getAllPajamasQuery.page,
-                    perPage: getAllPajamasQuery.perPage
+                    currentPage: page,
+                    perPage: perPage,
+                    ...allPajamasPaginatedResponse.meta
                 }
             });
         } else {

@@ -10,7 +10,7 @@ export async function getSaleInfo(request: FastifyRequest, reply: FastifyReply) 
     const getSaleInfoParamsSchema = z.object({
         saleId: z.string().uuid()
     });
-    
+
     const { saleId } = getSaleInfoParamsSchema.parse(request.params);
 
     const prismaSalesRepository = new PrismaSalesRepository();
@@ -25,9 +25,9 @@ export async function getSaleInfo(request: FastifyRequest, reply: FastifyReply) 
 
     try {
         const saleInfoResponse = await getSaleSaleInfoUseCase.execute({ id: saleId });
-        
+
         return reply.status(200).send(saleInfoResponse.saleInfo);
-        
+
     } catch (error) {
         if (error instanceof ResourceNotFoundError) {
             return reply.status(404).send({ message: error.message });

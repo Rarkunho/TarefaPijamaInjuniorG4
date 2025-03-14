@@ -1,9 +1,13 @@
 import { PajamasRepository } from "src/repositories/pajamas-repository";
-import { Pajama } from "@prisma/client";
+import { Pajama, PajamaGender } from "@prisma/client";
 
-interface GetAllPajamasUseCaseRequest {
+export interface GetAllPajamasUseCaseRequest {
     skipQuantity?: number;
     itemsPerPage?: number;
+
+    favorite?: boolean;
+    gender?: PajamaGender;
+    onSale?: boolean;
 }
 
 interface GetAllPajamasUseCaseResponseMetaData {
@@ -20,22 +24,20 @@ export class GetAllPajamasUseCase {
     constructor(private readonly pajamasRepository: PajamasRepository) {}
 
     async execute(GetAllPajamasInput: GetAllPajamasUseCaseRequest): Promise<GetAllPajamasUseCaseResponse> {
-        if (!GetAllPajamasInput.itemsPerPage && !GetAllPajamasInput.itemsPerPage) {
-            const allPajamas = await this.pajamasRepository.getAllPajamas();
-
-            return { pajamas: allPajamas } as GetAllPajamasUseCaseResponse;
-
-        } else {
+        const { skipQuantity, itemsPerPage, ...searchFilters } = GetAllPajamasInput;
+        
+        if (skipQuantity !== undefined && itemsPerPage !== undefined) {
             const [allPajamas, totalItems] = await Promise.all([
                 this.pajamasRepository.getPajamasPaginated(
-                    GetAllPajamasInput.skipQuantity!,
-                    GetAllPajamasInput.itemsPerPage
+                    skipQuantity,
+                    itemsPerPage,
+                    searchFilters
                 ),
-                this.pajamasRepository.getPajamasCount()
+                this.pajamasRepository.getPajamasCount(searchFilters)
             ]);
-
-            const totalPages = Math.ceil(totalItems / GetAllPajamasInput.itemsPerPage);
-
+    
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+    
             return {
                 pajamas: allPajamas,
                 meta: {
@@ -43,7 +45,11 @@ export class GetAllPajamasUseCase {
                     totalPages: totalPages
                 }
             }
+            
+        } else {
+            const allPajamas = await this.pajamasRepository.getAllPajamas(searchFilters);
+    
+            return { pajamas: allPajamas } as GetAllPajamasUseCaseResponse;
         }
-
     }
 } 

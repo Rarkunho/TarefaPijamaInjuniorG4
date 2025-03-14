@@ -44,7 +44,7 @@ const router = createBrowserRouter([
                 element: <PijamaIndividual/>
             },
             {
-                path: "/pijamas/:genre",
+                path: "/pijamas/:genre?",
                 element: <Pijamas/>
             }
         ]

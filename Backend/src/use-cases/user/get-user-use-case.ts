@@ -4,23 +4,23 @@ import { ResourceNotFoundError } from "../errors/resource-not-found-error"
 
 
 interface GetUserUseCaseRequest {
-    id: string
+    userId: string;
 }
 
 interface GetUserUseCaseResponse {
-    user: User
+    user: User;
 }
 
 export class GetUserUseCase {
     constructor(private readonly usersRepository: UsersRepository) {}
 
-    async execute({ id }: GetUserUseCaseRequest): Promise<GetUserUseCaseResponse> {
-        const user = await this.usersRepository.findById(id)
+    async execute({ userId }: GetUserUseCaseRequest): Promise<GetUserUseCaseResponse> {
+        const userFound = await this.usersRepository.findById(userId);
 
-        if (!user) {
-            throw new ResourceNotFoundError()
+        if (!userFound) {
+            throw new ResourceNotFoundError();
         }
 
-        return { user }
+        return { user: userFound } as GetUserUseCaseResponse;
     }
 }

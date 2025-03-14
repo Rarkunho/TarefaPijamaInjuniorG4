@@ -15,14 +15,14 @@ export async function deletePajama(request: FastifyRequest, reply: FastifyReply)
         const prismaPajamasRepository = new PrismaPajamasRepository();
         const deletePajamaUseCase = new DeletePajamaUseCase(prismaPajamasRepository);
         const pajama = await deletePajamaUseCase.execute({ pajamaId });
-        
+
         return reply.status(204).send(pajama);
 
     } catch (error) {
         if (error instanceof (ResourceNotFoundError)) {
             return reply.status(404).send({ message: error.message });
         }
-        
+
         throw error;
     }
 }

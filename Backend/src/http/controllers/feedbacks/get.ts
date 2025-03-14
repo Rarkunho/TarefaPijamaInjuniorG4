@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaFeedbacksRepository } from "src/repositories/prisma/prisma-feedbacks-repository";
 import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
-import { GetFeedbackUseCase } from "src/use-cases/feedbacks/get";
+import { GetFeedbackUseCase } from "src/use-cases/feedbacks/get-feedback-use-case";
 import { z } from "zod";
 
 export async function getFeedback(request : FastifyRequest, reply : FastifyReply){

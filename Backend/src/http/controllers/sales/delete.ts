@@ -9,7 +9,7 @@ export async function deleteSale(request: FastifyRequest, reply: FastifyReply) {
     const deleteParamsSchema = z.object({
         saleId: z.string().uuid()
     });
-    
+
     const { saleId } = deleteParamsSchema.parse(request.params);
 
     const prismaSalesRepository = new PrismaSalesRepository();

@@ -14,6 +14,7 @@
     "asn1.js": "5.4.1",
     "atomic-sleep": "1.0.0",
     "avvio": "9.1.0",
+    "backend": "file:",
     "balanced-match": "1.0.2",
     "bcryptjs": "3.0.2",
     "bn.js": "4.12.1",
@@ -139,7 +140,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.ts",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir build",
+    "init": "concurrently \"npm run dev\" \"cd .. && cd Frontend && npx vite --open\""
   },
   "keywords": [],
   "author": "",
@@ -148,6 +150,7 @@
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
     "@types/node": "22.13.10",
+    "concurrently": "9.1.2",
     "tsup": "8.4.0",
     "tsx": "4.19.3",
     "typescript": "5.8.2"

@@ -1,24 +1,27 @@
 import styles from "./styles.module.css"
-import fotoTeste from "../../assets/pijamaTeste.png"
 import botaoCoracao from "../../assets/Favorito2.png"
 import { useNavigate } from "react-router-dom"
+import usePijamaStore from "../../stores/usePijamaStore"
+import Pijama from "../../types/Pijama"
 
 interface CardsProps {
     className?: string
 }
 
-export default function Cards(props: CardsProps) {
+export default function Cards({ pijama }: { pijama: Pijama }) {
+    //const pijamas = usePijamaStore((state) => state.pijamas)
     const navigate = useNavigate()
 
     return (
         <>
             <li 
-                {...props} 
-                className={`${styles.container} ${props.className}`}
-                onClick={() => navigate("/pijama/1")}
+                //{...props} 
+                key={pijama.key}
+                //className={`${styles.container} ${props.className}`}
+                onClick={() => navigate(`/pijama/${pijama.key}`)}
             >
                 <div className={styles.layout}>
-                    <img src={fotoTeste} alt="Foto do Pijama"/>
+                    <img src={pijama.image} alt="Foto do Pijama"/>
                     <button 
                         //className={`${styles.likeButton} ${liked ? styles.liked : ''}`}
                         //onClick={handleLike}
@@ -27,11 +30,13 @@ export default function Cards(props: CardsProps) {
                     </button>
                 </div>
                 <div className={styles.info}>
-                    <span className={styles.desconto}>R$ 00,00</span>
-                    <h2>Pijama feminino longo - estampa poá</h2>
+                    <span className={styles.desconto}>
+                        {pijama.sale_percent !== null ? `R$ ${pijama.sale_percent}% de desconto` : null}
+                    </span>
+                    <h2>{pijama.name}</h2>
                     <div className={styles.preco}>
-                        <h3>R$ 00,00</h3>
-                        <p>6x de <span>R$ 00,00</span></p>
+                        <h3>{pijama.price}</h3>
+                        <p>6x de <span>{pijama.price}</span></p>
                     </div>
                 </div>
             </li>

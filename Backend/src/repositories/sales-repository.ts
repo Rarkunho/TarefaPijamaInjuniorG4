@@ -3,7 +3,7 @@ import { PajamaSizes, Prisma, Sale } from "@prisma/client";
 export interface SaleInfoResponse
     extends Omit<Prisma.SaleUncheckedCreateInput, 'id'>,
             Omit<Prisma.AddressUncheckedCreateInput, 'id'> {
-    saleId: string;
+    id: string;
     quantity: number;
 }
 
