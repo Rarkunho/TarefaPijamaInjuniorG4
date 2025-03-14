@@ -141,7 +141,7 @@
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.ts",
     "build": "tsup src --out-dir build",
-    "init": "concurrently \"npm run dev\" \"cd.. && cd Frontend && npx vite --open\""
+    "init": "concurrently \"npm run dev\" \"cd .. && cd Frontend && npx vite --open\""
   },
   "keywords": [],
   "author": "",
