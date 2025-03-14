@@ -6,6 +6,9 @@ import BotaoEsq from "../../assets/botaoesq.png";
 import BotaoDir from "../../assets/botaodir.png";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import Pijama from "../../types/Pijama";
+import fotoTeste from "../../assets/pijamaTeste.png"
+// import axios from "axios";
 
 export default function Favoritos() {
     const navigate = useNavigate();
@@ -19,8 +22,22 @@ export default function Favoritos() {
     const arrayCards = [];
     const movement = 500
 
+    const meuPijama: Pijama = {
+        name: "Pijama Confortável",
+        description: "Pijama feito de algodão super macio.",
+        image: fotoTeste,
+        price: 99.90,
+        season: "Verão",
+        type: "Adulto", // ou um número, se desejar
+        gender: "Unissex", // ou um número, se desejar
+        favorite: true,
+        on_sale: false,
+        key: 1
+    };
+    
+
     for (let index = 0; index < totalFavs; index++) {
-        arrayCards.push(<Cards className={styles.card} key={index} />);
+        arrayCards.push(<Cards key={index} pijama={meuPijama} />);
     }
 
     const scrollLeft = () => {
