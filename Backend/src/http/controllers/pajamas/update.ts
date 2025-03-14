@@ -7,8 +7,11 @@ import { z } from "zod";
 
 export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply) {
     const updateParamsSchema = z.object({
-        pajamaId: z.string().uuid()
+        pajamaId: z.string()
+            .nonempty("Pajama ID cannot be empty")
+            .uuid("Pajama ID must be a valid UUID")
     });
+
 
     const updateBodySchema = z.object({
         name: z.string()
@@ -19,19 +22,35 @@ export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply)
                 message: "Name must contain only alphabetic characters and spaces",
             }).optional(),
 
-        description: z.string().optional(),
+        description: z.string()
+            .nonempty("Description cannot be empty").optional(),
 
-        image: z.string().nonempty().url().optional(),
+        image: z.string()
+            .nonempty("Image URL cannot be empty")
+            .url("Image must be a valid URL").optional(),
 
-        season: z.enum(Object.values(PajamaSeason) as [string, ...string[]]).optional(),
+        season: z.enum(Object.values(PajamaSeason) as [string, ...string[]])
+            .refine((season) => Object.values(PajamaSeason).includes(season as PajamaSeason), {
+                message: "Invalid pajama season",
+            }).optional(),
 
-        type: z.enum(Object.values(PajamaType) as [string, ...string[]]).optional(),
+        type: z.enum(Object.values(PajamaType) as [string, ...string[]])
+            .refine((type) => Object.values(PajamaType).includes(type as PajamaType), {
+                message: "Invalid pajama type",
+            }).optional(),
 
-        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]]).optional(),
+        gender: z.enum(Object.values(PajamaGender) as [string, ...string[]])
+            .refine((gender) => Object.values(PajamaGender).includes(gender as PajamaGender), {
+                message: "Invalid pajama gender",
+            }).optional(),
 
-        favorite: z.coerce.boolean().optional(),
+        favorite: z.coerce.boolean({
+            invalid_type_error: "Favorite must be a boolean value (true or false)",
+        }).optional(),
 
-        onSale: z.coerce.boolean().optional(),
+        onSale: z.coerce.boolean({
+            invalid_type_error: "OnSale must be a boolean value (true or false)",
+        }).optional(),
 
         price: z.number()
             .positive({ message: "The price must be a positive number" })
@@ -48,10 +67,10 @@ export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply)
     const { pajamaId } = updateParamsSchema.parse(request.params);
     const updateBody = updateBodySchema.parse(request.body);
 
-    try {
-        const prismaPajamasRepository = new PrismaPajamasRepository();
-        const updatePajamasUseCase = new UpdatePajamaUseCase(prismaPajamasRepository);
+    const prismaPajamasRepository = new PrismaPajamasRepository();
+    const updatePajamasUseCase = new UpdatePajamaUseCase(prismaPajamasRepository);
 
+    try {
         const pajama = await updatePajamasUseCase.execute({
             pajamaId,
             data: updateBody
@@ -60,7 +79,7 @@ export async function UpdatePajama(request: FastifyRequest, reply: FastifyReply)
         return reply.status(200).send(pajama);
 
     } catch (error) {
-        if (error instanceof (ResourceNotFoundError)) {
+        if (error instanceof ResourceNotFoundError) {
             return reply.status(404).send({ message: error.message });
         }
 

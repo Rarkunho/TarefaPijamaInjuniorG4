@@ -39,7 +39,11 @@ export default function Home() {
                 </div>
                 <div className={styles.promocoes}>
                     <br /> <br /> <br />
+<<<<<<< HEAD
                     {/* cards de feedback */}
+=======
+                    {/* <Cards /> <Cards /> <Cards /> */}
+>>>>>>> 55227ffd158ab19a89c767457c7a31ed9472680c
                 </div >
                 <div className={styles.titulo}>
                     <h2>Feedbacks</h2> 

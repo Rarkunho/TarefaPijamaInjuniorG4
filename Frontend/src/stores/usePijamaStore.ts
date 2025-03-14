@@ -19,11 +19,13 @@ const usePijamaStore = create<PijamaStore>((set) => (
         getPijamas: async () => {
             try {
                 const response = await api.get("/pajamas")
-                set({ pijamas: response.data })
+                console.log(response.data.pajamas, "pijamas store");
+                set({ pijamas: Array.isArray(response.data.pajamas) ? response.data.pajamas : [] })
             } catch (error) {
                 console.error("Erro ao buscar os pijamas:", error)
             }
         },
+
         filterByGender: async (gender: string) => {
             try {
                 const response = await api.get("/pajamas", {

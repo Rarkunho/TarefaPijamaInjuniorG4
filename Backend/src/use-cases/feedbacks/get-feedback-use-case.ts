@@ -8,17 +8,16 @@ interface GetFeedbackUseCaseRequest {
 }
 
 interface GetFeedbackUseCaseResponse {
-    feedback : Feedback
+    feedback: Feedback
 }
 
 export class GetFeedbackUseCase {
-    constructor(private readonly feedbackRepository : FeedbacksRepository){
-
-    }
-    async execute( { id } : GetFeedbackUseCaseRequest): Promise<GetFeedbackUseCaseResponse>{
+    constructor(private readonly feedbackRepository: FeedbacksRepository) {}
+    
+    async execute({ id }: GetFeedbackUseCaseRequest): Promise<GetFeedbackUseCaseResponse> {
         const feedback = await this.feedbackRepository.getById(id)
 
-        if (!feedback){
+        if (!feedback) {
             throw new ResourceNotFoundError()
         }
 

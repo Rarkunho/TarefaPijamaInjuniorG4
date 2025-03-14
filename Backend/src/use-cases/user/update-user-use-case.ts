@@ -3,39 +3,40 @@ import { compare, hash } from "bcryptjs";
 import { env } from "src/env/index";
 import { UsersRepository, UserUpdateInput } from "src/repositories/users-repository";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { UpdateSamePasswordError } from "../errors/update-same-password-error";
 
 interface UpdateUserUseCaseRequest {
-    id: string,
-    data: UserUpdateInput
+    userId: string;
+    updateData: UserUpdateInput;
 }
 
 interface UpdateUserUseCaseResponse {
-    user: User
+    user: User;
 }
 
 
 export class UpdateUserUseCase {
     constructor(private readonly usersRepository: UsersRepository) {}
 
-    async execute({ id, data }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
-        const user = await this.usersRepository.update(id, data)
+    async execute({ userId, updateData }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
+        const existingUser = await this.usersRepository.findById(userId);
 
-        if (!user) {
-            throw new ResourceNotFoundError()
+        if (!existingUser) {
+            throw new ResourceNotFoundError();
         }
 
-        if (data.password) {
-            const isSamePassword = await compare(data.password, user.password)
+        if (updateData.password) {
+            const isSamePassword = await compare(updateData.password, existingUser.password);
+
             if (isSamePassword) {
-                throw new Error('Mesma senha')
+                throw new UpdateSamePasswordError();
             }
-            data.password = await hash(data.password, env.HASH_NUMBER_TIMES)
-        }
-        const userUpdated = await this.usersRepository.update(id, data)
-        if (!userUpdated) {
-            throw new Error('Usuario Nao Atualizado')
+
+            updateData.password = await hash(updateData.password, env.HASH_NUMBER_TIMES);
         }
 
-        return { user }
+        const userUpdated = await this.usersRepository.update(userId, updateData);
+
+        return { user: userUpdated } as UpdateUserUseCaseResponse;
     }
 }

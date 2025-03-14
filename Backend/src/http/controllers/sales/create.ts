@@ -14,27 +14,33 @@ import { z } from "zod";
 export async function createSale(request: FastifyRequest, reply: FastifyReply) {
     const createBodySchema = z.object({
         pajamaSaleData: z.object({
-            buyerName: z.string().nonempty().min(6),
+            buyerName: z.string()
+                .nonempty("Buyer name cannot be empty")
+                .min(6, { message: "Buyer name must have at least 6 characters" }),
 
             cpf: z.coerce.string()
-                .nonempty()
-                .length(11)
+                .nonempty("CPF cannot be empty")
+                .length(11, { message: "CPF must have exactly 11 characters" })
                 .refine((cpf) => /^\d+$/.test(cpf), {
                     message: "The input must be a string containing only digits"
                 }),
 
-            paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]]),
+            paymentMethod: z.enum(Object.values(PaymentMethod) as [string, ...string[]])
+                .refine((method) => Object.values(PaymentMethod).includes(method as PaymentMethod), {
+                    message: "Invalid payment method"
+                }),
 
             installments: z.coerce.number()
                 .int({ message: "The input must be an integer value" })
                 .positive({ message: "The input must be a positive value" })
                 .min(1, { message: "The minimum number of installments is 1" })
                 .max(6, { message: "The maximum number of installments is 6" })
-                .optional().default(1),
+                .optional()
+                .default(1),
 
             cardNumber: z.coerce.string()
-                .min(13)
-                .max(19)
+                .min(13, { message: "Card number must have at least 13 digits" })
+                .max(19, { message: "Card number can have a maximum of 19 digits" })
                 .refine((cardNumber) => /^\d+$/.test(cardNumber), {
                     message: "The input must be a string containing only digits"
                 })
@@ -46,7 +52,7 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
             }
 
             if (data.cardNumber !== undefined) {
-                return data.paymentMethod === PaymentMethod.CREDIT_CARD
+                return data.paymentMethod === PaymentMethod.CREDIT_CARD;
             }
 
             if (data.paymentMethod === PaymentMethod.PIX) {
@@ -55,7 +61,7 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
 
             return true;
         }, {
-            message: `Credit Card Payment Method must Contain a Valid Credit Card Number and \'paymentMethod\' field must be \'${PaymentMethod.CREDIT_CARD}\'`
+            message: `Credit Card Payment Method must Contain a Valid Credit Card Number and 'paymentMethod' field must be '${PaymentMethod.CREDIT_CARD}'`
         }),
 
         pajamaSaleAddressData: z.object({
@@ -65,31 +71,44 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
                     message: "The input must be a string containing only digits"
                 }),
 
-            state: z.string().nonempty(),
+            state: z.string()
+                .nonempty("State cannot be empty"),
 
-            city: z.string().nonempty(),
+            city: z.string()
+                .nonempty("City cannot be empty"),
 
-            neighborhood: z.string().nonempty(),
+            neighborhood: z.string()
+                .nonempty("Neighborhood cannot be empty"),
 
-            address: z.string().nonempty(),
+            address: z.string()
+                .nonempty("Address cannot be empty"),
 
-            number: z.coerce.string().nonempty().refine((number) => /^\d+$/.test(number), {
-                message: "The input must be a string containing only digits"
-            })
+            number: z.coerce.string()
+                .nonempty("Number cannot be empty")
+                .refine((number) => /^\d+$/.test(number), {
+                    message: "The input must be a string containing only digits"
+                })
         }),
 
         pajamasBought: z.array(
             z.object({
-                pajamaId: z.string().nonempty().uuid(),
+                pajamaId: z.string()
+                    .nonempty("Pajama ID cannot be empty")
+                    .uuid("Pajama ID must be a valid UUID"),
 
-                size: z.enum(Object.values(PajamaSizes) as [string, ...string[]]),
+                size: z.enum(Object.values(PajamaSizes) as [string, ...string[]])
+                    .refine((size) => Object.values(PajamaSizes).includes(size as PajamaSizes), {
+                        message: "Invalid pajama size"
+                    }),
 
                 quantity: z.coerce.number()
-                    .int({ message: "Quantity must be a integer number" })
-                    .positive({ message: "Quantity must be a positive integer number" })
+                    .int({ message: "Quantity must be an integer" })
+                    .positive({ message: "Quantity must be a positive integer" })
             })
+
         ).min(1, { message: "It is necessary to buy at least one pajama" })
     });
+
 
     const createBody = createBodySchema.parse(request.body);
 
