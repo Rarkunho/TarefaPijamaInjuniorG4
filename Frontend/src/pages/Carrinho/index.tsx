@@ -7,6 +7,7 @@ import SizeButton from "../../components/Buttons/SizeButton"
 import closeButton from "../../assets/X.png"
 
 import QuantityButton from "../../components/Buttons/QuantityButton"
+import GenericButton from "../../components/Buttons/GenericButton";
 
 
 
@@ -56,7 +57,9 @@ export default function Carrinho() {
                                     className={`${styles.closeButton}`}
                                     src={closeButton}
                                     alt="icone de fechar"
-                                    onClick={() => navigate("/favoritos")}
+                                    onClick={()=>{
+
+                                    }}
                                 />
                             </div>
                             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap:'2.7rem'}}>
@@ -69,32 +72,12 @@ export default function Carrinho() {
                             <p className={styles.cart__item__msg}>Ainda temos <span>x</span> peças do tamanho escolhido <br/>em nosso estoque!</p>
                         </div>
                     </div>
-                    <div className={styles.cart__item}>
-                        <div style={{display: "flex", gap: "2.7rem"}}>
-                            <img className={styles.cart__item__img} src={fotoTeste} alt="Foto do Pijama"/>
-                            <div className={styles.cart__item__infosize}>
-                                <div className={styles.cart__item__title}>
-                                    <h2>PIJAMA FEMININO LONGO - ESTAMPA POÁ</h2>
-                                    <p className={styles.cart__item__ref}>Ref: #123456</p>
-                                </div>
-                                <SizeButton
-                                text='M'
-                                isActive={true} onClick={function (): void {} }
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.cart__item__qtdprice}>
-                            <div></div>
-                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap:'2.7rem'}}>
-                                <div className={styles.quantidade}>
-                                    <h2 className={styles.tituloItalico}>Quantidade: </h2>
-                                    <QuantityButton/>
-                                </div>
-                                <h2 className={styles.cart__item__price}>R$ 78,90</h2>
-                            </div>
-                            <p className={styles.cart__item__msg}>Ainda temos <span>x</span> peças do tamanho escolhido <br/>em nosso estoque!</p>
-                        </div>
-                    </div>
+                </div>
+                <div className={styles.cart__total}>
+                    <h2>TOTAL <span className={styles.cart__total__price}>R$ 78,90</span> </h2>
+                    <GenericButton text={"COMPRE TUDO"} onClick={function (): void {
+                        throw new Error("Function not implemented.");
+                    } }/>
                 </div>
             </main>
         </>
