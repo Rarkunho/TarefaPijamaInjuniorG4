@@ -1,5 +1,5 @@
 import { Feedback, Prisma } from "@prisma/client";
-import { FeedbacksRepository } from "../feedbacks-repository";
+import { FeedbacksRepository, SearchFilters } from "../feedbacks-repository";
 import { prismaClient } from "src/lib/prisma";
 
 export class PrismaFeedbacksRepository implements FeedbacksRepository {
@@ -31,8 +31,24 @@ export class PrismaFeedbacksRepository implements FeedbacksRepository {
         return feedback;
     }
 
-    async getAllFeedbacks(): Promise<Feedback[]> {
-        const allFeedbacks = await prismaClient.feedback.findMany({});
+    async getAllFeedbacks(searchFilters: SearchFilters): Promise<Feedback[]> {
+        const allFeedbacks = await prismaClient.feedback.findMany({
+            where: {
+                ...searchFilters
+            }
+        });
+
+        return allFeedbacks;
+    }
+
+    async getAllFeedbacksWithRatingGTE(rating: number): Promise<Feedback[]> {
+        const allFeedbacks = await prismaClient.feedback.findMany({
+            where: {
+                rating: {
+                    gte: rating
+                }
+            }
+        });
 
         return allFeedbacks;
     }
