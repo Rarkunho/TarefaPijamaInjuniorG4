@@ -1,6 +1,6 @@
 .container {
     width: 408px;
-    height: 837px;
+    height: 687px;
     background-color: var(--azul0);
     box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.2),
                 0px -12px 12px rgba(0, 0, 0, 0.2); 
@@ -17,7 +17,7 @@
 
 .layout > img {
     width: 408px;
-    height: 620px;
+    height: 450px;
 }
 
 .layout > button {
@@ -39,7 +39,7 @@
 .info {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 35px;
     padding-top: 5px;
     justify-content: center;
     align-items: center;
@@ -48,9 +48,21 @@
     position: relative;
 }
 
+.precoComDesconto {
+    display: flex;
+    gap: 35px; 
+}
+
+
+.precoSemDesconto {
+    display: flex;
+    gap: 45px; 
+}
+
 .desconto {
-    position: absolute;
-    top: 80px;
+    position: relative; 
+    display: inline-block;
+    margin-top: 1px;
     font-family: "Nunito Sans", sans-serif;
     font-weight: 400;
     font-size: 16px;
@@ -87,7 +99,14 @@
     gap: 15px;
 }
 
-.preco > h3 {
+.preco > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.preco > div > h3 {
     color: var(--azul400);
     font-family: "Numans", sans-serif;
     font-weight: 700;
@@ -108,3 +127,5 @@
 .preco > p > span {
     font-weight: 800;
 }
+
+
