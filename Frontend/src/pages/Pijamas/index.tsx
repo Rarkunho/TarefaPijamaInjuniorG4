@@ -9,11 +9,17 @@ type GenreParams = Record<string, string | undefined>;
 
 export default function Pijamas() {
     const { genre } = useParams<GenreParams>();
-    const { pijamas, getPijamas, filterByGender, filterByType, filterByStation} = usePijamaStore(); 
+    //const { pijamas, getPijamas, filterByGender, filterByType, filterByStation} = usePijamaStore(); 
+    const pijamas = usePijamaStore((state) => state.pijamas)
+    const getPijamas = usePijamaStore((state) => state.getPijamas)
+    const filterByGender = usePijamaStore((state) => state.filterByGender)
+    const filterByType = usePijamaStore((state) => state.filterByType)
+    const filterByStation = usePijamaStore((state) => state.filterByStation)
 
     useEffect(() => {
+        console.log("cheguei aqui")
         getPijamas();
-      }, [getPijamas]);
+      }, []);
 
     return (
         <>
@@ -55,12 +61,9 @@ export default function Pijamas() {
             </section>
             <main className={styles.principal}>
                 <ul className={styles.pijamas}>
-                {pijamas.map((pijama, index) => (
-                    <Cards 
-                        key={index} 
-                        pijama={pijama} 
-                    />
-                ))}
+                    {pijamas.map((pijama, index) => (
+                        <Cards key={index} pijama={pijama} />
+                    ))}
                 </ul>
             </main>
         </div>

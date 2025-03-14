@@ -39,7 +39,7 @@ export default function Home() {
                 </div>
                 <div className={styles.promocoes}>
                     <br /> <br /> <br />
-                    <Cards /> <Cards /> <Cards />
+                    {/* cards de feedback */}
                 </div >
                 <div className={styles.titulo}>
                     <h2>Feedbacks</h2> 

@@ -24,7 +24,6 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 console.error("Erro ao buscar os pijamas:", error)
             }
         },
-
         filterByGender: async (gender: string) => {
             try {
                 const response = await api.get("/pajamas", {
