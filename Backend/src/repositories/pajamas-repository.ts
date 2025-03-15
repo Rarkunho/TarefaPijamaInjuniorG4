@@ -10,17 +10,20 @@ export interface PajamaInfoResponse
     pajamaSizesInfo: Omit<Prisma.PajamaSizeUncheckedCreateInput, 'pajamaId'>[];
 }
 
-interface SearchFilters
-    extends Partial<Prisma.PajamaUncheckedCreateInput> {}
+export interface SearchPajamaFilters
+    extends Partial<Omit<Prisma.PajamaUncheckedCreateInput, 'salePajamas' | 'sizes'>> {}
+
+export interface PajamasPaginationParams {
+    skip?: number;
+    take?: number;
+}
 
 export interface PajamasRepository {
     create(pajamaData: Prisma.PajamaCreateInput): Promise<Pajama>;
     findById(pajamaId: string): Promise<Pajama | null>;
     findManyById(pajamaIdArray: string[]): Promise<Pajama[]>;
     delete(pajamaId: string): Promise<Pajama>;
-    getPajamaInfo(pajamaId: string): Promise<PajamaInfoResponse>;
     update(pajamaId: string, updateData: PajamaUpdateInput): Promise<Pajama>;
-    getAllPajamas(searchFilters: SearchFilters): Promise<Pajama[]>;
-    getPajamasCount(searchFilters: SearchFilters): Promise<number>;
-    getPajamasPaginated(skipQuantity: number, itemsPerPage: number, searchFilters: SearchFilters): Promise<Pajama[]>;
+    getAllPajamas(searchFilters: SearchPajamaFilters, paginationParams: PajamasPaginationParams): Promise<Pajama[]>;
+    getPajamasCount(searchFilters: SearchPajamaFilters): Promise<number>;
 }

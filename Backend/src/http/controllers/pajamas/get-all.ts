@@ -98,10 +98,9 @@ export async function getAllPajamas(request: FastifyRequest, reply: FastifyReply
                     ...allPajamasPaginatedResponse.meta
                 }
             });
-        } else {
-            return reply.status(200).send({ pajamas: allPajamasPaginatedResponse.pajamas });
         }
-
+        
+        return reply.status(200).send({ pajamas: allPajamasPaginatedResponse.pajamas });
     } catch (error) {
         throw error;
     }
