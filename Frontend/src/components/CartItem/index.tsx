@@ -6,14 +6,14 @@ import styles from "./styles.module.css";
 import { SetStateAction, useState } from "react";
 
 interface CartItemProps {
-    id: number;
+    id: string;
     image: string;
     name: string;
     price: number;
     size: string;
     quantity: number;
     stock: number;
-    removeFromCart: (index: number) => void;
+    removeFromCart: (index: string) => void;
     className?: string;
 }
 
