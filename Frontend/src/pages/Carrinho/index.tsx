@@ -25,6 +25,9 @@ export default function Carrinho() {
         getCart();
     }, [getCart]);
 
+
+
+
     return (
         <>
             <nav className={styles.nav}>
@@ -100,11 +103,16 @@ export default function Carrinho() {
                             <div
                                 className={styles.overlay}
                                 onClick={handleCloseModal}></div>
-                            <Modal
-                                modalType="endereco"
-                            />
+                            <div className={styles.modal}>
+                                <Modal
+                                    modalType="endereco"
+                                    next={handleCloseModal}
+                                />
+                            </div>
                         </>
                     )}
+
+                    
                     {/* <Modal modalType="endereco" />
                     <Modal modalType="pagamento" />
                     <Modal modalType="concluido" /> */}

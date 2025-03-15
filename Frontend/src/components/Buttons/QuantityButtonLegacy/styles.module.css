@@ -1,0 +1,35 @@
+.container {
+    width: 171px;
+    height: 41.14px;
+    border: 1px solid #565656;
+    border-radius: 2px;
+    background-color: var(--branco);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button {
+    background-color: transparent;
+    height: 41.14px;
+    border: none;
+    cursor: pointer;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.button > img {
+    width: 20px;
+    height: 20.57px;
+    background-color: transparent;
+}
+
+.container > span {
+    color: var(--preto);
+    font-size: 24px;
+    font-weight: 500;
+    font-family: "Nunito Sans", sans-serif;
+    line-height: 100%;
+    letter-spacing: 0%;
+}

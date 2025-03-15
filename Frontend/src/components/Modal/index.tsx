@@ -63,11 +63,13 @@ type TModal = "endereco" | "pagamento" | "concluido";
 
 interface ModalProps {
     modalType: TModal;
+    next?: () => void;
+    prev?: () => void;
 }
 
 type Buyer = z.infer<typeof buyerSchema>;
 
-export default function Modal({ modalType }: ModalProps): JSX.Element {
+export default function Modal({ modalType, next, prev }: ModalProps): JSX.Element {
     const {
         register,
         formState: { errors },
@@ -172,7 +174,7 @@ export default function Modal({ modalType }: ModalProps): JSX.Element {
                     </div>
 
                     <div className={styles.botao1}>
-                        <button className="botao1">ENVIAR</button>
+                        <button type="submit" className="botao1" onClick={next}>ENVIAR</button>
                     </div>
                 </form>
             )}
@@ -221,9 +223,9 @@ export default function Modal({ modalType }: ModalProps): JSX.Element {
                                 : { justifyContent: "center" }
                         }>
                         {modalType === "pagamento" && (
-                            <button className="botao1">{"< Voltar"}</button>
+                            <button onClick={prev} className="botao1">{"< Voltar"}</button>
                         )}
-                        <button className="botao1">ENVIAR</button>
+                        <button type="submit" className="botao1" onClick={next}>ENVIAR</button>
                     </div>
                 </form>
             )}
