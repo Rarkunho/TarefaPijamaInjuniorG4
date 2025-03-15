@@ -13,12 +13,12 @@ export default function QuantityButton({ onCounterChange, numberSizes }: Quantit
     const [finalCondition, setFinalCondition] = useState<number>(1)
     const initialCondition = 1
 
+    const {counter, increment, decrement, setCounter} = useCounter(initialCondition, finalCondition)
+
     useEffect(() => {
         setFinalCondition(numberSizes);
         setCounter(initialCondition)
-    }, [numberSizes]);
-
-    const {counter, increment, decrement, setCounter} = useCounter(initialCondition, finalCondition)
+    }, [numberSizes, setCounter]);
 
     if (onCounterChange) onCounterChange(counter)
 
