@@ -8,12 +8,21 @@ interface AddToCartProps {
     quantidade: number
 }
 
+interface CartItem{
+    pijama: Pijama;
+    quantity: number;
+}
+
 export default function AddToCartButton (props: AddToCartProps) {
     const { addToCart} = usePijamaStore()
     const navigate = useNavigate()
 
     function handleClick() {
-        addToCart(props.pijamaSelecionado, props.quantidade)
+        const cartItem: CartItem = {
+            pijama: props.pijamaSelecionado, 
+            quantity: props.quantidade        
+        }
+        addToCart(cartItem)
         navigate("/carrinho")
     }
 
