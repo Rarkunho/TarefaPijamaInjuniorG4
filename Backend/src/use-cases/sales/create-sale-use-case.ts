@@ -66,17 +66,10 @@ export class CreateSaleUseCase {
         const pajamasBoughtInfo = await this.pajamasRepository.findManyById(pajamasBoughtIds);
 
         // Verificando se todos os pijamas comprados estão com a flag { onSale: true }:
-        for (const pajamaBought of pajamasBoughtInfo) {
-            try {
-                if (pajamaBought.onSale) continue;
-                throw new PurchaseNotAllowedError(pajamaBought.id);
-                
-            } catch (error) {
-                if (error instanceof PurchaseNotAllowedError) {
-                    saleStockErrors.push(error);
-                }
-            }
-        }
+        await Promise.all(pajamasBoughtInfo.map(async(pajamaBought) => {
+            if (pajamaBought.onSale) return;
+            saleStockErrors.push(new PurchaseNotAllowedError(pajamaBought.id));
+        }));
         
         if (saleStockErrors.length > 0) {
             throw new StockPajamasValidationError(saleStockErrors);
