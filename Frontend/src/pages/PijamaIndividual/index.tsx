@@ -117,12 +117,19 @@ export default function PijamaIndividual() {
                     <div className={styles.info}>
                         <div className={styles.titulo}>
                             <h2>{pijamaSelecionado.name}</h2>
-                            <p>Ref: {pijamaSelecionado.id}</p>
+                            <p>Ref: #{pijamaSelecionado.id}</p>
                         </div>
                         <div className={styles.preco}>
                             <div>
-                                <h2>{formatarPreco(preco)}</h2>
-                                <p>6x de <span>{formatarPreco(preco / 6)}</span></p>
+                                {pijamaSelecionado.salePercent !== undefined && pijamaSelecionado.salePercent > 0 ? (
+                                    <span className={styles.desconto}>
+                                        {formatarPreco(pijamaSelecionado.price)}
+                                    </span>
+                                ) : null}
+                                <div className={styles.priceInformation}>
+                                    <h2>{formatarPreco(preco)}</h2>
+                                    <p>6x de <span>{formatarPreco(preco / 6)}</span></p>
+                                </div>
                             </div>
                             <h3>Ou por <span>{formatarPreco(precoPix)}</span> no PIX</h3>
                         </div>
