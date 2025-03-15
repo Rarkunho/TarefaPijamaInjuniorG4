@@ -108,7 +108,6 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
         ).min(1, { message: "It is necessary to buy at least one pajama" })
     });
 
-
     const createBody = createBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();

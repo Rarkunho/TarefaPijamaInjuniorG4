@@ -29,30 +29,24 @@ export class CreateSaleUseCase {
         const saleStockErrors: StockValidationError[] = [];
         
         const validationPromises = saleCreateInputData.pajamasBought.map(async (pajamaBought) => {
-            try {
-                const pajamaBoughtStockInfo = await this.pajamasSizeRepository.findPajamaSize(pajamaBought.pajamaId, pajamaBought.size);
+            const pajamaBoughtStockInfo = await this.pajamasSizeRepository.findPajamaSize(pajamaBought.pajamaId, pajamaBought.size);
+            
+            if (pajamaBoughtStockInfo === null) {
+                saleStockErrors.push(new ResourceNotFoundError(
+                    `\'pajamaId\' ${pajamaBought.pajamaId} is Invalid or doesn\'t Exist`
+                ));
                 
-                if (pajamaBoughtStockInfo === null) {
-                    throw new ResourceNotFoundError(
-                        `\'pajamaId\' ${pajamaBought.pajamaId} is Invalid or doesn\'t Exist`
-                    );
-                }
-                
-                // Verificando se existe quantidade em estoque disponível para venda:
-                if (pajamaBoughtStockInfo.stockQuantity < pajamaBought.quantity) {
-                    throw new InsufficientPajamaSizeStockQuantityError(
-                        pajamaBought.pajamaId,
-                        pajamaBought.size,
-                        pajamaBought.quantity,
-                        pajamaBoughtStockInfo.stockQuantity
-                    );
-                }
-                
-            } catch (error) {
-                if (error instanceof ResourceNotFoundError ||
-                    error instanceof InsufficientPajamaSizeStockQuantityError) {
-                    saleStockErrors.push(error);
-                }
+                return;
+            }
+            
+            // Verificando se existe quantidade em estoque disponível para venda:
+            if (pajamaBoughtStockInfo.stockQuantity < pajamaBought.quantity) {
+                saleStockErrors.push(new InsufficientPajamaSizeStockQuantityError(
+                    pajamaBought.pajamaId,
+                    pajamaBought.size,
+                    pajamaBought.quantity,
+                    pajamaBoughtStockInfo.stockQuantity
+                ));
             }
         });
 
