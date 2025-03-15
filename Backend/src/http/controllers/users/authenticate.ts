@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaUsersRepository } from "src/repositories/prisma/prisma-users-repository";
 import { InvalidCredentialsError } from "src/use-cases/errors/invalid-credentials-error";
+import { UserDoesNotExistError } from "src/use-cases/errors/user-does-not-exist-error";
 import { AuthenticateUserUseCase } from "src/use-cases/user/authenticate-user-use-case";
 import { z } from "zod";
 
@@ -35,6 +36,10 @@ export async function authenticateUser(request: FastifyRequest, reply: FastifyRe
     } catch (error) {
         if (error instanceof InvalidCredentialsError) {
             return reply.status(401).send({ message: error.message });
+        }
+
+        if (error instanceof UserDoesNotExistError) {
+            return reply.status(404).send({ message: error.message });
         }
 
         throw error;

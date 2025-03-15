@@ -59,7 +59,7 @@ export default function Carrinho() {
                             id={item.pijama.id}
                             image={item.pijama.image}
                             name={item.pijama.name}
-                            price={item.pijama.price}
+                            price={item.pijama.price * item.quantity}
                             size={item.size}
                             quantity={item.quantity}
                             stock={item.stock}
@@ -83,7 +83,11 @@ export default function Carrinho() {
                     <h2>
                         TOTAL{" "}
                         <span className={styles.cart__total__price}>
-                            R$ 78,90
+                            {`R$${cartItems.reduce(
+                                (total, item) =>
+                                    total + item.pijama.price * item.quantity,
+                                0,
+                            ).toFixed(2)}`}
                         </span>{" "}
                     </h2>
                     <GenericButton

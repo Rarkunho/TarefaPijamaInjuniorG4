@@ -3,7 +3,7 @@ import closeButton from "../../assets/X.png";
 
 import QuantityButton from "../../components/Buttons/QuantityButton";
 import styles from "./styles.module.css";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 
 interface CartItemProps {
     id: string;
@@ -18,12 +18,14 @@ interface CartItemProps {
 }
 
 function CartItem(props: CartItemProps) {
-    const [qtdCounter, setQtdCounter] = useState(1);
+    const [counter, setCounter] = useState(1);
+    // const [qtdCounter, setQtdCounter] = useState(props.quantity);
 
-    const handleCounterChange = (newCounterValue: SetStateAction<number>) => {
-        setQtdCounter(newCounterValue)
-    }
+    // const handleCounterChange = (newCounterValue: SetStateAction<number>) => {
+    //     setQtdCounter(newCounterValue)
+    // }
 
+    
 
     return (
         <div className={styles.cart__item}>
@@ -68,9 +70,9 @@ function CartItem(props: CartItemProps) {
                     }}>
                     <div className={styles.quantidade}>
                         <h2 className={styles.tituloItalico}>Quantidade: </h2>
-                        <QuantityButton onCounterChange={handleCounterChange} numberSizes={0} />
+                        <QuantityButton onCounterChange={setCounter} numberSizes={0} />
                     </div>
-                    <h2 className={styles.cart__item__price}>R${(props.price * qtdCounter).toFixed(2).replace(".", ",")}</h2>
+                    <h2 className={styles.cart__item__price}>R${(props.price * counter).toFixed(2).replace(".", ",")}</h2>
                 </div>
                 <p className={styles.cart__item__msg}>
                     Ainda temos <span>{props.stock}</span> peças do tamanho
