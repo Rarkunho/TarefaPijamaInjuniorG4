@@ -7,6 +7,7 @@ import { SaleCreateInput, SalesRepository } from "src/repositories/sales-reposit
 import { InsufficientPajamaSizeStockQuantityError } from "../errors/insufficient-pajama-size-stock-quantity-error";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { PurchaseNotAllowedError } from "../errors/purchase-not-allowed-error";
+import { StockPajamasValidationError, StockValidationError } from "../errors/stock-pajamas-validation-error";
 
 export interface CreateSaleUseCaseRequest
     extends Omit<SaleCreateInput, 'price'> {}
@@ -23,32 +24,64 @@ export class CreateSaleUseCase {
                 private readonly pajamasSizeRepository: PajamasSizeRepository) {}
 
     async execute(saleCreateInputData: CreateSaleUseCaseRequest): Promise<CreateSaleUseCaseResponse> {
-        // Verificando se existe quantidade em estoque disponível para venda:
-        for (const pajamaBought of saleCreateInputData.pajamasBought) {
-            const pajamaBoughtStockInfo = await this.pajamasSizeRepository.findPajamaSize(pajamaBought.pajamaId, pajamaBought.size);
-
-            if (pajamaBoughtStockInfo === null) {
-                throw new ResourceNotFoundError(`\'pajamaId\' ${pajamaBought.pajamaId} is Invalid or doesn\'t Exist`);
-            }
-
-            if (pajamaBoughtStockInfo.stockQuantity < pajamaBought.quantity) {
-                throw new InsufficientPajamaSizeStockQuantityError(pajamaBought.pajamaId, pajamaBought.size, pajamaBought.quantity, pajamaBoughtStockInfo.stockQuantity);
-            }
-        };
+        // Paralelizando as verificações de quantidade
+        // em estoque e existência de pijamas referenciados:
+        const saleStockErrors: StockValidationError[] = [];
         
-        
+        const validationPromises = saleCreateInputData.pajamasBought.map(async (pajamaBought) => {
+            try {
+                const pajamaBoughtStockInfo = await this.pajamasSizeRepository.findPajamaSize(pajamaBought.pajamaId, pajamaBought.size);
+                
+                if (pajamaBoughtStockInfo === null) {
+                    throw new ResourceNotFoundError(
+                        `\'pajamaId\' ${pajamaBought.pajamaId} is Invalid or doesn\'t Exist`
+                    );
+                }
+                
+                // Verificando se existe quantidade em estoque disponível para venda:
+                if (pajamaBoughtStockInfo.stockQuantity < pajamaBought.quantity) {
+                    throw new InsufficientPajamaSizeStockQuantityError(
+                        pajamaBought.pajamaId,
+                        pajamaBought.size,
+                        pajamaBought.quantity,
+                        pajamaBoughtStockInfo.stockQuantity
+                    );
+                }
+                
+            } catch (error) {
+                if (error instanceof ResourceNotFoundError ||
+                    error instanceof InsufficientPajamaSizeStockQuantityError) {
+                    saleStockErrors.push(error);
+                }
+            }
+        });
+
+        // Sincroniza e aguarda o término de todas as verificações:
+        await Promise.all(validationPromises);
+
         // Extraindo todos os ID's dos respectivos pijamas comprados:
         const pajamasBoughtIds = saleCreateInputData.pajamasBought.map(pajama => pajama.pajamaId);
-
+        
         // Buscando os pijamas com base nos ID's extraídos:
         const pajamasBoughtInfo = await this.pajamasRepository.findManyById(pajamasBoughtIds);
 
         // Verificando se todos os pijamas comprados estão com a flag { onSale: true }:
         for (const pajamaBought of pajamasBoughtInfo) {
-            if (pajamaBought.onSale) continue;
-            throw new PurchaseNotAllowedError(pajamaBought.id);
+            try {
+                if (pajamaBought.onSale) continue;
+                throw new PurchaseNotAllowedError(pajamaBought.id);
+                
+            } catch (error) {
+                if (error instanceof PurchaseNotAllowedError) {
+                    saleStockErrors.push(error);
+                }
+            }
         }
         
+        if (saleStockErrors.length > 0) {
+            throw new StockPajamasValidationError(saleStockErrors);
+        }
+
         // Array associativo para cada id de pijama e seu respectivo preço:
         const pajamasPriceMap = new Map(pajamasBoughtInfo.map(pajama => [pajama.id, pajama.price]));
 
