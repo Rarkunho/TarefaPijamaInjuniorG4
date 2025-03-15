@@ -27,11 +27,14 @@ export class CreateSaleUseCase {
         // Paralelizando as verificações de quantidade
         // em estoque e existência de pijamas referenciados:        
         const validationPromises = saleCreateInputData.pajamasBought.map(async (pajamaBought) => {
-            const pajamaBoughtStockInfo = await this.pajamasSizeRepository.findPajamaSize(pajamaBought.pajamaId, pajamaBought.size);
+            const pajamaBoughtStockInfo = await this.pajamasSizeRepository.findPajamaSize(
+                pajamaBought.pajamaId,
+                pajamaBought.size
+            );
             
             if (pajamaBoughtStockInfo === null) {
                 return new ResourceNotFoundError(
-                    `\'pajamaId\' ${pajamaBought.pajamaId} is Invalid or doesn\'t Exist`
+                    `'pajamaId' ${pajamaBought.pajamaId} is Invalid or doesnt Exist`
                 );
             }
             
@@ -48,7 +51,7 @@ export class CreateSaleUseCase {
             return null;
         });
 
-        // Sincroniza e aguarda o término de todas as verificações:
+        // Agrupa todas as verificações em uma promise:
         const stockValidationPromisesAll = Promise.all(validationPromises);
 
         // Extraindo todos os ID's dos respectivos pijamas comprados:
@@ -57,7 +60,7 @@ export class CreateSaleUseCase {
         // Buscando os pijamas com base nos ID's extraídos:
         const pajamasBoughtInfo = await this.pajamasRepository.findManyById(pajamasBoughtIds);
 
-        // Verificando se todos os pijamas comprados estão com a flag { onSale: true }:
+        // Verificando assincronamente se todos os pijamas comprados estão com a flag { onSale: true }:
         const onSaleValidationPromisesAll = Promise.all(pajamasBoughtInfo.map(async (pajamaBought) => {
             if (pajamaBought.onSale) return null;
             return new PurchaseNotAllowedError(pajamaBought.id);
