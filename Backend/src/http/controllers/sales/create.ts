@@ -5,9 +5,8 @@ import { PrismaPajamasSizeRepository } from "src/repositories/prisma/prisma-paja
 import { PrismaPajamasRepository } from "src/repositories/prisma/prisma-pajamas-repository";
 import { PrismaSalePajamasRepository } from "src/repositories/prisma/prisma-sale-pajamas-repository";
 import { PrismaSalesRepository } from "src/repositories/prisma/prisma-sales-repository";
-import { InsufficientPajamaSizeStockQuantityError } from "src/use-cases/errors/insufficient-pajama-size-stock-quantity-error";
 import { PurchaseNotAllowedError } from "src/use-cases/errors/purchase-not-allowed-error";
-import { ResourceNotFoundError } from "src/use-cases/errors/resource-not-found-error";
+import { StockPajamasValidationError } from "src/use-cases/errors/stock-pajamas-validation-error";
 import { CreateSaleUseCase, CreateSaleUseCaseRequest } from "src/use-cases/sales/create-sale-use-case";
 import { z } from "zod";
 
@@ -138,12 +137,10 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
         });
 
     } catch (error) {
-        if (error instanceof ResourceNotFoundError) {
-            return reply.status(404).send({ message: error.message });
-        }
-
-        if (error instanceof InsufficientPajamaSizeStockQuantityError) {
-            return reply.status(422).send({ message: error.message });
+        if (error instanceof StockPajamasValidationError) {
+            return reply.status(422).send({
+                messages: error.stockValidationErrors.map(error => error.message)
+            });
         }
 
         if (error instanceof PurchaseNotAllowedError) {
