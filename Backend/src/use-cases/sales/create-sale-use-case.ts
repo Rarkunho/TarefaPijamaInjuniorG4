@@ -25,29 +25,27 @@ export class CreateSaleUseCase {
 
     async execute(saleCreateInputData: CreateSaleUseCaseRequest): Promise<CreateSaleUseCaseResponse> {
         // Paralelizando as verificações de quantidade
-        // em estoque e existência de pijamas referenciados:
-        const saleStockErrors: StockValidationError[] = [];
-        
+        // em estoque e existência de pijamas referenciados:        
         const validationPromises = saleCreateInputData.pajamasBought.map(async (pajamaBought) => {
             const pajamaBoughtStockInfo = await this.pajamasSizeRepository.findPajamaSize(pajamaBought.pajamaId, pajamaBought.size);
             
             if (pajamaBoughtStockInfo === null) {
-                saleStockErrors.push(new ResourceNotFoundError(
+                return new ResourceNotFoundError(
                     `\'pajamaId\' ${pajamaBought.pajamaId} is Invalid or doesn\'t Exist`
-                ));
-                
-                return;
+                );
             }
             
             // Verificando se existe quantidade em estoque disponível para venda:
             if (pajamaBoughtStockInfo.stockQuantity < pajamaBought.quantity) {
-                saleStockErrors.push(new InsufficientPajamaSizeStockQuantityError(
+                return new InsufficientPajamaSizeStockQuantityError(
                     pajamaBought.pajamaId,
                     pajamaBought.size,
                     pajamaBought.quantity,
                     pajamaBoughtStockInfo.stockQuantity
-                ));
+                );
             }
+
+            return null;
         });
 
         // Sincroniza e aguarda o término de todas as verificações:
@@ -61,15 +59,18 @@ export class CreateSaleUseCase {
 
         // Verificando se todos os pijamas comprados estão com a flag { onSale: true }:
         const onSaleValidationPromisesAll = Promise.all(pajamasBoughtInfo.map(async (pajamaBought) => {
-            if (pajamaBought.onSale) return;
-            saleStockErrors.push(new PurchaseNotAllowedError(pajamaBought.id));
+            if (pajamaBought.onSale) return null;
+            return new PurchaseNotAllowedError(pajamaBought.id);
         }));
 
         // Finaliza e sincroniza todas as verificações necessárias:
-        await Promise.all([stockValidationPromisesAll, onSaleValidationPromisesAll]);
+        const [saleStockErrors, onSaleErrors] = await Promise.all([stockValidationPromisesAll, onSaleValidationPromisesAll]);
+
+        // Verifica as requisições síncronamente uma a uma para evitar race conditions:
+        const allValidationErrors = [...saleStockErrors, ...onSaleErrors].filter(error => error !== null);
         
-        if (saleStockErrors.length > 0) {
-            throw new StockPajamasValidationError(saleStockErrors);
+        if (allValidationErrors.length > 0) {
+            throw new StockPajamasValidationError(allValidationErrors);
         }
 
         // Array associativo para cada id de pijama e seu respectivo preço:
