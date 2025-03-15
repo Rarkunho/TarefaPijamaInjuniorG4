@@ -2,15 +2,24 @@ import styles from "./styles.module.css";
 import logoCarrinho from "../../assets/ComprasActive.png";
 import logoFavoritos from "../../assets/FavoritoInactive.png";
 import { useNavigate } from "react-router-dom";
-import fotoTeste from "../../assets/pijamaTeste.png";
 import GenericButton from "../../components/Buttons/GenericButton";
 import usePijamaStore from "../../stores/usePijamaStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CartItem from "../../components/CartItem";
+import Modal from "../../components/Modal";
 
 export default function Carrinho() {
     const navigate = useNavigate();
     const { cartItems, removeFromCart, getCart } = usePijamaStore();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     useEffect(() => {
         getCart();
@@ -43,19 +52,20 @@ export default function Carrinho() {
                 </h2>
             </nav>
             <main className={`${styles.fundo} ${styles.main}`}>
-                <div className={styles.cart__container}>
-                    <CartItem
-                        id={0}
-                        image={fotoTeste}
-                        name={"PIJAMA FEMININO LONGO - ESTAMPA POÁ"}
-                        price={78.9}
-                        size={"M"}
-                        quantity={0}
-                        stock={30}
-                        removeFromCart={(): void => {
-                            removeFromCart(-8789789789789789);
-                        }}
-                    />
+            <div className={styles.cart__container}>
+                    {cartItems.map((item) => (
+                        <CartItem
+                            key={item.pijama.id}
+                            id={item.pijama.id}
+                            image={item.pijama.image}
+                            name={item.pijama.name}
+                            price={item.pijama.price}
+                            size={item.size}
+                            quantity={item.quantity}
+                            stock={item.stock}
+                            removeFromCart={() => removeFromCart(item.pijama.id)}
+                        />
+                    ))}
 
                     {cartItems.length === 0 && (
                         <h2
@@ -78,10 +88,22 @@ export default function Carrinho() {
                     </h2>
                     <GenericButton
                         text={"COMPRE TUDO"}
-                        onClick={function (): void {
-                            throw new Error("Function not implemented.");
-                        }}
+                        onClick={handleOpenModal}
                     />
+
+                    {isModalOpen && (
+                        <>
+                            <div
+                                className={styles.overlay}
+                                onClick={handleCloseModal}></div>
+                            <Modal
+                                modalType="endereco"
+                            />
+                        </>
+                    )}
+                    {/* <Modal modalType="endereco" />
+                    <Modal modalType="pagamento" />
+                    <Modal modalType="concluido" /> */}
                 </div>
             </main>
         </>

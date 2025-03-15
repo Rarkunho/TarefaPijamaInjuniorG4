@@ -5,7 +5,9 @@ import PijamaSizes from "../types/PijamaSizes";
 
 interface CartItem{
     pijama: Pijama;
+    size: string;
     quantity: number;
+    stock: number;
 }
 
 interface PijamaStore {
@@ -21,7 +23,7 @@ interface PijamaStore {
     filterByFavorite: () => Promise<void>
     addToFavorite: (id: string) => Promise<void>
     filterBySizes: (id: string, size: string) => Promise<void>
-    removeFromCart: (pijamaId: number) => void;
+    removeFromCart: (pijamaId: string) => void;
     addToCart: (item:CartItem) => void;
     getCart: ()=> void; 
 }
@@ -121,7 +123,7 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 cartItems: [...state.cartItems, item]
             }))
         },
-        removeFromCart: (pijamaId: number) => {
+        removeFromCart: (pijamaId: string) => {
             set((state) => ({
                 cartItems: state.cartItems.filter((item) => item.pijama.id !== pijamaId),
             }))
