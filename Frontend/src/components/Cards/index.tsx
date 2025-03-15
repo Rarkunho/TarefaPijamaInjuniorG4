@@ -1,6 +1,7 @@
 import styles from "./styles.module.css"
 import botaoCoracaoAtivo from "../../assets/FavoritoActive.png"
- import botaoCoracaoInativo from "../../assets/FavoritoInactive.png"
+import botaoCoracaoInativo from "../../assets/FavoritoInactive.png"
+import iconeDesconto from "../../assets/iconeDesconto.png"
 import { useNavigate } from "react-router-dom"
 import usePijamaStore from "../../stores/usePijamaStore"
 import Pijama from "../../types/Pijama"
@@ -47,6 +48,14 @@ export default function Cards({ pijama, ...props }: CardsProps) {
                             alt="Botão de Curtir" 
                         />
                     </button>
+                    {(pijama.salePercent ?? 0) > 0 && (
+                        <img 
+                            className={styles.discountIcon}
+                            src={iconeDesconto} 
+                            alt="Ícone de Desconto" 
+                            style={{ width: "83px", height: "83px", position: "absolute", top: "0", right: "0" }}
+                        />
+                    )}
                 </div>
                 <div  
                     className={`${styles.info} 
