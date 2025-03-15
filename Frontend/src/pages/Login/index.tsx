@@ -1,64 +1,83 @@
-
 import { useForm } from 'react-hook-form';
 import styles from './styles.module.css';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom'; // Importa o hook de navegação
+import { useNavigate } from 'react-router-dom'; 
+import { useState } from 'react'; 
+import olhoSenha from "/src/assets/olhoSenha.png"; 
 
-import { useState } from 'react'; // Importa useState para alternar visibilidade da senha
-import olhoSenha from "/src/assets/olhoSenha.png"; // Importe a imagem do ícone de senha
-
-
-
+// Validação no back
 const userSchema = z.object({
-    email: z.string().nonempty("O e-mail não pode ser vazio, tente novamente").refine(value=> z.string().email().safeParse(value).success, {
-    message: "O e-mail não é válido"
-    }),
-    password: z.string().nonempty("A senha não pode ser vazia, tente novamente").min(6 , "A senha deve ter no mínimo 6 caracteres"), 
-})
+    identifier: z.string()
+        .nonempty("O campo não pode estar vazio")
+        .refine(value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || /^[A-Za-z0-9]+$/.test(value), {
+            message: "Digite um e-mail válido ou um nome de usuário sem espaços",
+        }),
 
-type User = z.infer<typeof userSchema>
+    password: z.string()
+        .nonempty("A senha não pode ser vazia")
+        .min(6, "A senha deve ter no mínimo 6 caracteres"),
+});
 
+type User = z.infer<typeof userSchema>;
 
 export default function Login() {
-    const{register , handleSubmit , reset , formState: {errors} }= useForm<User>({
+    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<User>({
         resolver: zodResolver(userSchema)
-    })
+    });
 
-    const navigate = useNavigate(); // Hook para navegação
-
-    // Estado para alternar visibilidade da senha
+    const navigate = useNavigate();
     const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(""); //mensagem de erro
 
+    async function loginUser(data: User) {
+        setErrorMessage(""); 
 
-    async function createUser(data: User) {
-        await new Promise(resolve=> setTimeout(resolve, 2000)) // demorar 2seg
-       console.log(data)
-       reset()
+        try {
+            const response = await fetch("http://localhost:3434/users/login", { 
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    identifier: data.identifier, // 
+                    password: data.password
+                }),
+            });
 
-       // Após o login bem-sucedido, redireciona para a página Home
-       navigate('/');
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || "Erro ao fazer login");
+            }
+
+            // Se der certo vai pra Home
+            navigate('/');
+        } catch (error: any) {
+            setErrorMessage(error.message);
+        }
     }
-    
 
     return (
         <main>
-            <section className={styles.corpo}> 
+            <section className={styles.corpo}>
                 <div className={styles.container}>
                     <h1 className={styles.title}>Login</h1>
-                    <p className={styles.text}>Faça login para ter acesso aos <br /> 
-                    pijamas dos seus sonhos!</p>
-                    <form onSubmit={handleSubmit(createUser)} className={styles.form}>
+                    <p className={styles.text}>Faça login para acessar nossa loja!</p>
+
+                    {errorMessage && <span className={styles.error}>{errorMessage}</span>}
+
+                    <form onSubmit={handleSubmit(loginUser)} className={styles.form}>
+                        {/* usuário ou e-mail */}
                         <input
                             type='text'
                             className={styles.input}
                             placeholder='Usuário ou e-mail'
-                            {...register('email')}
+                            {...register('identifier')}
                         />
-                        {errors.email && <span>{errors.email.message}</span>}
+                        {errors.identifier && <span className={styles.error}>{errors.identifier.message}</span>}
 
-
-                        {/* Campo de senha com ícone de visibilidade */}
+                        {/* senha */}
                         <div className={styles.campoSenha}>
                             <input
                                 type={mostrarSenha ? "text" : "password"}
@@ -78,26 +97,26 @@ export default function Login() {
                                 />
                             </button>
                         </div>
-                        
-                        {errors.password && <span>{errors.password.message}</span>}
+
+                        {errors.password && <span className={styles.error}>{errors.password.message}</span>}
 
                         <div className={styles.esqueceuSenha}>
                             <p>Esqueceu a senha?</p>
                         </div>
-                        
 
                         <div className={styles.botao1}>
-                            <button className='botao1'>ENTRAR</button>
-                            <hr/>
+                            <button type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? "Entrando..." : "ENTRAR"}
+                            </button>
+                            <hr />
                         </div>
                     </form>
+
                     <div className={styles.botao2}>
-                            <button className='botao2' onClick={() => navigate('/cadastrar')}>
-                            CADASTRE-SE </button>
-                        </div>
+                        <button onClick={() => navigate('/cadastrar')}>CADASTRE-SE</button>
+                    </div>
                 </div>
             </section>
         </main>
-    )
-    }
-
+    );
+}

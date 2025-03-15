@@ -5,8 +5,8 @@ import { PajamasSizeRepository } from "src/repositories/pajamas-size-repository"
 import { SalePajamaCreateInput, SalePajamasRepository } from "src/repositories/sale-pajamas-repository";
 import { SaleCreateInput, SalesRepository } from "src/repositories/sales-repository";
 import { InsufficientPajamaSizeStockQuantityError } from "../errors/insufficient-pajama-size-stock-quantity-error";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { PurchaseNotAllowedError } from "../errors/purchase-not-allowed-error";
+import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { StockPajamasValidationError, StockValidationError } from "../errors/stock-pajamas-validation-error";
 
 export interface CreateSaleUseCaseRequest
@@ -51,7 +51,7 @@ export class CreateSaleUseCase {
         });
 
         // Sincroniza e aguarda o término de todas as verificações:
-        await Promise.all(validationPromises);
+        const stockValidationPromisesAll = Promise.all(validationPromises);
 
         // Extraindo todos os ID's dos respectivos pijamas comprados:
         const pajamasBoughtIds = saleCreateInputData.pajamasBought.map(pajama => pajama.pajamaId);
@@ -60,10 +60,13 @@ export class CreateSaleUseCase {
         const pajamasBoughtInfo = await this.pajamasRepository.findManyById(pajamasBoughtIds);
 
         // Verificando se todos os pijamas comprados estão com a flag { onSale: true }:
-        await Promise.all(pajamasBoughtInfo.map(async(pajamaBought) => {
+        const onSaleValidationPromisesAll = Promise.all(pajamasBoughtInfo.map(async (pajamaBought) => {
             if (pajamaBought.onSale) return;
             saleStockErrors.push(new PurchaseNotAllowedError(pajamaBought.id));
         }));
+
+        // Finaliza e sincroniza todas as verificações necessárias:
+        await Promise.all([stockValidationPromisesAll, onSaleValidationPromisesAll]);
         
         if (saleStockErrors.length > 0) {
             throw new StockPajamasValidationError(saleStockErrors);
