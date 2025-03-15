@@ -118,7 +118,7 @@ const usePijamaStore = create<PijamaStore>((set) => (
                 console.error("Erro ao buscar tamanhos de pijama pelo ID:", error);
             }
         },
-        addToCart: (item: CartItem) => {
+        addToCart: (item:CartItem) => {
             set((state) => ({
                 cartItems: [...state.cartItems, item]
             }))

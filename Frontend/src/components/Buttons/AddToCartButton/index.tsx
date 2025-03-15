@@ -3,27 +3,33 @@ import usePijamaStore from "../../../stores/usePijamaStore"
 import Pijama from "../../../types/Pijama"
 import styles from "./styles.module.css"
 
-interface AddToCartProps {
-    pijamaSelecionado: Pijama
-    quantidade: number
-}
 
 interface CartItem{
     pijama: Pijama;
+    size: string;
     quantity: number;
+    stock: number;
 }
 
-export default function AddToCartButton (props: AddToCartProps) {
+interface AddToCartButtonProps {
+    pijama: Pijama;
+    size: string;
+    quantity: number;
+    stock: number;
+    disabled: boolean
+}
+
+export default function AddToCartButton ({ pijama, size, quantity, stock, disabled }: AddToCartButtonProps) {
     const { addToCart} = usePijamaStore()
     const navigate = useNavigate()
 
     function handleClick() {
-        const cartItem: CartItem = {
-            pijama: props.pijamaSelecionado, 
-            quantity: props.quantidade        
+        const cartItem: CartItem = { pijama, quantity, size, stock }
+
+        if (!disabled) { // Verifica se o botão não está desabilitado antes de adicionar ao carrinho
+            addToCart(cartItem);
+            navigate("/carrinho");
         }
-        addToCart(cartItem)
-        navigate("/carrinho")
     }
 
     return (
