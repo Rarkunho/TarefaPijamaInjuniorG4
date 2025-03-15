@@ -108,6 +108,37 @@ export async function createSale(request: FastifyRequest, reply: FastifyReply) {
         ).min(1, { message: "It is necessary to buy at least one pajama" })
     });
 
+    //  Exemplo de body para esta requisição:
+    // {
+    //     "pajamaSaleData": {
+    //         "buyerName": "John Doe",
+    //         "cpf": "12345678901",
+    //         "paymentMethod": "CREDIT_CARD",
+    //         "installments": 3,
+    //         "cardNumber": "1234567812345678"
+    //     },
+    //     "pajamaSaleAddressData": {
+    //         "zipCode": "12345678",
+    //         "state": "SP",
+    //         "city": "São Paulo",
+    //         "neighborhood": "Centro",
+    //         "address": "Rua Exemplo, 123",
+    //         "number": "123"
+    //     },
+    //     "pajamasBought": [
+    //         {
+    //             "pajamaId": "277de5a7-ea3a-4c95-8132-07aeeeb7d68c",
+    //             "size": "G",
+    //             "quantity": 12
+    //         },
+    //         {
+    //             "pajamaId": "2cf1911b-5820-4d9c-82db-ffda4f0c37b8",
+    //             "size": "G",
+    //             "quantity": 3
+    //         }
+    //     ]
+    // }
+
     const createBody = createBodySchema.parse(request.body);
 
     const prismaSalesRepository = new PrismaSalesRepository();
