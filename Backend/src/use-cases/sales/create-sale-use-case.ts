@@ -7,7 +7,7 @@ import { SaleCreateInput, SalesRepository } from "src/repositories/sales-reposit
 import { InsufficientPajamaSizeStockQuantityError } from "../errors/insufficient-pajama-size-stock-quantity-error";
 import { PurchaseNotAllowedError } from "../errors/purchase-not-allowed-error";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
-import { StockPajamasValidationError, StockValidationError } from "../errors/stock-pajamas-validation-error";
+import { StockPajamasValidationError } from "../errors/stock-pajamas-validation-error";
 
 export interface CreateSaleUseCaseRequest
     extends Omit<SaleCreateInput, 'price'> {}
