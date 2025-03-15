@@ -32,20 +32,21 @@ export default function Pijamas() {
     const totalPaginas = Math.ceil(pijamas.length / itensPorPagina);
 
 
-    
+    // renderiza todos os pijamas
     useEffect(() => {
         getPijamas(); // dispara a atualização
     }, [getPijamas]);
 
 
+    //renderiza os pijamas com base nos filtros do select
     useEffect(() => {
-        const result = pijamas
+        let result = pijamas
             .filter(pijama => (genderFilter === "todos" || pijama.gender === genderFilter))
             .filter(pijama => (typeFilter === "todos" || pijama.type === typeFilter))
             .filter(pijama => (seasonFilter === "todos" || pijama.season === seasonFilter))
 
         setFilteredPijamas(result)
-    }, [genderFilter, typeFilter, seasonFilter, pijamas])
+    }, [genderFilter, typeFilter, seasonFilter, pijamas, filtro])
 
    // useEffect(() => {
     //    if (genderFilter !== "todos") {
@@ -65,6 +66,8 @@ export default function Pijamas() {
        // }
     //}, [seasonFilter, filterBySeason])
 
+    //funcções para atualizar os filtros
+
     const handleGenderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setGenderFilter(event.target.value);
     }
@@ -77,25 +80,21 @@ export default function Pijamas() {
         setSeasonFilter(event.target.value);
     }
 
-    //function filterByName (name: string) {
-     //   const result = pijamas.filter(pijama =>
-      //      pijama.name.toLowerCase().includes(name.toLowerCase())  
-      //  )
-     //   setFilteredPijamas(result)
-    //}
 
-    //function handleSearch() {
-     //   filterByName(filtro)
-   // }
+    function handleSearch() {
+        let result = pijamas;
 
-    //useEffect(() => {
-    //    if (filtro) {
-    //        filterByName(filtro)
-    //    } else {
-    //        setFilteredPijamas(pijamas)
-   //     }
-    //}, [filtro, pijamas])
+        if (filtro) {
+            result = result.filter(pijama =>
+                pijama.name.toLowerCase().includes(filtro.toLowerCase())
+            );
+        }
 
+        setFilteredPijamas(result)
+    }
+
+
+    //renderiza as paginas Feminino, Masculino e Infantil ajustando os valores de filtro
     useEffect(() => {
         if (param) {
             if (genderOptions.includes(param)) {
@@ -124,12 +123,11 @@ export default function Pijamas() {
             <section className={styles.container}>
                 <div className={styles.busca}>
                     <input 
-                        //className={styles.search}
                         placeholder={`Pesquise pelo produto...`}
                         value={filtro}
                         onChange={(e) => setFiltro(e.target.value)}
                     />
-                    <button //onClick={handleSearch}
+                    <button onClick={handleSearch}
                     >
                         <img src={botao} alt="Botão de Pesquisa"/>
                     </button>

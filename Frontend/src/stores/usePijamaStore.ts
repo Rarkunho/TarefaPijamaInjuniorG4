@@ -11,7 +11,7 @@ interface CartItem{
 interface PijamaStore {
     pijamas: Pijama[]
     pijamaSelecionado?: Pijama
-    pijamaSizes?: PijamaSizes[]
+    pijamaSizes?: PijamaSizes
     cartItems: CartItem[];
     getPijamas: () => Promise<void>
     filterByGender: (gender: string) => Promise<void>

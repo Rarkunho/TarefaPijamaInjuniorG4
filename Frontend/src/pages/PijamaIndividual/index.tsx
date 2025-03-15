@@ -8,7 +8,6 @@ import iconeMasculino from "../../assets/generoMasculino.png"
 import iconeUnissex from "../../assets/estiloUnissex.png"
 import iconeInverno from "../../assets/climaInverno.png"
 import iconeVerao from "../../assets/estacaoVerao.png"
-import iconeTodos from "../../assets/estiloTodos.png"
 import SizeButton from "../../components/Buttons/SizeButton"
 import AddToCartButton from "../../components/Buttons/AddToCartButton"
 import QuantityButton from "../../components/Buttons/QuantityButton"
@@ -142,7 +141,7 @@ export default function PijamaIndividual() {
                         </div>
                         <div className={styles.quantidade}>
                             <h2 className={styles.tituloItalico}>Quantidade: </h2>
-                            <QuantityButton/>
+                            <QuantityButton numberSizes={pijamaSizes?.stockQuantity || 0}/>
                         </div>
                         <div className={styles.carrinho}>
                             <AddToCartButton/> 

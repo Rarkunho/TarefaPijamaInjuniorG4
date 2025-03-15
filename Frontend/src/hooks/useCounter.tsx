@@ -1,21 +1,21 @@
 import { useState } from "react";
 
 
-export default function useCounter(initialCondition: number) {
+export default function useCounter(initialCondition: number, finalCondition: number) {
     const [counter, setCounter] = useState<number>(initialCondition)
 
 
     function increment() {
-        if (counter < 8 ) { //mudar isso aqui depois
+        if (counter < finalCondition ) { 
             setCounter((currentState) => currentState+1)
         }
     }
 
     function decrement() {
-        if (counter > 0) {
+        if (counter > 1) {
             setCounter((currentState) => currentState-1)
         }
     }
 
-    return {counter, increment, decrement}
+    return {counter, increment, decrement, setCounter}
 }
