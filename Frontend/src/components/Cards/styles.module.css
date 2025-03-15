@@ -8,7 +8,6 @@
     flex-direction: column;
     justify-content: flex-start;
     gap: 20px;
-    cursor: pointer;
 }
 
 .layout {
@@ -52,6 +51,7 @@
     padding-left: 20px;
     padding-right: 20px;
     position: relative;
+    cursor: pointer;
 }
 
 .precoComDesconto {

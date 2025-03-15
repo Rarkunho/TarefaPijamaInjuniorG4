@@ -152,7 +152,15 @@ export default function PijamaIndividual() {
                             <QuantityButton numberSizes={pijamaSizes?.stockQuantity || 0} onCounterChange={setCounter}/>
                         </div>
                         <div className={styles.carrinho}>
-                            <AddToCartButton pijamaSelecionado={pijamaSelecionado} quantidade={counter} /> 
+                            
+                                <AddToCartButton 
+                                    pijama={pijamaSelecionado} 
+                                    size={ativo ?? 'default'} // Caso 'ativo' seja null ou undefined, define um valor default
+                                    quantity={counter} 
+                                    stock={pijamaSizes?.stockQuantity ?? 0 - counter} 
+                                    disabled={!ativo} // Desabilita o botão se 'ativo' for null ou undefined
+                                />
+                             
                             <img className={styles.favoritos} 
                                 src={botaoCoracao} 
                                 alt="Ícone de Favoritos"
