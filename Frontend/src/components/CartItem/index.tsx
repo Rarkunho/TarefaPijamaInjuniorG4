@@ -6,14 +6,14 @@ import styles from "./styles.module.css";
 import { SetStateAction, useState } from "react";
 
 interface CartItemProps {
-    id: number;
+    id: string;
     image: string;
     name: string;
     price: number;
     size: string;
     quantity: number;
     stock: number;
-    removeFromCart: (index: number) => void;
+    removeFromCart: (index: string) => void;
     className?: string;
 }
 
@@ -68,7 +68,7 @@ function CartItem(props: CartItemProps) {
                     }}>
                     <div className={styles.quantidade}>
                         <h2 className={styles.tituloItalico}>Quantidade: </h2>
-                        <QuantityButton onCounterChange={handleCounterChange} />
+                        <QuantityButton onCounterChange={handleCounterChange} numberSizes={0} />
                     </div>
                     <h2 className={styles.cart__item__price}>R${(props.price * qtdCounter).toFixed(2).replace(".", ",")}</h2>
                 </div>

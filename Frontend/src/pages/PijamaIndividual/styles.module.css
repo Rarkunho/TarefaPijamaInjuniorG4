@@ -28,7 +28,7 @@
     flex-direction: column;
     height: 831px;
     align-items: flex-start;
-    gap: 55px;
+    gap: 50px;
 }
 
 .titulo {
@@ -62,14 +62,14 @@
     gap: 20px;
 }
 
-.preco > div {
+.priceInformation {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     gap: 250px;
 }
 
-.preco > div > h2 {
+.priceInformation > h2 {
     color: var(--preto);
     font-size: 64px;
     font-weight: 700;
@@ -78,7 +78,7 @@
     letter-spacing: 0%;
 }
 
-.preco > div > p {
+.priceInformation > p {
     color: var(--cinza400);
     font-size: 24px;
     font-weight: 400;
@@ -87,7 +87,7 @@
     letter-spacing: 0%;
 }
 
-.preco > div > p > span {
+.priceInformation > span {
     font-weight: 700;
 }
 
@@ -234,4 +234,27 @@
     font-family: "Nunito Sans", sans-serif;
     line-height: 100%;
     letter-spacing: 4%;
+}
+
+.desconto {
+    position: relative; 
+    display: inline-block;
+    margin-top: 1px;
+    margin-left: 80px;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: var(--vermelho200);
+}
+
+.desconto::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%; 
+    height: 1px; 
+    background-color: var(--vermelho200); 
 }
