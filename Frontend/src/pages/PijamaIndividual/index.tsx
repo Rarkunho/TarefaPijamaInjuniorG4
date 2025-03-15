@@ -37,12 +37,13 @@ type GenreParams = Record<string, string | undefined>;
 
 export default function PijamaIndividual() {
     const { id } = useParams<GenreParams>()
-    console.log(id)
+    //console.log(id)
     const { pijamaSelecionado, pijamaSizes, filterById, addToFavorite, filterBySizes} = usePijamaStore()
     const [ativo, setAtivo] = useState<string | null>(null)
     const [preco, setPreco] = useState<number>(pijamaSelecionado?.price || 0)
     const [precoPix, setPrecoPix] = useState<number>(pijamaSelecionado?.price || 0)
     const navigate = useNavigate()
+    const [counter, setCounter] = useState(1);
 
     const sizes = ["PP", "P", "M", "G", "GG"]
 
@@ -141,10 +142,10 @@ export default function PijamaIndividual() {
                         </div>
                         <div className={styles.quantidade}>
                             <h2 className={styles.tituloItalico}>Quantidade: </h2>
-                            <QuantityButton numberSizes={pijamaSizes?.stockQuantity || 0}/>
+                            <QuantityButton numberSizes={pijamaSizes?.stockQuantity || 0} onCounterChange={setCounter}/>
                         </div>
                         <div className={styles.carrinho}>
-                            <AddToCartButton/> 
+                            <AddToCartButton pijamaSelecionado={pijamaSelecionado} quantidade={counter} /> 
                             <img className={styles.favoritos} 
                                 src={botaoCoracao} 
                                 alt="Ícone de Favoritos"
